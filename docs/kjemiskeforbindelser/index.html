@@ -224,7 +224,7 @@
       const GROUP12AL = ['Li','Na','K','Rb','Cs','Be','Mg','Ca','Sr','Ba','Al'];
       const SINGLE_ANION_ID = { N:'nitrid', P:'fosfid', O:'oksid', S:'sulfid', F:'fluorid', Cl:'klorid', Br:'bromid', I:'jodid' };
 
-      const INITIAL_MOLECULES = ['H2O','BH3','C','CS2','CH4','CF4', 'CCl4', 'CBr4', 'CI4','NH3','N2','N2O','NO','NO2','N2O4','N2O5','PF5','P2O5','O2','O3','SO2','SO3','S2Cl2','H2S','SF6','HF','HCl','HBr','HI'];
+      const INITIAL_MOLECULES = ['H2O','H2','BH3','C','CS2','CH4','CF4', 'CCl4', 'CBr4', 'CI4','NH3','N2','N2O','NO','NO2','N2O4','N2O5','PF5','P2O5','O2','O3','SO2','SO3','S2Cl2','H2S','SF6','HF','HCl','HBr','HI','Cl2'];
       const [molecules, setMolecules] = useState([...INITIAL_MOLECULES]);   // master list
       const [enabledMolecules, setEnabledMolecules] = useState([...INITIAL_MOLECULES]); // active subset
       const [showMolecules, setShowMolecules] = useState(false); // hidden by default
@@ -291,6 +291,10 @@
           const sym = parsed.order[0]; const cnt = parsed.counts[sym];
           if(SINGLE_ELEMENT_COMMON[sym] && SINGLE_ELEMENT_COMMON[sym][cnt]) return SINGLE_ELEMENT_COMMON[sym][cnt];
           const el = ELEMENT_POS.find(e=>e.key===sym) || {name:sym.toLowerCase()};
+          if (cnt === 2) { // If single nonmetal element with subscript 2 (X2), use the bare element name (e.g., F2 → "fluor")
+            const elFull = ELEMENT_POS.find(e=>e.key===sym);
+            if (elFull && elFull.type === 'nonmetal') return elFull.name;
+          }
           if(cnt===1) return el.name;
           const pref = PREFIX[cnt]||String(cnt);
           return (pref+el.name);
@@ -385,6 +389,8 @@
       
         if (modeName) {
           // Expecting NAME
+
+          // No spaces
           if (/\s/.test(raw)) {
             setResult('Feil: navnet må være ett ord uten mellomrom.');
             setCorrect(`Forventet: ${current.name}`);
@@ -394,12 +400,40 @@
           const user = normalizeNameForCompare(raw);
           const expFull = normalizeNameForCompare(current.name); // e.g. "Sølv(I)klorid"
         
-          if (user === expFull) {
+          if (user === expFull) { // perfect match
             setResult('Riktig!');
             setCorrect('');
             return;
           }
-        
+
+          // Accept "<element>gass" / "<element>væske" / "<element>fast" for diatomic nonmetals X2
+          if (current?.type === 'molecule') {
+            // Parse the actual formula (strip subscripts, spaces)
+            const fcanon = fromSub(current.formula).replace(/\s+/g, ''); // e.g., "O2"
+            const parsed = parseFormulaSimple(fcanon);                  // { order: [...], counts: { O:2 }, ... }
+          
+            if (parsed.order.length === 1) {
+              const sym = parsed.order[0];
+              const cnt = parsed.counts[sym];
+              const el  = ELEMENT_POS.find(e => e.key === sym);
+          
+              // Only for true diatomic molecules of a single nonmetal element (e.g., O2, H2, Cl2, Br2, I2, N2, F2)
+              if (cnt === 2 && el && el.type === 'nonmetal') {
+                const baseName = (el.name || sym.toLowerCase()); // "oksygen", "klor", "brom", ...
+                const candidates = [
+                  baseName + 'gass',
+                  baseName + 'væske',  // accept any state label
+                ].map(s => normalizeNameForCompare(s));
+          
+                if (candidates.includes(user)) {
+                  setResult('Riktig!');
+                  setCorrect('');
+                  return;
+                }
+              }
+            }
+          }
+
           // --- "Ok" path: allow missing Roman numeral IF cation has only one oxidation state ---
           if (current?.type === 'salt' && current?.details?.cat && current?.details?.an) {
             const cat = current.details.cat;  // e.g. { key:'Ag', name:'Sølv', states:[1], ... }
@@ -427,7 +461,24 @@
               return;
             }
           }
-        
+
+          // --- "Ok" path: vowel elision before "-oksid" (historically done this way, not anymore)
+          if (current?.type === 'molecule') {
+            const expLower = normalizeNameForCompare(current.name); // e.g. "dinitrogenpentaoksid"
+            if (expLower.includes('oksid')) {
+              const elided = expLower.replace( // Replace ...aoksid -> ...oksid for 4+ prefixes (not di/tri)
+                /(tetra|penta|heksa|hepta|okta|nona|deka)oksid/g,
+                (m, p) => p.slice(0, -1) + 'oksid'
+              );
+              if (user === elided && elided !== expLower) {
+                setResult('Ok');
+                setCorrect(`Dobbeltvokaler har historisk sett blitt kuttet vekk for å gjøre det lettere å uttale. Dette skal nå kun gjøres for monoksid. ` +
+                           `Foretrukket skrivemåte: ${current.name}`);
+                return;
+              }
+            }
+          }
+          
           // Otherwise, standard "Feil."
           setResult('Feil.');
           setCorrect(`Forventet: ${current.name}`);
@@ -514,7 +565,7 @@
                     type="text"
                     placeholder={modeName
                       ? (current?.type==='salt' ? 'Skriv systematisk navn (f.eks. kalsiumoksid eller dihydrogenmonoksid)' : 'Skriv systematisk navn (f.eks. kalsiumoksid eller dihydrogenmonoksid)')
-                      : (current?.type==='salt' ? 'Skriv formel (f.eks Ca(NO₃)₂)' : 'Skriv formel (f.eks H₂O)')}
+                      : (current?.type==='salt' ? 'Skriv formel (f.eks. Ca(NO₃)₂ eller H₂O)' : 'Skriv formel (f.eks. Ca(NO₃)₂ eller H₂O)')}
                     value={answer}
                     onChange={e=>setAnswer(e.target.value)}
                     onKeyDown={e=>{
