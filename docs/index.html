@@ -1,31 +1,694 @@
 <!DOCTYPE html>
-<html lang="en">
-    
-    <head id="head">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://jackli.gg/chessle/common/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://jackli.gg/chessle/common/css/chessle.css?v=1.7">
-        <link rel="icon" type="image/png" href="https://cdn.discordapp.com/emojis/859126981987532820.webp?size=96">
-        <title>Snado</title>
-    </head>
-    
-    <body id="body" class="">
-        <nav class="navbar navbar-dark navbar-header">
-            <div>
-            <a class="navbar-brand navbar-side" href="/">
-                snado.no
-                <object><a href="https://snado.no/secret">
-                    <img src="https://cdn.discordapp.com/emojis/547888989286170683.webp?size=24">
-                </a></object>
-            </a>
-            </div>
-            <div class="navbar navbar-title flex flex-column">
-            <div class="navbar-main-title">Sando</div>
-            </div>
-            <a class="navbar-side"></a>
-        </nav>
-    </body>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kjemiske forbindelser — øvingsspill</title>
+</head>
+<body>
+  <div id="root"></div>
 
+  <!-- React 18 UMD + Babel for in‑browser JSX -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useEffect, useMemo, useState } = React;
+
+    function ChemTrainer() {
+      // -------------------- STYLES --------------------
+      const styles = `
+        :root{--metal:#cfe8ff;--nonmetal:#f8c0ff;--card:#ffffff;--bg:#f6f8fb;--accent:#7dd3fc}
+        *{box-sizing:border-box}
+        body{margin:0;font-size:22px;line-height:1.6}
+        .wrap{max-width:none;width:100%;margin:0;padding:24px;font-family:Inter,Helvetica,Arial,sans-serif;color:#042028;background:var(--bg)}
+        header{display:flex;align-items:center;gap:12px}
+        h1{margin:0;font-size:32px}
+        .card{background:none;box-shadow:none;padding:0;margin:0}
+        .row{display:block}
+        .col{width:100%;margin-bottom:32px}
+        .small{font-size:14px;color:#445}
+        
+
+        /* periodic table */
+        .ptable-wrap{overflow:visible;max-height:none;margin-bottom:32px;}
+        .ptable{display:grid;grid-template-columns:repeat(18,70px);grid-auto-rows:70px;gap:8px;justify-content:center}
+        .elem{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;border:1px solid rgba(0,0,0,0.06);font-size:16px;cursor:pointer;padding:2px;user-select:none}
+        .elem .sym{font-weight:700;font-size:20px}
+        .elem.metal{background:var(--metal);color:#012}
+        .elem.nonmetal{background:var(--nonmetal);color:#012}
+        .elem.off{opacity:0.28}
+        .elem.inert{background:#eee;color:#777;cursor:not-allowed;pointer-events:none}
+
+        /* controls */
+        .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+        input[type=text]{width:100%;padding:14px;border-radius:12px;border:1px solid #d6dbe1;font-size:18px}
+        button{background:var(--accent);border:0;padding:10px 12px;border-radius:10px;color:#042028;cursor:pointer}
+        button:disabled{opacity:.6;cursor:not-allowed}
+        label.small{font-size:13px;color:#223}
+
+
+        .polylist{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+        .polylist label{
+          background:#fff;
+          padding:8px 12px;
+          border-radius:8px;
+          box-shadow:0 2px 6px rgba(0,0,0,0.1);
+          font-size:18px !important;
+          font-weight:600;
+        }
+        .polylist input{margin-right:6px; transform:scale(1.3);}
+
+        .subheading{font-size:15px;font-weight:700;margin-top:12px}
+        .status{
+          margin-top:10px;
+          /* Reserve vertical space so the page doesn't jump when text appears */
+          min-height:3.2em; /* ~2 lines */
+        }      
+        .status .line{min-height:1.6em} /* Each line keeps its own minimum height too */
+        .status .line:empty{visibility:hidden} /* Hide empty lines visually but keep their space reserved */
+        .tests{margin-top:16px;background:#fff;border-radius:10px;padding:10px;border:1px solid #e6eaf0}
+        .test-ok{color:#176b34}
+        .test-okish{color:#b7791f}
+        .test-fail{color:#8b1c1c}
+        .status #result{font-weight:bold}
+
+
+        /* Prompt typography */
+        #prompt{ font-size:32px; font-weight:700; margin-top:6px }
+        #prompt.formula{
+          font-family: "Cambria Math", "STIX Two Text", "Times New Roman", serif;
+          font-variant-ligatures: none;
+          font-size:34px;
+          letter-spacing:0.5px;
+        }
+        #prompt.name{
+          font-family: Inter, Helvetica, Arial, sans-serif; /* your default UI font */
+          letter-spacing:0;
+        }
+
+
+        /* Nomenclature modal */
+        .modal-backdrop{
+          position:fixed; inset:0; background:rgba(2,6,23,0.45);
+          display:flex; align-items:center; justify-content:center; z-index:1000;
+        }
+        .modal{
+          background:#fff; border-radius:14px; max-width:860px; width:92%;
+          max-height:80vh; overflow:auto; padding:20px 22px; box-shadow:0 12px 40px rgba(0,0,0,0.25);
+        }
+        .modal h2{ margin:0 0 12px 0; font-size:22px }
+        .modal h3{ margin:16px 0 8px 0; font-size:18px }
+        .modal p, .modal li{ font-size:16px; line-height:1.6 }
+        .modal .close-row{ display:flex; justify-content:flex-end; margin-top:12px }
+        .modal .close-btn{
+          background:#e6edf7; border:0; border-radius:10px; padding:8px 12px; cursor:pointer;
+        }
+        
+      `;
+
+      // -------------------- DATA --------------------
+      // Expanded periodic table (periods 1–6 common entries with groups)
+      const ELEMENT_POS = [
+        // Period 1
+        {key:'H',name:'hydrogen',group:1,period:1,type:'nonmetal'},
+        {key:'He',name:'helium',group:18,period:1,type:'nonmetal',inert:true},
+        // Period 2
+        {key:'Li',name:'litium',group:1,period:2,type:'metal'},
+        {key:'Be',name:'beryllium',group:2,period:2,type:'metal'},
+        {key:'B',name:'bor',group:13,period:2,type:'nonmetal'},
+        {key:'C',name:'karbon',group:14,period:2,type:'nonmetal'},
+        {key:'N',name:'nitrogen',group:15,period:2,type:'nonmetal'},
+        {key:'O',name:'oksygen',group:16,period:2,type:'nonmetal'},
+        {key:'F',name:'fluor',group:17,period:2,type:'nonmetal'},
+        {key:'Ne',name:'neon',group:18,period:2,type:'nonmetal',inert:true},
+        // Period 3
+        {key:'Na',name:'natrium',group:1,period:3,type:'metal'},
+        {key:'Mg',name:'magnesium',group:2,period:3,type:'metal'},
+        {key:'Al',name:'aluminium',group:13,period:3,type:'metal'},
+        {key:'Si',name:'silisium',group:14,period:3,type:'nonmetal'},
+        {key:'P',name:'fosfor',group:15,period:3,type:'nonmetal'},
+        {key:'S',name:'svovel',group:16,period:3,type:'nonmetal'},
+        {key:'Cl',name:'klor',group:17,period:3,type:'nonmetal'},
+        {key:'Ar',name:'argon',group:18,period:3,type:'nonmetal',inert:true},
+        // Period 4
+        {key:'K',name:'kalium',group:1,period:4,type:'metal'},
+        {key:'Ca',name:'kalsium',group:2,period:4,type:'metal'},
+        {key:'Sc',name:'scandium',group:3,period:4,type:'metal'},
+        {key:'Ti',name:'titan',group:4,period:4,type:'metal'},
+        {key:'V',name:'vanadium',group:5,period:4,type:'metal'},
+        {key:'Cr',name:'krom',group:6,period:4,type:'metal'},
+        {key:'Mn',name:'mangan',group:7,period:4,type:'metal'},
+        {key:'Fe',name:'jern',group:8,period:4,type:'metal'},
+        {key:'Co',name:'kobolt',group:9,period:4,type:'metal'},
+        {key:'Ni',name:'nikkel',group:10,period:4,type:'metal'},
+        {key:'Cu',name:'kobber',group:11,period:4,type:'metal'},
+        {key:'Zn',name:'sink',group:12,period:4,type:'metal'},
+        {key:'Ga',name:'gallium',group:13,period:4,type:'metal'},
+        {key:'Ge',name:'germanium',group:14,period:4,type:'nonmetal'},
+        {key:'As',name:'arsen',group:15,period:4,type:'nonmetal'},
+        {key:'Se',name:'selen',group:16,period:4,type:'nonmetal'},
+        {key:'Br',name:'brom',group:17,period:4,type:'nonmetal'},
+        {key:'Kr',name:'krypton',group:18,period:4,type:'nonmetal',inert:true},
+        // Period 5
+        {key:'Rb',name:'rubidium',group:1,period:5,type:'metal'},
+        {key:'Sr',name:'strontium',group:2,period:5,type:'metal'},
+        {key:'Y',name:'yttrium',group:3,period:5,type:'metal'},
+        {key:'Zr',name:'zirkonium',group:4,period:5,type:'metal'},
+        {key:'Nb',name:'niob',group:5,period:5,type:'metal'},
+        {key:'Mo',name:'molybden',group:6,period:5,type:'metal'},
+        {key:'Tc',name:'technetium',group:7,period:5,type:'metal'},
+        {key:'Ru',name:'ruthenium',group:8,period:5,type:'metal'},
+        {key:'Rh',name:'rhodium',group:9,period:5,type:'metal'},
+        {key:'Pd',name:'palladium',group:10,period:5,type:'metal'},
+        {key:'Ag',name:'sølv',group:11,period:5,type:'metal'},
+        {key:'Cd',name:'kadmium',group:12,period:5,type:'metal'},
+        {key:'In',name:'indium',group:13,period:5,type:'metal'},
+        {key:'Sn',name:'tinn',group:14,period:5,type:'metal'},
+        {key:'Sb',name:'antimon',group:15,period:5,type:'metal'},
+        {key:'Te',name:'tellur',group:16,period:5,type:'nonmetal'},
+        {key:'I',name:'jod',group:17,period:5,type:'nonmetal'},
+        {key:'Xe',name:'xenon',group:18,period:5,type:'nonmetal',inert:true},
+        // Period 6 (main + some transition)
+        {key:'Cs',name:'cesium',group:1,period:6,type:'metal'},
+        {key:'Ba',name:'barium',group:2,period:6,type:'metal'},
+        {key:'Hf',name:'hafnium',group:4,period:6,type:'metal'},
+        {key:'Ta',name:'tantal',group:5,period:6,type:'metal'},
+        {key:'W',name:'wolfram',group:6,period:6,type:'metal'},
+        {key:'Re',name:'rhenium',group:7,period:6,type:'metal'},
+        {key:'Os',name:'osmium',group:8,period:6,type:'metal'},
+        {key:'Ir',name:'iridium',group:9,period:6,type:'metal'},
+        {key:'Pt',name:'platina',group:10,period:6,type:'metal'},
+        {key:'Au',name:'gull',group:11,period:6,type:'metal'},
+        {key:'Hg',name:'kvikksølv',group:12,period:6,type:'metal'},
+        {key:'Tl',name:'thallium',group:13,period:6,type:'metal'},
+        {key:'Pb',name:'bly',group:14,period:6,type:'metal'},
+        {key:'Bi',name:'vismut',group:15,period:6,type:'metal'},
+        {key:'Po',name:'polonium',group:16,period:6,type:'metal'},
+        {key:'At',name:'astat',group:17,period:6,type:'nonmetal'},
+        {key:'Rn',name:'radon',group:18,period:6,type:'nonmetal',inert:true}
+      ];
+
+      const lockedSet = new Set(['Si','Ge','As','Se','Te','At']);
+
+      const capitalizeFirst = (str)=>str.charAt(0).toUpperCase()+str.slice(1);
+      
+      const OX_STATES = {
+        Li:[1], Na:[1], K:[1], Rb:[1], Cs:[1],
+        Be:[2], Mg:[2], Ca:[2], Sr:[2], Ba:[2],
+        Sc:[3], Ti:[2,3,4], V:[2,3,4,5], Cr:[2,3,6], Mn:[2,3,4,6,7],Fe:[2,3], Co:[2,3], Ni:[2,3], Cu:[1,2], Zn:[2],
+        Y:[3], Zr:[4], Nb:[5], Mo:[3,4,5,6], Tc:[2,4,6,7], Ru:[2,3,4,6,8], Rh:[3,4,6], Pd:[2,4], Ag:[1], Cd:[2],
+        Hf:[4], Ta:[5], W:[3,4,5,6], Re:[2,4,6,7], Os:[2,3,4,6,8], Ir:[3,4,6], Pt:[2,4,6], Au:[1,3], Hg:[1,2],
+        Al:[3],Ga:[3],In:[3],Tl:[1,3],
+        Sn:[2,4], Pb:[2,4],
+        Sb:[3,5], Bi:[3,5],
+        Po:[2,4],
+      };
+      
+      const CATIONS = Object.entries(OX_STATES).map(([key, states]) => {
+        const el = ELEMENT_POS.find(e => e.key === key);
+        return { key, name: capitalizeFirst((el?.name ?? key).toLowerCase()), states };
+       }).concat([{ key:'NH4', name:'Ammonium', states:[1], poly:true }]);
+
+      const ANIONS = [
+        {key:'H',base:'hydrid',charge:-1,poly:false},{key:'B',base:'borid',charge:-3,poly:false},{key:'C',base:'karbid',charge:-4,poly:false},
+        {key:'N',base:'nitrid',charge:-3,poly:false},{key:'P',base:'fosfid',charge:-3,poly:false},{key:'O',base:'oksid',charge:-2,poly:false},{key:'S',base:'sulfid',charge:-2,poly:false},
+        {key:'F',base:'fluorid',charge:-1,poly:false},{key:'Cl',base:'klorid',charge:-1,poly:false},{key:'Br',base:'bromid',charge:-1,poly:false},{key:'I',base:'jodid',charge:-1,poly:false},
+        {key:'OH',base:'hydroksid',charge:-1,poly:true},{key:'NO3',base:'nitrat',charge:-1,poly:true},{key:'CO3',base:'karbonat',charge:-2,poly:true},{key:'SO4',base:'sulfat',charge:-2,poly:true},{key:'PO4',base:'fosfat',charge:-3,poly:true},
+        //{key:'Si',base:'silisid',charge:-4,poly:false},{key:'Ge',base:'germanid',charge:-4,poly:false},{key:'As',base:'arsenid',charge:-3,poly:false},{key:'Se',base:'selenid',charge:-2,poly:false},{key:'Te',base:'tellurid',charge:-2,poly:false},{key:'At',base:'astatid',charge:-1,poly:false}
+      ];
+
+      const HALOGENS = new Set(['F','Cl','Br','I','At']);
+
+      const GROUP12AL = ['Li','Na','K','Rb','Cs','Be','Mg','Ca','Sr','Ba','Al'];
+      const SINGLE_ANION_ID = { N:'nitrid', P:'fosfid', O:'oksid', S:'sulfid', F:'fluorid', Cl:'klorid', Br:'bromid', I:'jodid' };
+
+      const INITIAL_MOLECULES = ['H2O','BH3','C','CS2','CH4','CF4', 'CCl4', 'CBr4', 'CI4','NH3','N2','N2O','NO','NO2','N2O4','N2O5','PF5','P2O5','O2','O3','SO2','SO3','S2Cl2','H2S','SF6','HF','HCl','HBr','HI'];
+      const [molecules, setMolecules] = useState([...INITIAL_MOLECULES]);   // master list
+      const [enabledMolecules, setEnabledMolecules] = useState([...INITIAL_MOLECULES]); // active subset
+      const [showMolecules, setShowMolecules] = useState(false); // hidden by default
+      const [newMol, setNewMol] = useState('');
+      
+      const PREFIX = {1:'mono',2:'di',3:'tri',4:'tetra',5:'penta',6:'heksa',7:'hepta',8:'okta',9:'nona',10:'deka'};
+
+      // -------------------- UTIL --------------------
+      const subscriptDigits = (n) => String(n)
+        .replace(/0/g,'₀').replace(/1/g,'₁').replace(/2/g,'₂').replace(/3/g,'₃').replace(/4/g,'₄')
+        .replace(/5/g,'₅').replace(/6/g,'₆').replace(/7/g,'₇').replace(/8/g,'₈').replace(/9/g,'₉');
+      const toSubscripts = (text) => String(text).replace(/(\d+)/g,(m)=>subscriptDigits(m));
+      const fromSub = (s) => s.replace(/₀/g,'0').replace(/₁/g,'1').replace(/₂/g,'2').replace(/₃/g,'3').replace(/₄/g,'4').replace(/₅/g,'5').replace(/₆/g,'6').replace(/₇/g,'7').replace(/₈/g,'8').replace(/₉/g,'9');
+      const gcd = (a,b)=> b===0?Math.abs(a):gcd(b,a%b);
+      const rand = (arr)=> arr[Math.floor(Math.random()*arr.length)];
+      const roman = (n)=>{ const map=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let r=''; for(const [v,s] of map){ while(n>=v){ r+=s; n-=v; }} return r; };
+      const removeDiacritics = (str)=> str.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+      const supMap = {'+':'\u207A','-':'\u207B','1':'\u00B9','2':'\u00B2','3':'\u00B3','4':'\u2074'};
+      const toSuperscript = (s)=> String(s).split('').map(ch=> supMap[ch] || ch).join('');
+      const POLY_LABELS = {
+        OH: 'OH'+toSuperscript('-'),
+        NO3: 'NO'+subscriptDigits(3)+toSuperscript('-'),
+        CO3: 'CO'+subscriptDigits(3)+toSuperscript('2-'),
+        SO4: 'SO'+subscriptDigits(4)+toSuperscript('2-'),
+        PO4: 'PO'+subscriptDigits(4)+toSuperscript('3-'),
+        NH4: 'NH'+subscriptDigits(4)+toSuperscript('+'),
+      };
+
+      const balanceCharges = (cationCharge, anionCharge)=>{
+        const pos = Math.abs(Number(cationCharge)||0);
+        const neg = Math.abs(Number(anionCharge)||0);
+        if(pos===0 || neg===0) return {cationCount:1,anionCount:1};
+        const g = gcd(pos,neg);
+        return { cationCount: neg/g, anionCount: pos/g };
+      };
+
+      const formatIon = (symbol, count, isPoly) => {
+        const core = toSubscripts(symbol); // makes NO3 -> NO₃, SO4 -> SO₄, NH4 -> NH₄
+        if (isPoly) {
+          return count > 1 ? `(${core})${subscriptDigits(count)}` : core;
+        }
+        return core + (count > 1 ? subscriptDigits(count) : '');
+      };
+
+      const parseFormulaSimple = (formula)=>{
+        const f = fromSub(formula).replace(/\s/g,'');
+        const regex = /([A-Z][a-z]?)(\d*)/g; let m; const order=[]; const counts={};
+        while((m=regex.exec(f))!==null){ const sym=m[1]; const num = m[2]?parseInt(m[2],10):1; if(!order.includes(sym)) order.push(sym); counts[sym]=(counts[sym]||0)+num; }
+        return {order,counts};
+      };
+
+      const SINGLE_ELEMENT_COMMON = { 'O':{2:'oksygen',3:'ozon'}, 'N':{2:'nitrogen'}, 'C':{1:'karbon'} };
+      const makeMoleculeName = (formula)=>{
+        const parsed = parseFormulaSimple(formula);
+        if (parsed.order.length === 2 && parsed.counts.H === 1) { // Special case: hydrogen + a single halogen (HF, HCl, HBr, HI, HAt) → "hydrogenfluorid", "hydrogenklorid", ...
+          const other = parsed.order.find(k => k !== 'H');
+          if (other && HALOGENS.has(other) && parsed.counts[other] === 1) {
+            const base = SINGLE_ANION_ID[other] || (ELEMENT_POS.find(e=>e.key===other)?.name?.toLowerCase() + 'id') || other.toLowerCase() + 'id';
+            return 'hydrogen' + base;
+          }
+        }
+        if(parsed.order.length===1){
+          const sym = parsed.order[0]; const cnt = parsed.counts[sym];
+          if(SINGLE_ELEMENT_COMMON[sym] && SINGLE_ELEMENT_COMMON[sym][cnt]) return SINGLE_ELEMENT_COMMON[sym][cnt];
+          const el = ELEMENT_POS.find(e=>e.key===sym) || {name:sym.toLowerCase()};
+          if(cnt===1) return el.name;
+          const pref = PREFIX[cnt]||String(cnt);
+          return (pref+el.name);
+        }
+        const parts=[];
+        for(let i=0;i<parsed.order.length;i++){
+          const sym = parsed.order[i]; const cnt = parsed.counts[sym]; const elem = ELEMENT_POS.find(e=>e.key===sym) || {name:sym.toLowerCase()}; const pref = PREFIX[cnt]||'';
+          if(i===0){ if(cnt===1) parts.push(elem.name); else parts.push(pref+elem.name); }
+          else {
+            let idname = (ANIONS.find(a=>a.key===sym)||{base:elem.name+'id'}).base; // fallback
+            let part = (pref||'') + idname; if(pref==='mono' && idname==='oksid') part='monoksid';
+            parts.push(part);
+          }
+        }
+        return parts.join('');
+      };
+
+      const pickSalt = (enabledCats, enabledAns)=>{
+        if(enabledCats.length===0 || enabledAns.length===0) return null;
+        const cat = rand(enabledCats);
+        const an = rand(enabledAns);
+        const ox = rand(cat.states);
+        const counts = balanceCharges(ox, an.charge);
+        const catPart = formatIon(cat.key, counts.cationCount, !!cat.poly);
+        const anPart = formatIon(an.key, counts.anionCount, !!an.poly);
+        const formula = catPart + anPart;
+        const needRoman = !(GROUP12AL.includes(cat.key)) && cat.key!=='NH4';
+        const catNor = needRoman ? `${cat.name}(${roman(ox)})` : `${cat.name}`;
+        const anBase = an.poly ? an.base : (SINGLE_ANION_ID[an.key] || an.base);
+        const name = capitalizeFirst(catNor + anBase);
+        return {type:'salt',formula,name,details:{cat,an,ox,counts}};
+      };
+
+      const pickMolecule = ()=>{
+        const f = rand(enabledMolecules);
+        const display = f.replace(/(\d+)/g,(m)=>subscriptDigits(m));
+        return {type:'molecule',formula:display,name: capitalizeFirst(makeMoleculeName(f))};
+      };
+
+      const normalizeNameForCompare = (s)=> removeDiacritics((s||'').trim().toLowerCase());
+      const normalizeFormulaForCompare = (s)=> (fromSub((s||'')).replace(/\s+/g,'').toLowerCase());
+
+      // -------------------- REACT STATE --------------------
+      // Start with a sensible "common" set enabled; all the new elements are off by default
+      const COMMON_DEFAULT = new Set(['Li','Na','Mg','Al','K','Ca','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ag','Sn','Pb','O','S','F','Cl','Br','I']);
+      const inertSet = new Set(ELEMENT_POS.filter(e=>e.inert).map(e=>e.key));
+      const [enabledElems, setEnabledElems] = useState(()=> new Set([...COMMON_DEFAULT]));
+
+      // Exclusivity toggles
+      const [forceSalt, setForceSalt] = useState(false);
+      const [forceMol, setForceMol] = useState(false);
+
+      // enabled polyatomic ions
+      const initialPoly = {OH:true, NO3:true, CO3:true, SO4:true, PO4:true, NH4:true};
+      const [polyEnabled, setPolyEnabled] = useState(initialPoly);
+
+      const enabledCations = useMemo(()=>{
+        const list = CATIONS.filter(c=> enabledElems.has(c.key));
+        if(polyEnabled.NH4) list.push(CATIONS.find(c=>c.key==='NH4'));
+        return list.filter(Boolean);
+      },[enabledElems, polyEnabled.NH4]);
+
+      const enabledAnions = useMemo(()=>{
+        const base = ANIONS.filter(a=> enabledElems.has(a.key));
+        const polys = ANIONS.filter(a=>a.poly && polyEnabled[a.key]);
+        return [...base, ...polys];
+      },[enabledElems, polyEnabled]);
+
+      const chooseCompound = ()=>{
+        if(forceSalt) return pickSalt(enabledCations, enabledAnions);
+        if(forceMol) return pickMolecule();
+        return Math.random()<0.7 ? pickSalt(enabledCations, enabledAnions) : pickMolecule();
+      };
+
+      const [current, setCurrent] = useState(null);
+      const [answer, setAnswer] = useState('');
+      const [result, setResult] = useState('');
+      const [correct, setCorrect] = useState('');
+
+      const nextQ = ()=>{
+        const c = chooseCompound();
+        setCurrent(c);
+        setAnswer('');
+        setResult('');
+        setCorrect('');
+      };
+
+      const check = () => {
+        if (!current) { setResult('Ingen gyldig forbindelse.'); return; }
+        const raw = answer.trim();
+        if (!raw) { setResult('Skriv noe først.'); return; }
+      
+        if (modeName) {
+          // Expecting NAME
+          if (/\s/.test(raw)) {
+            setResult('Feil: navnet må være ett ord uten mellomrom.');
+            setCorrect(`Forventet: ${current.name}`);
+            return;
+          }
+        
+          const user = normalizeNameForCompare(raw);
+          const expFull = normalizeNameForCompare(current.name); // e.g. "Sølv(I)klorid"
+        
+          if (user === expFull) {
+            setResult('Riktig!');
+            setCorrect('');
+            return;
+          }
+        
+          // --- "Ok" path: allow missing Roman numeral IF cation has only one oxidation state ---
+          if (current?.type === 'salt' && current?.details?.cat && current?.details?.an) {
+            const cat = current.details.cat;  // e.g. { key:'Ag', name:'Sølv', states:[1], ... }
+            const an  = current.details.an;   // e.g. { key:'Cl', base:'klorid', poly:false, ... }
+        
+            // Build the name WITHOUT the Roman numeral, then compare
+            const anBase = an.poly ? an.base : (SINGLE_ANION_ID[an.key] || an.base);
+            const noRomanName = capitalizeFirst(cat.name + anBase); // e.g. "Sølvklorid"
+            const expNoRoman = normalizeNameForCompare(noRomanName);
+        
+            // If the cation is unambiguous (only one state), accept the no-Roman version as "Ok"
+            const unambiguous = Array.isArray(cat.states) && cat.states.length === 1;
+        
+            if (unambiguous && user === expNoRoman) {
+              setResult('Ok');
+            
+              const charge = Array.isArray(cat.states) && cat.states.length === 1 ? cat.states[0] : null;
+              const chargeText = (charge != null ? `+${charge}` : 'spesifikk positiv');
+            
+              // Explanation + preferred form
+              setCorrect(
+                `Det er entydig fordi ${cat.name.toLowerCase()} bare kan danne ioner med en ${chargeText} ladning. ` +
+                `Foretrukket skrivemåte: ${current.name}`
+              );
+              return;
+            }
+          }
+        
+          // Otherwise, standard "Feil."
+          setResult('Feil.');
+          setCorrect(`Forventet: ${current.name}`);
+        } else {
+          // Expecting FORMULA
+          if (/\s/.test(raw)) {
+            setResult('Feil: formelen må skrives uten mellomrom.');
+            setCorrect(`Forventet: ${current.formula}`);
+            return;
+          }
+          const user = normalizeFormulaForCompare(raw);
+          const exp  = normalizeFormulaForCompare(current.formula);
+          const ok = (user === exp);
+          setResult(ok ? 'Riktig!' : 'Feil.');
+          if (!ok) setCorrect(`Forventet: ${current.formula}`);
+        }
+      };
+
+      // init first question & tests once
+      useEffect(()=>{ nextQ(); },[]);
+
+      // helpers to toggle elements
+      const toggleElem = (key)=>{
+        if (inertSet.has(key) || lockedSet.has(key)) return; // ignore both inert and locked
+        setEnabledElems(prev=>{
+          const n = new Set(prev);
+          if(n.has(key)) n.delete(key); else n.add(key);
+          return n;
+        });
+      };
+
+      const selectAll = ()=>{
+        const n = new Set(ELEMENT_POS.filter(e => !inertSet.has(e.key) && !lockedSet.has(e.key)).map(e=>e.key));
+        setEnabledElems(n);
+        setPolyEnabled({...initialPoly});
+      };
+      const clearAll = ()=>{
+        setEnabledElems(new Set());
+        setPolyEnabled({OH:false,NO3:false,CO3:false,SO4:false,PO4:false,NH4:false});
+      };
+
+      // -------------------- TESTS --------------------
+      const [tests, setTests] = useState([]);
+
+      
+      // -------------------- RENDER --------------------
+      const [modeName, setModeName] = useState(true); // true = write name, show formula
+      const [showRules, setShowRules] = useState(false);
+
+      return (
+        <div className="wrap">
+          <style>{styles}</style>
+          <header>
+            <h1>Kjemiske forbindelser — øvingsspill</h1>
+          </header>
+
+          <div className="card">
+            <div className="controls" style={{justifyContent:'space-between',marginBottom:8}}>
+              <div className="controls">
+                <label className="small"><input type="radio" name="mode" checked={modeName} onChange={()=>setModeName(true)} /> Skriv navn (vis formel)</label>
+                <label className="small"><input type="radio" name="mode" checked={!modeName} onChange={()=>setModeName(false)} /> Skriv formel (vis navn)</label>
+                <label className="small"><input type="checkbox" checked={forceSalt} onChange={e=>{ const v=e.target.checked; setForceSalt(v); if(v) setForceMol(false); }} /> Kun salter</label>
+                <label className="small"><input type="checkbox" checked={forceMol} onChange={e=>{ const v=e.target.checked; setForceMol(v); if(v) setForceSalt(false); }} /> Kun molekyler</label>
+              </div>
+
+              <div className="controls">
+                  <button onClick={selectAll}>Velg alle</button>
+                  <button onClick={clearAll}>Fjern alle</button>
+                  <button onClick={()=>setShowRules(true)}>Regler / nomenklatur</button>
+              </div>
+              
+            </div>
+
+            <div className="row">
+              <div className="col">
+                <div className="small">Spørsmål</div>
+                <div id="prompt" className={modeName ? 'formula' : 'name'}>
+                  {current ? (modeName ? current.formula : current.name) : '(ingen gyldig forbindelse)'}
+                </div>
+
+                <div style={{marginTop:10}}>
+                  <input
+                    id="answer"
+                    type="text"
+                    placeholder={modeName
+                      ? (current?.type==='salt' ? 'Skriv systematisk navn (f.eks. kalsiumoksid eller dihydrogenmonoksid)' : 'Skriv systematisk navn (f.eks. kalsiumoksid eller dihydrogenmonoksid)')
+                      : (current?.type==='salt' ? 'Skriv formel (f.eks Ca(NO₃)₂)' : 'Skriv formel (f.eks H₂O)')}
+                    value={answer}
+                    onChange={e=>setAnswer(e.target.value)}
+                    onKeyDown={e=>{
+                      if (e.key === 'Enter') {
+                        if ((result || '').startsWith('Riktig') || (result || '').startsWith('Ok')) {
+                          nextQ();
+                        } else {
+                          check();
+                        }
+                      }
+                    }}
+                  />
+                  {/* Buttons moved directly below the textbox */}
+                  <div className="controls" style={{marginTop:8}}>
+                    <button onClick={nextQ}>Neste</button>
+                    <button onClick={check}>Sjekk svar</button>
+                    <button onClick={()=>{ if(current) setCorrect(`${current.name} — ${current.formula}`); }}>Vis riktig</button>
+                  </div>
+                </div>
+
+                <div className="status">
+                  <div
+                    id="result"
+                    className={`small line ${result.startsWith('Riktig') ? 'test-ok' : result.startsWith('Ok') ? 'test-okish' : result.startsWith('Feil') ? 'test-fail' : ''}`}
+                  >
+                    {result}
+                  </div>
+                  <div id="correct" className="small line">{correct}</div>
+                </div>
+              </div>
+
+              <div className="col">
+                <div className="ptable-wrap">
+                  <div className="ptable">
+                    {ELEMENT_POS.map(el=>{
+                      const on = enabledElems.has(el.key);
+                      const cls = `elem ${el.type==='metal'?'metal':'nonmetal'} ${el.inert?'inert':''} ${on?'on':'off'}`;
+                      return (
+                        <div
+                          key={el.key}
+                          className={cls}
+                          style={{gridColumnStart:el.group, gridRowStart:el.period}}
+                          onClick={()=>toggleElem(el.key)}
+                          title={el.name}
+                        >
+                          <div className="sym">{el.key}</div>
+                          <div style={{fontSize:9}}>{el.name}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div aria-hidden="true" style={{height: '40px'}} />
+                
+                
+                <div className="subheading">Sammensatte ioner</div>
+                <div className="polylist ions-block">
+                  {['OH','NO3','CO3','SO4','PO4','NH4'].map(k=> (
+                    <label key={k} style={{fontSize:13, marginRight:8}}>
+                      <input type="checkbox" checked={!!polyEnabled[k]} onChange={e=>setPolyEnabled(pe=>({...pe, [k]: e.target.checked}))} /> {POLY_LABELS[k]}
+                    </label>
+                  ))}
+                </div>
+
+                <div aria-hidden="true" style={{height: '32px'}} />
+                
+                <div className="molecules-block">
+                <div className="subheading" style={{cursor:'pointer'}} onClick={()=>setShowMolecules(v=>!v)}>
+                  Mulige molekyler {showMolecules ? '▲' : '▼'}
+                </div>
+                {showMolecules && (
+                  <div className="polylist">
+                    {molecules.map((m)=>(
+                      <label key={m} style={{background:'#fff',padding:'8px 12px',borderRadius:'8px'}}>
+                        <input
+                          type="checkbox"
+                          checked={enabledMolecules.includes(m)}
+                          onChange={e=>{
+                            setEnabledMolecules(prev => e.target.checked
+                              ? [...prev, m]
+                              : prev.filter(x => x !== m)
+                            );
+                          }}
+                        /> {toSubscripts(m)}
+                      </label>
+                    ))}
+                  </div>
+                  )}
+
+                  {showMolecules && (
+                  <div style={{marginTop:12}}>
+                    <input
+                      type="text"
+                      placeholder="Skriv formel"
+                      value={newMol}
+                      onChange={e=>setNewMol(e.target.value)}
+                      onKeyDown={e=>{
+                        if(e.key === 'Enter'){
+                          e.preventDefault();
+                          const raw = newMol.trim();
+                          if(!raw) return;
+                          const clean = fromSub(raw).replace(/\s+/g,''); 
+                          setMolecules(prev => prev.includes(clean) ? prev : [...prev, clean]);
+                          setEnabledMolecules(prev => prev.includes(clean) ? prev : [...prev, clean]);
+                          setNewMol('');
+                        }
+                      }}
+                      style={{width:'200px',marginRight:'8px'}}
+                    />
+                    <button onClick={()=>{
+                      const raw = newMol.trim();
+                      if(!raw) return;
+                      const clean = fromSub(raw).replace(/\s+/g,''); // normalize (CO₂ -> CO2, no spaces)
+                      setMolecules(prev => prev.includes(clean) ? prev : [...prev, clean]);
+                      setEnabledMolecules(prev => prev.includes(clean) ? prev : [...prev, clean]);
+                      setNewMol('');
+                    }}>Legg til</button>
+                  </div>
+                )}
+
+                  {showRules && (
+                  <div className="modal-backdrop" onClick={()=>setShowRules(false)} role="dialog" aria-modal="true">
+                    <div className="modal" onClick={e=>e.stopPropagation()}>
+                      <h2>Regler for nomenklatur</h2>
+                
+                      <h3>Salter (ioneforbindelser)</h3>
+                      <ul>
+                        <li><b>Navn:</b> Skriv først navnet på kationet/metallet, deretter anionet/ikke-metallet (kalsiumklorid).</li>
+                        <li><b>Ladning:</b> Hvis metallet kan ha flere ladninger, oppgis ladningen med romertall i parentes (jern(II), jern(III)).</li>
+                        <li><b>Gruppe 1, 2 og Al:</b> Metaller med bare én mulig ladning skrives uten romertall (Na⁺, Mg²⁺, Al³⁺).</li>
+                        <li><b>Innskuddsmetaller:</b> Innskuddsmetaller skrives som hovedregel alltid med romertall.  
+                        Unntak kan godtas når metallet bare kan ha én ladning i den aktuelle forbindelsen (f.eks. sølvklorid), men  
+                        sølv kan også danne Ag(II) i enkelte fluorider (AgF₂). Derfor er konvensjonen alltid å oppgi romertall for innskuddsmetaller.</li>
+                        <li><b>Formler:</b> Ladningene balanseres til minste heltall. Sammensatte ioner settes i parentes når det er flere: Ca(OH)₂, Al₂(SO₄)₃.</li>
+                      </ul>
+                      
+                      <h3>Molekyler (kovalente forbindelser)</h3>
+                      <ul>
+                        <li><b>Prefikser:</b> Mono-, di-, tri-, tetra-, penta-, heksa-, … beskriver antall atomer (dihydrogenmonoksid).</li>
+                        <li><b>Første ledd:</b> Prefikset “mono-” droppes foran første atom (karbondioksid)).</li>
+                        <li><b>Oksid:</b> Foran ordet -oksid forkortes mono- til mon- (monoksid).</li>
+                        <li><b>Rekkefølgen:</b> Grunnstoffene skrives fra minst til mest elektronegativ, med unntak av hydrogen som puttes etter nitrogen til tross for å ha lavere elektronegativitet. Den fullstendige prioritetsrekkefølgen er: Rn, Xe, Kr, Ar, Ne, He, B, Si, C, Sb, As, P, N, H, Te, Se, S, I, Br, Cl, O, F.</li>
+                        <li><b>Trivialnavn:</b> Noen stoffer har spesielle navn som f.eks. vann (H₂O) og ammoniakk (NH₃).</li>
+                        <li><b>Hydrogenhalogenider:</b> Forbindelser som HCl dropper prefiks fordi H og Cl kun kan danne én binding (hydrogenklorid). Når løst i vann har de egne trivialnavn (saltsyre). </li>
+                      </ul>
+                      
+                      <h3>Mer informasjon</h3>
+                      <ul>
+                        <li>Les mer om uorganisk nomenklatur her:   
+                          <a href="https://mn.uio.no/kjemi/forskning/grupper/skole/uorganisk-nomenklatur/" target="_blank">mn.uio.no/kjemi/forskning/grupper/skole/uorganisk-nomenklatur</a>
+                        </li>
+                      </ul>
+                      
+                      <div className="close-row">
+                        <button className="close-btn" onClick={()=>setShowRules(false)}>Lukk</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                  
+              </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<ChemTrainer />);
+  </script>
+</body>
 </html>
