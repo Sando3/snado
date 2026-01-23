@@ -531,13 +531,7 @@
 
   function translateRootInBase(base) {
     const roots = Object.keys(ROOT_MAP).sort((a,b)=>b.length-a.length);
-    for (const r of roots) {
-      if (base.startsWith(r)) {
-        base = ROOT_MAP[r] + base.slice(r.length);
-      } else if (base.includes(r)) {
-        base = base.replace(r, ROOT_MAP[r]);
-      }
-    }
+    for (const r of roots) base = base.replace(new RegExp(r, "g"), ROOT_MAP[r]);
     return base;
   }
 
@@ -545,10 +539,11 @@
     if (!prefixStr) return [];
     if (!prefixStr.includes("-")) {
       const listhalo = []
-      if (prefixStr.includes("dibromo")) { listhalo.push("dibrom"); } else if (prefixStr.includes("bromo")) { listhalo.push("brom"); }
-      if (prefixStr.includes("difluoro")) {listhalo.push("difluor") } else if (prefixStr.includes("fluoro")) { listhalo.push("fluor"); }
-      if (prefixStr.includes("diiodo")) { listhalo.push("dijod"); } else if (prefixStr.includes("iodo")) { listhalo.push("jod"); }
-      if (prefixStr.includes("dichloro")) { listhalo.push("diklor") } else if (prefixStr.includes("chloro")) { listhalo.push("klor"); }
+      if (prefixStr.includes("bromo")) listhalo.push((prefixStr.includes("dibromo") ? "di" : (prefixStr.includes("tribromo") ? "tri" : (prefixStr.includes("tetrabromo") ? "tetra" : "")))+"brom");
+      if (prefixStr.includes("fluoro")) listhalo.push((prefixStr.includes("difluoro") ? "di" : (prefixStr.includes("trifluoro") ? "tri" : (prefixStr.includes("tetrafluoro") ? "tetra" : "")))+"fluor");
+      if (prefixStr.includes("iodo")) listhalo.push((prefixStr.includes("diiodo") ? "di" : (prefixStr.includes("triiodo") ? "tri" : (prefixStr.includes("tetraiodo") ? "tetra" : "")))+"jod");
+      if (prefixStr.includes("chloro")) listhalo.push((prefixStr.includes("dichloro") ? "di" : (prefixStr.includes("trichloro") ? "tri" : (prefixStr.includes("tetrachloro") ? "tetra" : "")))+"klor");
+      if (prefixStr.includes("yl")) listhalo.push(translateRootInBase(prefixStr));
       if (listhalo) return [listhalo.join("")];
       return [prefixStr];
     }
@@ -600,6 +595,7 @@
   }
 
   function translateAndResortPrefixes(prefixStr) {
+
     const segs = parsePrefixSegments(prefixStr);
     const items = segs.map(translateOnePrefix);
 
@@ -635,6 +631,14 @@
 
     return `${prefixNo}${baseNo}`;
   }
+
+  // Midlertidig
+  function debugChars(label, s) {
+    console.log(label, JSON.stringify(s));
+    console.log([...s].map(ch => `${ch}(${ch.codePointAt(0)})`).join(" "));
+  }
+
+
 
   //
   // PRELOAD
@@ -1174,8 +1178,9 @@
     return cap;
   }
 
-  function pickFunctionalGroupsForLinear(fgEnabledKeys, fgN) {
+  function pickFunctionalGroupsForLinear(n, fgEnabledKeys, fgN) {
     let fg1 = sample(fgEnabledKeys);
+    if (fg1 == "ketones" && n <= 2) fg1 = "aldehydes";
     
     if (fg1 === "esters" || fg1 === "ethers") return { early: fg1, fgs: [fg1] };
 
@@ -1234,7 +1239,6 @@
         } else if (mustBeInternal) {
           pos1 = randint(2, n-1);
           occupy = 2;
-          if (n <= 2) occupy = 3;
         } else {
           pos1 = randint(1, n);
           occupy = 1;
@@ -1245,7 +1249,6 @@
 
         const idx = remaining.indexOf(principalFg);
         if (idx !== -1) remaining.splice(idx,1);
-        if (mustBeInternal && n <= 2) principalFg = "aldehydes";
 
     }
 
@@ -1458,7 +1461,7 @@
     const fgEnabledKeys = FG_LIST.filter(f => fgState[f.key]).map(f => f.key);
     if (!fgEnabledKeys.length) return `${parentRoots[n]}ane`;
 
-    const pick = pickFunctionalGroupsForLinear(fgEnabledKeys, fgN);
+    const pick = pickFunctionalGroupsForLinear(n, fgEnabledKeys, fgN);
 
     if (pick.early === "ethers") return simpleEtherName(n, maxChain.value);
     if (pick.early === "esters") return simpleEsterName(n, maxChain.value);
@@ -1978,9 +1981,10 @@
     }
   
     const exp = normalizeName(currentName);
-    const expNO = iupacEnToNo(exp);
+    const expNO = iupacEnToNo(currentName);
+    console.log(expNO);
   
-    if (user === exp || user == expNO) {
+    if (user === exp || user === expNO) {
       lastCheckCorrect = true;
       setStatus(t("statusCorrect"), "ok");
     } else {
