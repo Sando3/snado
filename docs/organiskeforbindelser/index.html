@@ -1,0 +1,2039 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nomenklaturspill – Organisk kjemi</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color-scheme: light; }
+    body { margin: 0; background: #f4f7fb; color: #0f172a; }
+
+    .page { max-width: 980px; margin: 0 auto; padding: 18px 16px 30px; }
+    h1 { margin: 0 0 10px 0; font-size: 34px; letter-spacing: .2px; }
+
+    .topbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid #d7e2ef; background: #ffffff;
+      border-radius: 999px; padding: 8px 12px;
+      box-shadow: 0 1px 0 rgba(15, 23, 42, .04);
+    }
+    .pill label { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+    input[type="checkbox"], input[type="radio"] { transform: translateY(1px); }
+
+    .langbtn {
+      border: 1px solid #d7e2ef; background: #ffffff; color: #0f172a;
+      border-radius: 10px; padding: 8px 10px; cursor: pointer; font-weight: 600;
+    }
+
+    .card {
+      background: #ffffff; border: 1px solid #d7e2ef; border-radius: 16px;
+      padding: 16px; box-shadow: 0 6px 22px rgba(15, 23, 42, .06);
+    }
+
+    .sectionTitle { font-size: 14px; color: #334155; margin: 0 0 10px 0; }
+
+    .questionWrap {
+      display: grid; place-items: center; padding: 10px;
+      border-radius: 14px; border: 1px dashed #d7e2ef;
+      background: #fbfdff; min-height: 400px; /* 220px før */
+    }
+
+    .questionText {
+      font-size: 44px; font-weight: 700; letter-spacing: .3px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #0b1220; text-align: center; padding: 10px 8px;
+    }
+
+    /* SVG is rendered inline here */
+    #svgHost { width: 100%; max-width: 900px; display: grid; place-items: center; }
+    #svgHost svg { width: 100%; height: 380px; max-height: 520px; }
+    @media (max-width: 520px) { #svgHost svg { height: 300px; } }
+
+    .answerInput {
+      width: 100%; box-sizing: border-box; margin-top: 12px;
+      padding: 14px 14px; border-radius: 14px;
+      border: 1px solid #d7e2ef; background: #f8fbff;
+      font-size: 16px; outline: none;
+    }
+    .answerInput:focus {
+      border-color: #7bcfff;
+      box-shadow: 0 0 0 4px rgba(123, 207, 255, .25);
+      background: #ffffff;
+    }
+
+    .btnRow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+    .btn {
+      border: 1px solid rgba(15, 23, 42, .08);
+      background: #7bcfff; color: #06263a;
+      border-radius: 12px; padding: 10px 12px;
+      cursor: pointer; font-weight: 600;
+      box-shadow: 0 2px 0 rgba(6, 38, 58, .08);
+    }
+    .btn:hover { filter: brightness(0.98); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn.secondary { background: #bfeaff; }
+
+    .status { color: #475569; }
+    .status.err { color: #b42318; }
+    .status.warn { color: #8a5b00; }
+    .status.ok { color: #067647; }
+
+    .fgArea { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6eef8; }
+    .fgTitle { margin: 0 0 8px 0; font-size: 13px; color: #334155; font-weight: 600; }
+
+    .fgGrid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 8px 10px; }
+    @media (max-width: 820px) { .fgGrid { grid-template-columns: repeat(2, minmax(180px, 1fr)); } }
+    @media (max-width: 520px) { .fgGrid { grid-template-columns: 1fr; } }
+
+    .chip { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1px solid #d7e2ef; background: #ffffff; }
+    .chip.disabled { opacity: .55; }
+
+    .muted { font-size: 12px; color: #64748b; margin-top: 8px; }
+
+    input[type="range"] { width: 220px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .genGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    
+    @media (max-width: 820px) {
+      .genGrid { grid-template-columns: 1fr; }
+    }
+    
+    .genItem {
+      border: 1px solid #d7e2ef;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    
+    .genItem label {
+      font-size: 13px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .genItem input[type="range"] { width: 80px; }
+    
+    .genItem .mono {
+      min-width: 70px;
+      text-align: right;
+    }
+
+    /* Difficulty selector */
+    .diffWrap { margin-top: 12px; }
+    
+    .diffBar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .diffBtn {
+      border: 1px solid #d7e2ef;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px 0;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 17px;
+      text-align: center;
+      user-select: none;
+      position: relative;
+      transition: transform 80ms ease, filter 120ms ease, box-shadow 120ms ease;
+    }
+    
+    .diffBtn[data-level="1"] { background: rgba(34, 197, 94, 0.18); }
+    .diffBtn[data-level="2"] { background: rgba(132, 204, 22, 0.18); }
+    .diffBtn[data-level="3"] { background: rgba(234, 179, 8, 0.18); }
+    .diffBtn[data-level="4"] { background: rgba(249, 115, 22, 0.18); }
+    .diffBtn[data-level="5"] { background: rgba(239, 68, 68, 0.16); }
+    .diffBtn[data-level="6"] { background: rgba(196, 7, 7, 0.16); }
+    .diffBtn[data-level="7"] { background: rgba(136, 9, 108, 0.16); }
+    
+    .diffBtn:hover { filter: brightness(1.03); transform: translateY(-1px); }
+    .diffBtn:active { transform: translateY(0px); }
+    
+    .diffBtn.active {
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.06);
+      border-color: rgba(15, 23, 42, 0.22);
+      filter: none;
+      transform: translateY(-1px);
+    }
+
+    .diffBtn.active[data-level="1"] { background: rgba(34, 197, 94, 0.40); }
+    .diffBtn.active[data-level="2"] { background: rgba(132, 204, 22, 0.40); }
+    .diffBtn.active[data-level="3"] { background: rgba(234, 179, 8, 0.40); }
+    .diffBtn.active[data-level="4"] { background: rgba(249, 115, 22, 0.40); }
+    .diffBtn.active[data-level="5"] { background: rgba(239, 68, 68, 0.38); }
+    .diffBtn.active[data-level="6"] { background: rgba(196, 7, 7, 0.42); }
+    .diffBtn.active[data-level="7"] { background: rgba(136, 9, 108, 0.38); }
+
+    .diffDesc {
+      margin-top: 10px;
+      border: 1px solid #e6eef8;
+      background: #fbfdff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: #0f172a;
+    }
+
+    .diffDesc[data-level="1"] { background: rgba(34, 197, 94, 0.12); }
+    .diffDesc[data-level="2"] { background: rgba(132, 204, 22, 0.12); }
+    .diffDesc[data-level="3"] { background: rgba(234, 179, 8, 0.12); }
+    .diffDesc[data-level="4"] { background: rgba(249, 115, 22, 0.12); }
+    .diffDesc[data-level="5"] { background: rgba(239, 68, 68, 0.10); }
+    .diffDesc[data-level="6"] { background: rgba(196, 7, 7, 0.20); }
+    .diffDesc[data-level="7"] { background: rgba(136, 9, 108, 0.20); }
+    
+    .diffDesc .title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+    
+    .diffDesc .body {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.35;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1 data-lang="title">Organiske forbindelser — øvingsspill</h1>
+
+    <div class="topbar">
+      <!-- Maks karbonkjede lengde -->
+      <div class="pill">
+        <label>
+          <span data-lang="maxChain">Maks lengde (lengste kjede)</span>:
+          <span id="maxChainVal" class="mono">10</span>
+        </label>
+        <input id="maxChain" type="range" min="1" max="12" value="10" />
+      </div>
+
+      <!-- Språk -->
+      <div class="right">
+        <div class="pill">
+          <span class="muted" style="margin:0" data-lang="language">Språk</span>
+          <button id="langBtn" class="langbtn" title="Toggle language">NO</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kjemisk forbindelse SVG -->
+    <div class="card">
+      <div class="sectionTitle" data-lang="question">Hva er det systematiske IUPAC navnet til denne forbindelsen?</div>
+      <div class="questionWrap" aria-live="polite">
+        <div id="svgHost" style="display:none"></div>
+        <div id="fallbackText" class="questionText">–</div>
+      </div>
+
+      <!-- Inntastingsfelt -->
+      <input id="answer" class="answerInput" type="text" placeholder="" autocomplete="off" spellcheck="false" />
+
+      <!-- Knapper under forbindelsen -->
+      <div class="btnRow">
+        <button id="newBtn" class="btn" data-lang="new">Ny forbindelse</button>
+        <button id="checkBtn" class="btn secondary" data-lang="check">Sjekk svar</button>
+        <button id="showBtn" class="btn secondary" data-lang="show">Vis riktig</button>
+        <span id="status" class="status"></span>
+        <span id="expected"></span>
+      </div>
+
+
+      <!-- Funksjonelle grupper -->
+      <div class="fgArea">
+        <div class="fgTitle" data-lang="fgTitle">Stoffgrupper / funksjonelle grupper</div>
+        <div class="fgGrid" id="fgGrid"></div>
+      </div>
+
+      <!-- Hydrokarboner -->
+      <div class="fgArea">
+        <div class="fgTitle" data-lang="hcTitle">Hydrokarboner</div>
+        <div class="fgGrid" id="hcGrid"></div>
+      </div>
+      
+      <!-- Genererings-innstillinger -->
+      <div class="fgArea">
+        <div class="fgTitle" data-lang="genTitle">Generering</div>
+      
+        <div class="genGrid">
+          <div class="genItem">
+            <label for="unsatCount"><span data-lang="unsatCount">Antall dobbel/trippelbindinger</span>: <span id="unsatCountVal" class="mono">0</span></label>
+            <input id="unsatCount" type="range" min="0" max="4" value="0" disabled />
+          </div>
+          
+          <div class="genItem">
+            <label for="branchCount"><span data-lang="branches">Antall sidegrener</span>: <span id="branchCountVal" class="mono">Tilfeldig</span></label>
+            <input id="branchCount" type="range" min="0" max="4" value="4" />
+          </div>
+      
+          <div class="genItem">
+            <label for="fgCount"><span data-lang="fgCount">Antall funksjonelle grupper</span>: <span id="fgCountVal" class="mono">Tilfeldig</span></label>
+            <input id="fgCount" type="range" min="0" max="4" value="4" />
+          </div>
+        </div>
+          
+        <!-- Vanskelighetsgrad -->
+        <div class="fgArea">
+          <div class="diffWrap">
+            <div class="fgTitle" data-lang="diffTitle">Vanskelighetsgrad</div>
+            
+            <div class="diffBar" id="diffBar" role="radiogroup" aria-label="Difficulty">
+              <div class="diffBtn" data-level="1" role="radio" aria-checked="false">1</div>
+              <div class="diffBtn" data-level="2" role="radio" aria-checked="false">2</div>
+              <div class="diffBtn" data-level="3" role="radio" aria-checked="false">3</div>
+              <div class="diffBtn" data-level="4" role="radio" aria-checked="false">4</div>
+              <div class="diffBtn" data-level="5" role="radio" aria-checked="false">5</div>
+              <div class="diffBtn" data-level="6" role="radio" aria-checked="false">6</div>
+              <div class="diffBtn" data-level="7" role="radio" aria-checked="false">7</div>
+            </div>
+            
+            <div class="diffDesc" id="diffDesc" aria-live="polite">
+              <div class="title" id="diffDescTitle">—</div>
+              <div class="body" id="diffDescBody">—</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <details style="margin-top:10px;">
+        <summary class="muted" data-lang="debug">Debug</summary>
+        <div class="muted" style="margin-top:8px">
+          <div><span class="mono">IUPAC</span>: <span id="nameOut">–</span></div>
+          <div><span class="mono">SVG</span>: <span id="svgInfo">–</span></div>
+          <div><span class="mono">Regler</span>: <span id="rulesOut">–</span></div>
+          <div><span>ㅤ</span></div>
+          <div><span class="mono">Output</span>: <span id="debuggingOutput">–</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+<script>
+  const LANG = {
+    no: {
+      title: "Organiske forbindelser — øvingsspill",
+      maxChain: "Maks lengde (lengste kjede)",
+      language: "Språk",
+      new: "Ny forbindelse",
+      question: "Hva er det systematiske IUPAC navnet til denne forbindelsen?",
+      check: "Sjekk svar",
+      show: "Vis riktig",
+      fgTitle: "Stoffgrupper / funksjonelle grupper",
+      placeholder: "Skriv navn her…",
+      statusCorrect: "Riktig!",
+      statusWrong: "Feil.",
+      hcTitle: "Hydrokarboner",
+      genTitle: "Generering",
+      unsatCount: "Dobbel/trippelbindinger",
+      branches: "Antall sidegrener",
+      fgCount: "Antall funksjonelle grupper",
+      randomWord: "Tilfeldig",
+      fgs: {
+        carboxylic: "Karboksylsyrer (COOH)",
+        esters: "Estere (COOR)",
+        amides: "Amider (CON)",
+        aldehydes: "Aldehyder (CHO)",
+        ketones: "Ketoner (CO)",
+        alcohols: "Alkoholer (OH)",
+        amines: "Aminer (NH₂)",
+        halogens: "Halogener (X)",
+        ethers: "Etere (-O-)",
+      },
+      hydroTypes: {
+        alkanes: "Alkaner (C–C)",
+        alkenes: "Alkener (C=C)",
+        alkynes: "Alkyner (C≡C)",
+        cyclic: "Sykliske forbindelser (⬠)",
+        aromatic: "Aromatiske forbindelser (⌬)",
+      },
+      diffTitle: "Vanskelighetsgrad",
+      diffLevels: {
+        1: {
+          title: "Enkle hydrokarboner",
+          body: "Alkaner, sykloalkaner og benzen."
+        },
+        2: {
+          title: "Enkle hydrokarboner med sidegrener",
+          body: "Alkaner med 0–3 sidegrener."
+        },
+        3: {
+          title: "Umettede forbindelser",
+          body: "Alkener og alkyner."
+        },
+        4: {
+          title: "Umettede forbindelser med sidegrener",
+          body: "Alkener og alkyner med 0-3 sidegrener."
+        },
+        5: {
+          title: "En funksjonell gruppe",
+          body: "Alkaner med 1 funksjonell gruppe. Du velger hvilke stoffgrupper som er aktivert."
+        },
+        6: {
+          title: "Mange funksjonelle grupper",
+          body: "Organiske forbindelser med 0–3 funksjonelle grupper. Du velger hvilke stoffgrupper som er aktivert."
+        },
+        7: {
+          title: "Mange funksjonelle grupper og sidegrener",
+          body: "Organiske forbindelser med 0–3 funksjonelle grupper og 0–3 sidegrener. Du velger hvilke stoffgrupper som er aktivert.",
+        },
+      },
+    },
+    en: {
+      title: "Organic compounds — practice game",
+      maxChain: "Max parent chain length",
+      language: "Language",
+      new: "New compound",
+      question: "What is the systematic IUPAC name of this compound?",
+      check: "Check answer",
+      show: "Show answer",
+      fgTitle: "Functional groups",
+      placeholder: "Type the name here…",
+      statusCorrect: "Correct!",
+      statusWrong: "Wrong.",
+      hcTitle: "Hydrocarbons",
+      genTitle: "Generation",
+      unsatCount: "Double/triple bonds",
+      branches: "Number of side branches",
+      fgCount: "Number of functional groups",
+      randomWord: "Random",
+      fgs: {
+        carboxylic: "Carboxylic acids (COOH)",
+        esters: "Esters (COOR)",
+        amides: "Amides (CON)",
+        aldehydes: "Aldehydes (CHO)",
+        ketones: "Ketones (CO)",
+        alcohols: "Alcohols (OH)",
+        amines: "Amines (NH₂)",
+        halogens: "Halogens (X)",
+        ethers: "Ethers (-O-)",
+      },
+      hydroTypes: {
+        alkanes: "Alkanes (C–C)",
+        alkenes: "Alkenes (C=C)",
+        alkynes: "Alkynes (C≡C)",
+        cyclic: "Cyclic compounds (⬠)",
+        aromatic: "Aromatic compounds (⌬)",
+      },
+      diffTitle: "Difficulty",
+      diffLevels: {
+        1: {
+          title: "Simple hydrocarbons",
+          body: "Alkanes, cycloalkanes and benzene."
+        },
+        2: {
+          title: "Simple hydrocarbons with branches",
+          body: "Alkanes with 0–3 branches."
+        },
+        3: {
+          title: "Unsaturated compounds",
+          body: "Alkenes and alkynes."
+        },
+        4: {
+          title: "Unsaturated compounds with branches",
+          body: "Alkenes and alkynes with 0–3 branches."
+        },
+        5: {
+          title: "One functional group",
+          body: "Alkanes with 1 functional group."
+        },
+        6: {
+          title: "Multiple functional groups",
+          body: "Organic compounds with 0-3 functional groups. You choose the classes yourself."
+        },
+        7: {
+          title: "Multiple functional groups and branches",
+          body: "Organic compounds 0–3 functional groups and 0–3 branches. You choose the classes yourself."
+        }
+      },
+    }
+  };
+
+  //
+  // NORSK IUPAC
+  //
+  const SUB_MAP = {
+    fluoro: "fluor",
+    chloro: "klor",
+    bromo: "brom",
+    iodo: "jod",
+    amino: "amino",
+    hydroxy: "hydroksy",
+    methyl: "metyl",
+    ethyl: "etyl",
+    propyl: "propyl",
+    butyl: "butyl",
+    pentyl: "pentyl",
+    hexyl: "heksyl",
+  };
+
+  const MULT_MAP = {
+    di: "di",
+    tri: "tri",
+    tetra: "tetra",
+  };
+
+  const ROOT_MAP = {
+    meth: "met",
+    eth: "et",
+    prop: "prop",
+    but: "but",
+    pent: "pent",
+    hex: "heks",
+    hept: "hept",
+    oct: "okt",
+    non: "non",
+    dec: "dek",
+    undec: "undek",
+    dodec: "dodek",
+  };
+
+  function translateBase(base) {
+    base = base.replace(/oic acid\b/g, "syre");
+    base = base.replace(/oate\b/g, "at");
+    base = base.replace(/amide\b/g, "amid");
+    base = base.replace(/al\b/g, "al");
+    base = base.replace(/one\b/g, "on");
+    base = base.replace(/ol\b/g, "ol");
+    base = base.replace(/amine\b/g, "amin");
+    base = base.replace(/ene\b/g, "en");
+    base = base.replace(/yne\b/g, "yn");
+    base = base.replace(/ane\b/g, "an");
+    base = base.replace(/benzene/g, "benzen");
+    base = base.replace(/cyclo/g, "syklo");
+
+    return base;
+  }
+
+  function splitPrefixAndBase(iupac) {
+    const m = iupac.match(/(cyclo)?(meth|eth|prop|but|pent|hex|hept|oct|non|dec|undec|dodec)[-\d,]*(?:an|en|dien|trien|yn|diyn|triyn)/);
+    if (!m) return { prefix: "", base: iupac }; // ingen substituenter
+  
+    return { prefix: iupac.slice(0, m.index), base: iupac.slice(m.index) };
+  }
+
+  function translateRootInBase(base) {
+    const roots = Object.keys(ROOT_MAP).sort((a,b)=>b.length-a.length);
+    for (const r of roots) {
+      if (base.startsWith(r)) {
+        base = ROOT_MAP[r] + base.slice(r.length);
+      } else if (base.includes(r)) {
+        base = base.replace(r, ROOT_MAP[r]);
+      }
+    }
+    return base;
+  }
+
+  function parsePrefixSegments(prefixStr) {
+    if (!prefixStr) return [];
+    if (!prefixStr.includes("-")) {
+      const listhalo = []
+      if (prefixStr.includes("dibromo")) { listhalo.push("dibrom"); } else if (prefixStr.includes("bromo")) { listhalo.push("brom"); }
+      if (prefixStr.includes("difluoro")) {listhalo.push("difluor") } else if (prefixStr.includes("fluoro")) { listhalo.push("fluor"); }
+      if (prefixStr.includes("diiodo")) { listhalo.push("dijod"); } else if (prefixStr.includes("iodo")) { listhalo.push("jod"); }
+      if (prefixStr.includes("dichloro")) { listhalo.push("diklor") } else if (prefixStr.includes("chloro")) { listhalo.push("klor"); }
+      if (listhalo) return [listhalo.join("")];
+      return [prefixStr];
+    }
+
+    const matches = prefixStr.match(/[0-9,]+-(?:di|tri|tetra)?[a-z]+/gi);
+    return matches ? matches : [];
+  }
+
+  function translateOnePrefix(seg) {
+    const m = seg.match(/^([0-9,]+)-(?:(di|tri|tetra))?([a-z]+)$/i);
+    const m2 = seg.match(/^(?:(di|tri|tetra))?([a-z]+)$/i);
+    if (!m && !m2) { 
+    
+      return { loc: "", sortKey: seg, toString() { return seg; } };
+    
+    } else if (m2) { // ikke noe tall foran substituent
+    
+      const mult = m2[1] || "";
+      const nameEn = m2[2].toLowerCase();
+      let nameNo = SUB_MAP[nameEn] || nameEn;
+
+      return {
+        loc: "",
+        sortKey: nameNo,
+        toString() { return `${mult}${nameNo}`; }
+      };
+      
+    }
+      
+    const loc = m[1];
+    const mult = m[2] || "";
+    const nameEn = m[3];
+
+    const nameNo = SUB_MAP[nameEn] || nameEn;
+    const multNo = mult ? (MULT_MAP[mult] || mult) : "";
+
+    const sortKey = nameNo;
+
+    // NB: 1-chloro-2-iodoethane IKKE fungerende for norsk ennå!!!
+    return {
+      loc,
+      mult: multNo,
+      nameNo,
+      sortKey,
+      toString() {
+        return `${loc}-${multNo}${nameNo}`;
+      }
+    };
+  }
+
+  function translateAndResortPrefixes(prefixStr) {
+    const segs = parsePrefixSegments(prefixStr);
+    const items = segs.map(translateOnePrefix);
+
+    // sorter alfabetisk på norsk substituentnavn, tie-break på locants (numerisk/lex)
+    items.sort((a,b) => {
+      const c = a.sortKey.localeCompare(b.sortKey, "nb");
+      if (c) return c;
+      return a.loc.localeCompare(b.loc);
+    });
+
+    return items.map(x => x.toString()).join("-");
+  }
+
+  function translateEther(str) {
+    const alkyls = str.replace("ane","").split("oxy");
+    if (alkyls[0] < alkyls[1]) return translateRootInBase(alkyls[0])+"yl"+translateRootInBase(alkyls[1])+"yleter";
+    if (alkyls[1] < alkyls[0]) return translateRootInBase(alkyls[1])+"yl"+translateRootInBase(alkyls[0])+"yleter";
+    return "di"+translateRootInBase(alkyls[0])+"yleter";
+  }
+
+  function iupacEnToNo(nameEn) {
+    if (nameEn === "phenol") return "fenol";
+    if (nameEn === "benzoic acid") return "benzosyre";
+    if (nameEn === "benzaldehyde") return "benzaldehyd";
+    
+    if (nameEn.includes("anoate")) { return translateRootInBase(nameEn).replace("anoate","anat").replace(" ",""); }
+    if (nameEn.includes("oxy") && nameEn.includes("ane")) { return translateEther(nameEn); }
+
+    const { prefix, base } = splitPrefixAndBase(nameEn);
+    const prefixNo = translateAndResortPrefixes(prefix);
+    let baseNo = translateRootInBase(base);
+    baseNo = translateBase(baseNo);
+
+    return `${prefixNo}${baseNo}`;
+  }
+
+  //
+  // PRELOAD
+  //
+  let lang = "no";
+
+  function t(keyPath) {
+    const parts = keyPath.split(".");
+    let cur = LANG[lang];
+    for (const p of parts) cur = cur && cur[p];
+    return cur || keyPath;
+  }
+
+  // Last inn tekst til på knapper, overskrifter, ... 
+  function applyLANG() {
+    document.querySelectorAll("[data-lang]").forEach(el => {
+      el.textContent = t(el.getAttribute("data-lang"));
+    });
+    
+    FG_LIST.forEach(fg => {
+      const labelSpan = document.querySelector("label[for='fg_" + fg.key + "'] span");
+      if (labelSpan) labelSpan.textContent = t("fgs." + fg.key);
+    });
+
+    HC_LIST.forEach(hc => {
+      const labelSpan = document.querySelector("label[for='hc_" + hc.key + "'] span");
+      if (labelSpan) labelSpan.textContent = t("hydroTypes." + hc.key);
+    });
+
+    document.getElementById("langBtn").textContent = lang.toUpperCase();
+    document.getElementById("answer").placeholder = t("placeholder");
+  }
+
+  // Funksjonelle grupper
+  const FG_LIST = [
+    { key: "carboxylic", default: false },
+    { key: "esters", default: false },
+    { key: "amides", default: false },
+    { key: "aldehydes", default: false },
+    { key: "ketones", default: false },
+    { key: "alcohols", default: false },
+    { key: "amines", default: false },
+    { key: "halogens", default: false },
+    { key: "ethers", default: false },
+  ];
+
+  const fgState = {};
+  FG_LIST.forEach(f => fgState[f.key] = f.default);
+
+  const fgGrid = document.getElementById("fgGrid");
+  FG_LIST.forEach(fg => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.id = "fg_" + fg.key;
+    cb.checked = !!fgState[fg.key];
+
+    cb.addEventListener("change", () => {
+      fgState[fg.key] = cb.checked;
+      updateRulesOut();
+    });
+
+    const lab = document.createElement("label");
+    lab.htmlFor = cb.id;
+    lab.style.display = "flex";
+    lab.style.alignItems = "center";
+    lab.style.gap = "10px";
+    lab.style.margin = "0";
+
+    const text = document.createElement("span");
+    text.textContent = t("fgs." + fg.key);
+
+    lab.appendChild(cb);
+    lab.appendChild(text);
+    chip.appendChild(lab);
+    fgGrid.appendChild(chip);
+  });
+
+  // Hydrokarbon-typer (egen kategori)
+  const HC_LIST = [
+    { key: "alkanes", default: true },
+    { key: "alkenes", default: false },
+    { key: "alkynes", default: false },
+    { key: "cyclic", default: false },
+    { key: "aromatic", default: false },
+  ];
+  
+  const hcState = {};
+  HC_LIST.forEach(h => hcState[h.key] = h.default);
+  
+  const hcGrid = document.getElementById("hcGrid");
+  HC_LIST.forEach(hc => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+  
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.id = "hc_" + hc.key;
+    cb.checked = !!hcState[hc.key];
+
+    // HC Listener
+    cb.addEventListener("change", () => {
+      hcState[hc.key] = cb.checked;
+  
+      // Sørg for at minst én type alltid er valgt
+      const anyOn = HC_LIST.some(x => hcState[x.key]);
+      if (!anyOn) {
+        hcState.alkanes = true;
+        document.getElementById("hc_alkanes").checked = true;
+      }
+
+      updateUnsatAvailability();
+      updateRulesOut();
+    });
+  
+    const lab = document.createElement("label");
+    lab.htmlFor = cb.id;
+    lab.style.display = "flex";
+    lab.style.alignItems = "center";
+    lab.style.gap = "10px";
+    lab.style.margin = "0";
+  
+    const text = document.createElement("span");
+    text.textContent = t("hydroTypes." + hc.key);
+  
+    lab.appendChild(cb);
+    lab.appendChild(text);
+    chip.appendChild(lab);
+    hcGrid.appendChild(chip);
+  });
+
+  // Slider: Lengste kjede
+  const maxChain = document.getElementById("maxChain");
+  const maxChainVal = document.getElementById("maxChainVal");
+  function setMaxChainLabel() { maxChainVal.textContent = String(maxChain.value); }
+  maxChain.addEventListener("input", () => { setMaxChainLabel(); });
+  setMaxChainLabel();
+
+  // SLIDERS: bindinger, sidegrener og funksjonelle grupper
+  const unsatCount = document.getElementById("unsatCount");
+  const unsatCountVal = document.getElementById("unsatCountVal");
+  const branchCount = document.getElementById("branchCount");
+  const branchCountVal = document.getElementById("branchCountVal");
+  const fgCount = document.getElementById("fgCount");
+  const fgCountVal = document.getElementById("fgCountVal");
+  
+  function sliderLabel(v) {
+    if (Number(v) === 4) return t("randomWord"); // 4 = tilfeldig
+    return String(v);
+  }
+  
+  function syncGenSliders() {
+    unsatCountVal.textContent = sliderLabel(unsatCount.value);
+    branchCountVal.textContent = sliderLabel(branchCount.value);
+    fgCountVal.textContent = sliderLabel(fgCount.value);
+
+    if (Number(unsatCount.value) === 0) {
+      const anyOn = HC_LIST.some(x => hcState[x.key]);
+      if (!anyOn) setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", false);
+      setHydrocarbonGroup("alkynes", false);
+    } else if (!document.getElementById("hc_alkenes").checked && !document.getElementById("hc_alkynes").checked) {
+      setHydrocarbonGroup("alkenes", true);
+      setHydrocarbonGroup("alkynes", true);
+    }
+  }
+
+  function updateUnsatAvailability() {
+    const allow = !!hcState.alkenes || !!hcState.alkynes;
+  
+    if (!allow) {
+      unsatCount.value = "0";
+      unsatCount.disabled = true;
+    } else {
+      unsatCount.disabled = false;
+      if (Number(unsatCount.value) === 0) unsatCount.value = "1"
+    }
+  
+    syncGenSliders();
+  }
+
+  unsatCount.addEventListener("input", () => {
+    syncGenSliders();
+    updateRulesOut();
+  });
+  
+  branchCount.addEventListener("input", () => {
+    syncGenSliders();
+    updateRulesOut();
+  });
+  
+  fgCount.addEventListener("input", () => {
+    syncGenSliders();
+    updateRulesOut();
+  });
+  
+  syncGenSliders();
+  
+
+  //
+  //
+  // GENERERER EN ORGANISK FORBINDELSE (IUPAC)
+  //
+  //
+  const parentRoots = { 1:"meth",2:"eth",3:"prop",4:"but",5:"pent",6:"hex",7:"hept",8:"oct",9:"non",10:"dec",11:"undec",12:"dodec" };
+  const alkylRoots = { 1:"methyl",2:"ethyl",3:"propyl",4:"butyl",5:"pentyl",6:"hexyl",7:"heptyl",8:"octyl",9:"nonyl",10:"decyl",11:"undecyl",12:"dodecyl"};
+
+  function randint(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function sample(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function buildAlkaneName(n) { return parentRoots[n] + "ane"; }
+  function weightedSample(items) { // items = [{key, vekting}, ...]
+    const total = items.reduce((s, it) => s + it.weight, 0);
+    let r = Math.random() * total;
+    for (const it of items) {
+      r -= it.weight;
+      if (r <= 0) return it.key;
+    }
+    return items[items.length - 1]?.key;
+  }
+  function resolveCount(sliderValue, min, max) {
+    const v = Number(sliderValue);
+    if (v === 4) return randint(min, max);
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function buildMoleculeName() {
+    
+    const weighted = [];
+    if (hcState.alkanes) weighted.push({ key: "alkanes", weight: 10 });
+    if (hcState.alkenes) weighted.push({ key: "alkenes", weight: 5 });
+    if (hcState.alkynes) weighted.push({ key: "alkynes", weight: 1 });
+    if (hcState.cyclic) weighted.push({ key: "cyclic", weight: 1 });
+    if (hcState.aromatic) weighted.push({ key: "aromatic", weight: 1 });
+  
+    const chosen = weighted.length ? weightedSample(weighted) : "alkanes";
+    addDebugLine("Type: "+chosen)
+
+    if (chosen === "aromatic") {
+      return buildBenzeneName();
+    }
+
+    if (chosen === "cyclic") {
+      return buildCycloName();
+    }
+
+    return buildLinearHydrocarbon(chosen);
+    
+  }
+
+  //
+  // ALKAN / ALKEN / ALKYN
+  //
+  function buildLinearHydrocarbon(type) {
+    const n = randint(1, Math.max(1, Number(maxChain.value)));
+    const brN = resolveCount(branchCount.value, 0, 3);
+    const fgN = resolveCount(fgCount.value, 0, 3);
+    const unsat = resolveCount(unsatCount.value, 0, Math.floor(n/2));
+    addDebugLine("Carbonchain: "+n+" (unsat="+unsat+", brN="+brN+", "+"fgN="+fgN+")");
+
+    if (fgN === 0 && brN === 0) return simpleHydrocarbonName(n, type, unsat);
+    if (fgN === 0) return brancedHydrocarbonName(n, type, brN, unsat);
+    return functionalizedHydrocarbonName(n, type, fgN, brN, unsat);
+
+  }
+
+  function unsatSuffix(kind, count) {
+    const mult = {2:"di", 3:"tri", 4:"tetra", 5:"penta", 6:"hexa"};
+    if (count <= 1) return (kind === "alkenes" ? "ene" : "yne");
+    return (mult[count] || "") + (kind === "alkenes" ? "ene" : "yne");
+  }
+
+  function normalizeUnsatLocants(unsatPos, n) {
+    const a = [...unsatPos].sort((x, y) => x - y);
+    const b = a.map(i => n - i).sort((x, y) => x - y);
+
+    // Sammenlign posisjonslister:[*1*,6,7,8] slår [*2*,3,4,9] selv om summen er større
+    for (let k = 0; k < Math.min(a.length, b.length); k++) {
+        if (a[k] < b[k]) return a;
+        if (b[k] < a[k]) return b;
+    }
+    return a;
+  }
+
+  function simpleHydrocarbonName(n, type, unsat) { // ingen sidekjeder eller funksjonelle grupper
+    
+    if (type === "alkanes" || unsat === 0) return parentRoots[n]+'ane'; // Alkane disabled but unsat=0 makes alkane... FIX!!!
+    if (type === "alkenes" && n <= 3) return parentRoots[n]+'ene';
+    if (type === "alkynes" && n <= 3) return parentRoots[n]+'yne';
+    
+    const possibleUnsatPos = [];
+    for (let i = 1 ; i <= n-1; i++) possibleUnsatPos.push(i);
+
+    const unsatPos = [];
+    for (let i = 1 ; i <= unsat ; i++) {
+        if (possibleUnsatPos.length < 1) break;
+        const pos = sample(possibleUnsatPos);
+        unsatPos.push(pos);
+        for (let j = pos-1 ; j<=pos+1 ; j++) {
+            const idx = possibleUnsatPos.indexOf(j)
+            if (idx !== -1) possibleUnsatPos.splice(idx, 1);
+        }
+    }
+
+    const newUnsatPos = normalizeUnsatLocants(unsatPos, n);
+    return parentRoots[n]+'-'+newUnsatPos.join(',')+'-'+unsatSuffix(type, newUnsatPos.length);
+
+  }
+
+  function makeCapacityForChain(n, type, unsatLocants) {
+    const cap = Array(n+1).fill(2); // Alle karboner bortsettfra ytterkarboner kan ha 2 substituenter. NB: [2, 0, ..., 0]
+    cap[1] = 0;
+    cap[n] = 0;
+
+    if (type === "alkanes") return cap;
+
+    for (const u of unsatLocants) {
+        if (type === "alkenes") {
+            cap[u] = Math.max(0, cap[u] - 1);
+            cap[u + 1] = Math.max(0, cap[u + 1] - 1);
+        } else if (type === "alkynes") {
+            cap[u] = 0;
+            cap[u + 1] = 0;
+        }
+    
+    }
+
+    addDebugLine("Capacity: "+cap.join("-").substring(2));
+    return cap;
+  }
+
+  function pickAlkylSubstituentsOnChain(n, brN, capacity) {
+    const subs = [];
+
+    for (let k = 0; k < brN; k++) {
+        const candidates = [];
+        for (let p = 2; p <= n - 1; p++) {
+            if (capacity[p] <= 0) continue;
+            const mMax = Math.min(p - 1, n - p); // maks alkyllengde som ikke gjør hovedkjeden lengre
+            if (mMax >= 1) candidates.push(p);
+        }
+        
+        if (!candidates.length) break;
+        const p = sample(candidates);
+        const mMax = Math.min(p - 1, n - p);
+        const m = randint(1, Math.min(mMax, 6));
+        subs.push({ pos: p, name: alkylRoots[m] });
+
+        capacity[p] -= 1;
+    }
+    return subs;
+  }
+
+  function normalizeBranchLocants(subs, n) {
+
+    const A = subs.map(s => ({ pos: s.pos, name: s.name }))
+                .sort((x, y) => x.pos - y.pos || x.name.localeCompare(y.name));
+
+    const B = subs.map(s => ({ pos: (n + 1 - s.pos), name: s.name }))
+                .sort((x, y) => x.pos - y.pos || x.name.localeCompare(y.name));
+
+    const locA = A.map(x => x.pos);
+    const locB = B.map(x => x.pos);
+
+    for (let i = 0; i < Math.min(locA.length, locB.length); i++) {
+        if (locA[i] < locB[i]) return A;
+        if (locB[i] < locA[i]) return B;
+    }
+
+    // Tie-break: hvis locants er identiske, prioriteres den som kommer tidligst i alfabetet
+    for (let i = 0; i < Math.min(A.length, B.length); i++) {
+        if (A[i].name < B[i].name) return A;
+        if (B[i].name < A[i].name) return B;
+    }
+
+    return A;
+  }
+
+  function chooseDirectionByUnsatThenBranches(n, unsatPos, subs) {
+    const A_uns = [...unsatPos].sort((a,b)=>a-b);
+    const B_uns = A_uns.map(i => n - i).sort((a,b)=>a-b);
+
+    const mapSub = (flip) =>
+        subs.map(s => ({ pos: flip ? (n + 1 - s.pos) : s.pos, name: s.name }))
+            .sort((x,y)=> x.pos - y.pos || x.name.localeCompare(y.name));
+
+    const A_sub = mapSub(false);
+    const B_sub = mapSub(true);
+
+    const lexCmp = (x, y) => {
+        for (let i = 0; i < Math.min(x.length, y.length); i++) {
+        if (x[i] < y[i]) return -1;
+        if (x[i] > y[i]) return 1;
+        }
+        return 0;
+    };
+
+    // 1) sammenlign unsat posisjoner
+    let c = lexCmp(A_uns, B_uns);
+    if (c < 0) return { flip:false, uns:A_uns, subs:A_sub };
+    if (c > 0) return { flip:true,  uns:B_uns, subs:B_sub };
+
+    // 2) tie: sammenlign sidekjede posisjoner
+    c = lexCmp(A_sub.map(s=>s.pos), B_sub.map(s=>s.pos));
+    if (c <= 0) return { flip:false, uns:A_uns, subs:A_sub };
+    return { flip:true, uns:B_uns, subs:B_sub };
+  }
+
+  function formatUnsatParent(n, type, unsLocants) {
+    const root = parentRoots[n];
+    const suf = unsatSuffix(type, unsLocants.length);
+    if (n <= 3) return `${root}${suf}`;
+    return `${root}-${unsLocants.join(",")}-${suf}`;
+  }
+
+  function renderHydrocarbonWithSubstituents(parentName, subs) {
+    const byName = new Map();
+    for (const s of subs) {
+        if (!byName.has(s.name)) byName.set(s.name, []);
+        byName.get(s.name).push(s.pos);
+    }
+
+    const byNameStr = Array.from(byName.entries()).map(([name, locs]) => `${name}: [${locs.join(", ")}]`).join(", ");
+    addDebugLine("Alkyl: "+byNameStr);
+
+    const mult = { 2:"di", 3:"tri", 4:"tetra" };
+
+    const parts = Array.from(byName.entries())
+        .sort(([a],[b]) => a.localeCompare(b))
+        .map(([name, locs]) => {
+        locs.sort((x,y)=>x-y);
+        const prefix = mult[locs.length] || "";
+        return `${locs.join(",")}-${prefix}${name}`;
+        });
+
+    return parts.length ? `${parts.join("-")}${parentName}` : parentName;
+  }
+
+  function brancedHydrocarbonName(n, type, brN, unsat) { // kun sidekjeder (og eventuelle dobbel/trippelbindinger)
+    if (brN < 1) simpleHydrocarbonName(n, type); // No branches
+
+    if (type === "alkanes" || unsat === 0) {
+        if (n <= 2) return  parentRoots[n]+'ane'; // methane og ethane
+
+        const capacity = makeCapacityForChain(n, "alkanes", []);
+        const subs = pickAlkylSubstituentsOnChain(n, brN, capacity);
+        const normalized = normalizeBranchLocants(subs, n);
+        
+        var outputDebugText = "Sidechains: ";
+        for (const s of normalized) outputDebugText += s.pos+"-"+s.name+" ";
+        addDebugLine(outputDebugText);
+
+        return renderHydrocarbonWithSubstituents(parentRoots[n]+'ane', normalized);
+    }
+
+    const possibleUnsatPos = [];
+    for (let i = 1 ; i <= n-1; i++) possibleUnsatPos.push(i);
+
+    const unsatPos = [];
+    for (let i = 1 ; i <= unsat ; i++) {
+        if (possibleUnsatPos.length < 1) break;
+        const pos = sample(possibleUnsatPos);
+        unsatPos.push(pos);
+        for (let j = pos-1 ; j<=pos+1 ; j++) {
+            const idx = possibleUnsatPos.indexOf(j)
+            if (idx !== -1) possibleUnsatPos.splice(idx, 1);
+        }
+    }
+
+    // Posisjoner av dobbel/trippelbindinger
+    const newUnsatPos = normalizeUnsatLocants(unsatPos, n);
+    addDebugLine("Bonds: "+newUnsatPos.join(", "));
+
+    const cap = makeCapacityForChain(n, type, newUnsatPos);
+    const subs = pickAlkylSubstituentsOnChain(n, brN, cap);
+
+    const dir = chooseDirectionByUnsatThenBranches(n, newUnsatPos, subs);
+    const parent = formatUnsatParent(n, type, dir.uns);
+    return renderHydrocarbonWithSubstituents(parent, dir.subs);
+
+  }
+
+
+
+  //
+  // ALKAN MED funksjonelle grupper
+  //
+  function fgPriorityRankLinear(fg) {
+    if (fg === "carboxylic") return 0;
+    if (fg === "esters") return 1;
+    if (fg === "amides") return 2;
+    if (fg === "aldehydes") return 3;
+    if (fg === "ketones") return 4;
+    if (fg === "alcohols") return 5;
+    if (fg === "amines") return 6;
+    if (fg === "ethers") return 7;
+    if (fg === "fluoro" || fg === "chloro" || fg === "bromo" || fg === "iodo" || fg === "halogens") return 8;
+    return 99;
+  }
+
+  function subPriority(name) {
+    if (name === "oxo") return 0;
+    if (name === "hydroxy") return 1;
+    if (name === "amino") return 2;
+    if (name === "fluoro" || name === "chloro" || name === "bromo" || name === "iodo") return 3;
+    return 9;
+  }
+
+  function expandHalogenIfNeeded(fg) {
+    if (fg !== "halogens") return fg;
+    return sample(["fluoro", "chloro", "bromo", "iodo"]);
+  }
+
+  function fgSuffixLinear(fg) {
+    if (fg === "carboxylic") return "oic acid";
+    if (fg === "amides") return "amide";
+    if (fg === "aldehydes") return "al";
+    if (fg === "ketones") return "one";
+    if (fg === "alcohols") return "ol";
+    if (fg === "amines") return "amine";
+    return null;
+  }
+
+  function fgPrefixLinear(fg) {
+    if (fg === "alcohols") return "hydroxy";
+    if (fg === "amines") return "amino";
+    if (fg === "ketones" || fg === "aldehydes") return "oxo"; // brukes ikke ennå
+    if (fg === "fluoro" || fg === "chloro" || fg === "bromo" || fg === "iodo") return fg;
+    return null;
+  }
+
+  function makeAlkaneCapacity(n) { // funksjonelle grupper har plass på enden. IKKE alkyl !
+    const cap = Array(n + 1).fill(2);
+    cap[1] = 3;
+    cap[n] = 3;
+    return cap;
+  }
+
+  function pickFunctionalGroupsForLinear(fgEnabledKeys, fgN) {
+    let fg1 = sample(fgEnabledKeys);
+    
+    if (fg1 === "esters" || fg1 === "ethers") return { early: fg1, fgs: [fg1] };
+
+    const r1 = fgPriorityRankLinear(fg1);
+    const lowPoolBase = ["alcohols", "amines", "halogens"]; // Kun lavordens funksjonelle grupper av lik eller lavere orden som fg1
+    const lowPool = lowPoolBase.filter(k => fgEnabledKeys.includes(k)).filter(k => fgPriorityRankLinear(k) >= r1);
+
+    const fgs = [fg1];
+    if (fgN >= 2 && lowPool.length > 0) fgs.push(sample(lowPool));
+    if (fgN >= 3 && lowPool.length > 0) fgs.push(sample(lowPool));
+    for (let i = 0; i < fgs.length; i++) fgs[i] = expandHalogenIfNeeded(fgs[i]); // Gjør om "halogens" til en spesifikk type
+
+    return { early: null, fgs };
+  }
+
+  function chooseFlipBySubsTieBreak(n, subsFlat) {
+    const A = subsFlat
+        .map(s => ({ name: s.name, pos: s.pos }))
+        .sort((x, y) => subPriority(x.name) - subPriority(y.name) || x.pos - y.pos || x.name.localeCompare(y.name));
+
+    const B = subsFlat
+        .map(s => ({ name: s.name, pos: (n + 1 - s.pos) }))
+        .sort((x, y) => subPriority(x.name) - subPriority(y.name) || x.pos - y.pos || x.name.localeCompare(y.name));
+
+    const locA = A.map(x => x.pos);
+    const locB = B.map(x => x.pos);
+
+    for (let i = 0; i < Math.min(locA.length, locB.length); i++) {
+        if (locA[i] < locB[i]) return false;
+        if (locB[i] < locA[i]) return true;
+    }
+    return false; // tie
+  }
+
+  function placeLinearFunctionalGroupsOnAlkane(n, fgs, brN, unsattype, unsat) {
+    const cap = makeAlkaneCapacity(n);
+
+    const sortedByPriority = [...fgs].sort((a,b)=> fgPriorityRankLinear(a)-fgPriorityRankLinear(b));
+    const maybePrincipal = sortedByPriority.find(fg => fgSuffixLinear(fg) !== null) || null;
+    const principalFg = maybePrincipal;
+
+    let principalLocants = [];
+    const remaining = [...fgs];
+    
+    const mustBeEnd = (principalFg === "carboxylic" || principalFg === "aldehydes" || principalFg == "amides");
+    const mustBeInternal = (principalFg === "ketones");
+
+    if (principalFg) {
+
+        let pos1;
+        let occupy;
+
+        if (mustBeEnd) {
+          pos1 = 1;
+          occupy = 3;
+        } else if (mustBeInternal) {
+          pos1 = randint(2, n-1);
+          occupy = 2;
+        } else {
+          pos1 = randint(1, n);
+          occupy = 1;
+        }
+
+        principalLocants.push(pos1);
+        cap[pos1] -= occupy;
+
+        const idx = remaining.indexOf(principalFg);
+        if (idx !== -1) remaining.splice(idx,1);
+
+    }
+
+    const sameAsPrincipal = principalFg ? remaining.filter(fg => fg === principalFg) : []; // Dersom flere av den funksjonelle gruppen med høyest prioritet (NB: Kun OH mulig for øyeblikket)
+    if (principalFg && sameAsPrincipal.length) {
+        for (let k = 0; k < sameAsPrincipal.length; k++) {
+          const candidates = [];
+          for (let p = 1; p <= n; p++) {
+              if (cap[p] <= 0) continue;
+              if (mustBeEnd && !(p === 1 || p === n)) continue;
+              if (mustBeInternal && (p === 1 || p === n)) continue;
+              candidates.push(p);
+          }
+          
+          if (!candidates.length) break;
+          const p = sample(candidates);
+          principalLocants.push(p);
+          cap[p] -= 1;
+        }
+
+        for (let k = 0; k < sameAsPrincipal.length; k++) {
+          const idx = remaining.indexOf(principalFg);
+          if (idx !== -1) remaining.splice(idx,1);
+        }
+    }
+
+    let flip = false;
+    if (principalFg) { // Numrer i riktig retning
+        const A = [...principalLocants].sort((a,b)=>a-b);
+        const B = A.map(x => (n+1-x)).sort((a,b)=>a-b);
+        for (let i = 0; i < Math.min(A.length,B.length); i++) {
+          if (A[i] < B[i]) { flip = false; break; }
+          if (B[i] < A[i]) { flip = true; break; }
+        }
+        if (flip) principalLocants = B;
+        else principalLocants = A;
+    }
+
+    const mapPos = (p) => flip ? (n+1-p) : p;
+
+    let subsFlat = [];
+    for (const fg of remaining) { // Plasserer resten av de funksjonelle gruppene som substituenter
+        const prefixName = fgPrefixLinear(fg);
+        if (!prefixName) continue;
+
+        const candidates = [];
+        for (let p = 1; p <= n; p++) {
+          if (cap[p] <= 0) continue;
+          candidates.push(p);
+        }
+
+        if (!candidates.length) break;
+        const p = sample(candidates);
+        cap[p] -= 1;
+
+        subsFlat.push({ name: prefixName, pos: mapPos(p) });
+    }
+
+    // Dersom kun halogener, pass på at numreringen er riktig
+    if (!principalFg) {
+
+      const Aitems = subsFlat.map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name));
+      const Bitems = subsFlat.map(s => ({ pos: (n + 1 - s.pos), name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name));
+      const Apos = Aitems.map(x => x.pos);
+      const Bpos = Bitems.map(x => x.pos);
+      addDebugLine("Halogens A: " + Apos.join(","));
+      addDebugLine("Halogens B: " + Bpos.join(","));
+
+      let tiebreak = true;
+      for (let i = 0; i < Math.min(Apos.length, Bpos.length); i++) {
+        if (Apos[i] < Bpos[i]) { flip = false; tiebreak = false; break; }
+        if (Bpos[i] < Apos[i]) { flip = true;  tiebreak = false; break; }
+      }
+
+      if (tiebreak) {
+        const Anames = Aitems.map(x => x.name);
+        const Bnames = Bitems.map(x => x.name);
+        for (let i = 0; i < Math.min(Anames.length, Bnames.length); i++) {
+          if (Anames[i] < Bnames[i]) { flip = false; break; }
+          if (Anames[i] > Bnames[i]) { flip = true; break; }
+        }
+      }
+
+      if (flip) addDebugLine("FLIP!");
+      subsFlat = subsFlat.map(s => ({ name: s.name, pos: mapPos(s.pos) }));
+
+    }
+
+    // Legger til sidekjeder
+    addDebugLine("Capacity: "+cap.join("-").substring(2));
+    const sidechains = pickAlkylSubstituentsOnChain(n, brN, cap);
+    var outputDebugText = "Sidechains: ";
+    for (const s of sidechains) outputDebugText += mapPos(s.pos)+"-"+s.name+" ";    
+    addDebugLine(outputDebugText);
+    for (const s of sidechains) subsFlat.push({ name: s.name, pos: mapPos(s.pos)});
+
+    const principalObj = principalFg ? { fg: principalFg, locants: principalLocants.map(x => x).sort((a,b)=>a-b) } : null;
+    const byName = new Map();
+    for (const s of subsFlat) {
+        if (!byName.has(s.name)) byName.set(s.name, []);
+        byName.get(s.name).push(s.pos);
+    }
+
+    const subs = Array.from(byName.entries()).map(([name, locants]) => ({
+        name,
+        locants: locants.sort((a,b)=>a-b)
+    }));
+
+    // Plasser eventuelle umettede bindinger
+    let bonds = { type: "single", locants: [] };
+    if (unsattype == "alkenes" || unsattype == "alkynes") {
+      const possibleUnsatPos = [];
+      const capOcc = (unsattype == "alkynes") ? 2 : 1;
+      for (let i = 1 ; i <= n-1; i++) if (cap[i] >= capOcc && cap[i+((mapPos(1) == 1) ? 1 : -1)] >= capOcc && mapPos(i) <= n-1) possibleUnsatPos.push(mapPos(i));
+
+      const unsatPos = [];
+      for (let i = 1 ; i <= unsat ; i++) {
+          if (possibleUnsatPos.length < 1) break;
+          const pos = sample(possibleUnsatPos);
+          unsatPos.push(pos);
+          for (let j = pos-1 ; j<=pos+1 ; j++) {
+              const idx = possibleUnsatPos.indexOf(j)
+              if (idx !== -1) possibleUnsatPos.splice(idx, 1);
+          }
+      }
+
+      newunsatPos = unsatPos.sort((a,b)=>a-b);
+      addDebugLine("Bonds: "+newunsatPos.join(", "));
+      if (principalObj == null && newunsatPos.length > 0 && newunsatPos[0] > subs[0].locants[0]) {
+        addDebugLine("Removing C=C due to error");
+      } else {
+        bonds = { type: (unsattype == "alkynes") ? "triple" : "double", locants: newunsatPos}; // halogen er IKKE høyeste funksjonelle gruppe, og dobbeltbindingen er IKKE i tidligere posisjon
+      }
+
+    }
+
+    return { n, principal: principalObj, subs, bonds};
+    // { n,
+    //   { fg: <key>, locants: [..] }                 // suffix (eller null hvis bare prefix)
+    //   [ {name:<prefixName>, locants:[..]} ... ]    // prefixer (substituenter og deres posisjon)
+    //   { type:<bond>, locants:[...] }           // alken eller alkyn (posisjon av enkel/dobbel/trippel binding)          
+    // }
+  }
+
+  function buildLinearAlkaneNameWithFG(n, placed) {
+    const mult = {1:"",2:"di",3:"tri",4:"tetra"};
+    const root = parentRoots[n];
+
+    // alkan/alken/alkyn ending:
+    let ending;
+    if (placed.bonds.locants.length > 0 && (placed.bonds.type == "double" || placed.bonds.type == "triple")) {
+      if (placed.bonds.locants.length > 0) ending = "-"+placed.bonds.locants.join(",")+"-"+mult[placed.bonds.locants.length];
+      ending += (placed.bonds.type == "triple") ? "yn" : "en";
+    } else {
+      ending = "an";
+    }
+
+    let base;
+    if (!placed.principal) {
+        base = `${root}${ending}e`; // no functional group last name
+    } else {
+        const fg = placed.principal.fg;
+        const locs = placed.principal.locants;
+        const suf = fgSuffixLinear(fg);
+
+        if (fg === "carboxylic") {
+            base = `${root}${ending}oic acid`;
+        } else if (fg === "amides") {
+            base = `${root}${ending}amide`;
+        } else if (fg === "aldehydes") {
+            base = `${root}${ending}al`;
+        } else { // Kan ha flere
+            const m = mult[locs.length] || "";
+            const stem = `${root}${ending}`;
+            if (n == 1 || !placed.subs.length && ((n == 2 && locs.length <= 1) || fg === "ketones" && n <= 4)) return `${stem}${m}${suf}`; // Ingen substituenter og unambigiøs
+            base = `${stem}-${locs.join(",")}-${m}${suf}`;
+        }
+    }
+
+    if (!placed.subs.length) return base;
+
+    const prefixParts = placed.subs
+        .sort((a,b)=> a.name.localeCompare(b.name))
+        .map(s => {
+        const m = mult[s.locants.length] || "";
+        return `${s.locants.join(",")}-${m}${s.name}`;
+        });
+
+    let finishedName = `${prefixParts.join("-")}${base}`;
+    if (n === 1) finishedName = finishedName.replace(/\d/g, "").replace(/,/g, "").replace(/-/g, "");
+    return finishedName;
+  }
+
+  // Etere
+  function simpleEtherName(n, maxChain) {
+    const m = randint(1, Math.max(1, Number(maxChain)));
+    const a = Math.min(n, m);
+    const b = Math.max(n, m);
+    return `${alkylRoots[a].replace("yl","")}oxy${parentRoots[b]}ane`;
+  }
+
+  // Estere
+  function simpleEsterName(n, maxChain) {
+    const alkyl = randint(1, Math.max(1, Number(maxChain)));
+    return `${alkylRoots[alkyl]} ${parentRoots[n]}anoate`;
+  }
+
+  function functionalizedHydrocarbonName(n, type, fgN, brN, unsat) { 
+    //if (type !== "alkanes") throw new Error("Only alkanes implemented first");
+
+    const fgEnabledKeys = FG_LIST.filter(f => fgState[f.key]).map(f => f.key);
+    if (!fgEnabledKeys.length) return `${parentRoots[n]}ane`;
+
+    const pick = pickFunctionalGroupsForLinear(fgEnabledKeys, fgN);
+
+    if (pick.early === "ethers") return simpleEtherName(n, maxChain.value);
+    if (pick.early === "esters") return simpleEsterName(n, maxChain.value);
+
+    const placed = placeLinearFunctionalGroupsOnAlkane(n, pick.fgs, brN, type, unsat);
+    return buildLinearAlkaneNameWithFG(n, placed);
+  }
+
+
+
+
+  //
+  // AROMATISK
+  //
+  function buildBenzeneName() {
+    const brN = resolveCount(branchCount.value, 0, 2);
+    if (fgCount.value === 0 && brN === 0) return "benzene";
+    if (fgCount.value === 0) return buildBenzeneAlkylName(brN);
+    if (brN === 0) return buildBenzeneFunctionalName();
+    if (Math.random() < 0.5) return buildBenzeneFunctionalName();
+    return buildBenzeneAlkylName(brN);
+  }
+  
+  function buildBenzeneFunctionalName() {
+    const candidates = ["benzene"];
+    const fgEnabledKeys = FG_LIST.filter(f => fgState[f.key]).map(f => f.key);
+    if (fgEnabledKeys.includes("carboxylic")) candidates.push("benzoic acid");
+    if (fgEnabledKeys.includes("aldehydes")) candidates.push("benzaldehyde");
+    if (fgEnabledKeys.includes("alcohols")) candidates.push("phenol");
+    return sample(candidates);
+    }
+  
+    function buildBenzeneAlkylName(subCount) {
+    
+        function randomAlkylGroup() {
+            return alkylRoots[sample([1,1,1,2,2,3,3,4,5,6])];
+        }
+
+        if (subCount === 1) return randomAlkylGroup() + "benzene";
+    
+        const g1 = randomAlkylGroup();
+        const g2 = randomAlkylGroup();
+        const secondLocant = sample([2,3,4]);
+        const pair = [g1, g2].sort();
+        const a = pair[0];
+        const b = pair[1];
+        if (a === b) return `1,${secondLocant}-di${a}benzene`;
+        return `1-${a}-${secondLocant}-${b}benzene`;
+    
+    }
+  
+    //
+    // SYKLISK (cycloalkanes + substituents / functional groups)
+    //
+    function buildCycloName() {
+        const n = randint(3, Math.max(3, Number(maxChain.value))); // syklopropan er den minste
+
+        const fgN = resolveCount(fgCount.value, 0, 3);
+        const brN = resolveCount(branchCount.value, 0, 3);
+
+        if (fgN === 0 && brN === 0) return 'cyclo'+buildAlkaneName(n); // cyclopentane
+        if (fgN === 0) return buildCycloAlkylName(n, brN); // 1-ethyl-2-methylcyclopentane
+        if (brN === 0) return generateCycloPlan(n, fgN, 0); // cyclopentanone
+        if (Math.random() > 0.5) { // both alkyl and functional groups enabled → choose one type
+            return generateCycloPlan(n, fgN, 0);
+        } else {
+            return buildCycloAlkylName(n, brN);
+        }
+
+    }
+
+    function buildCycloAlkylName(n, subCount) {
+    
+        function randomAlkylGroup() {
+            return alkylRoots[sample([1,1,1,2,2,3,3,4,5,6])];
+        }
+
+        if (subCount === 1) return randomAlkylGroup()+'cyclo'+buildAlkaneName(n);
+
+        const g1 = randomAlkylGroup();
+        const g2 = randomAlkylGroup();
+        const secondLocant = randint(1, Math.floor(n / 2) + 1);
+        const pair = [g1, g2].sort();
+        const a = pair[0];
+        const b = pair[1];
+        //const isomer = sample(["cis","trans"])
+
+        if (a === b) return `1,${secondLocant}-di${a}cyclo${buildAlkaneName(n)}`;
+        return `1-${a}-${secondLocant}-${b}cyclo${buildAlkaneName(n)}`;
+    }
+
+    function cycloAllowedFgKeys() {
+    const allowed = ["ketones", "alcohols", "amines", "halogens"];
+    const out = [];
+    for (const k of allowed) {
+        if (!fgState[k]) continue;
+        if (k === "halogens") { out.push("bromo","chloro","fluoro","iodo") } else { out.push(k) }
+    }
+    return out;
+    }
+
+    function fgPriorityRank(key) {
+        const order = ["ketones", "alcohols", "amines", "bromo","chloro","fluoro","iodo"];
+        return order.indexOf(key);
+    }
+
+    function cycloFgNamePart(key) {
+        if (key === "alcohols") return "hydroxy";
+        if (key === "amines") return "amino";
+        if (key === "halogens") return sample(["fluoro","chloro","bromo","iodo"]); // random halogen substituent
+        return "ERROR";
+    }
+
+    function cycloPrincipalSuffix(key) {
+        if (key === "ketones") return "one"; // cyclohexanone etc.
+        if (key === "alcohols") return "ol"; // cyclohexanol
+        if (key === "amines") return "amine"; // cyclohexanamine (simplified)
+        if (key === "halogens") return null; // no suffix; stays as substituent
+        return null;
+    }
+
+    function generateCycloPlan(n, fgCount, desiredAlkylCount) {
+
+        const fgKeys = cycloAllowedFgKeys();
+        if (fgKeys.length === 0) return buildCycloAlkylName(n, desiredAlkylCount);
+
+        const fg1 = sample(fgKeys);
+        if (fgCount === 1) { // Just one functional group
+            if (cycloPrincipalSuffix(fg1) === null) return fg1+'cyclo'+parentRoots[n]+'ane';
+            return 'cyclo'+parentRoots[n]+'an'+cycloPrincipalSuffix(fg1);
+        } else if (fgCount > 1) {
+            const fg2 = sample(fgKeys);
+            const picks = [
+            { key: fg1, pr: fgPriorityRank(fg1), i: 1 },
+            { key: fg2, pr: fgPriorityRank(fg2), i: 2 },
+            ];
+            picks.sort((a, b) => (a.pr - b.pr) || (a.i - b.i));
+            const nyfg1 = picks[0].key;
+            const nyfg2 = picks[1].key;
+            const secondLocant = randint((nyfg1 === 'ketones') ? 2 : 1, Math.floor(n / 2) + 1);
+
+            if (cycloPrincipalSuffix(nyfg1) === null) { // two halogens
+                if (nyfg1 === nyfg2) return '1,'+secondLocant+'-di'+nyfg1+'cyclo'+parentRoots[n]+'ane';
+                return '1-'+nyfg1+'-'+secondLocant+'-'+nyfg2+'cyclo'+parentRoots[n]+'ane';
+            } else if (cycloPrincipalSuffix(nyfg2) === null) { // one halogen
+                return secondLocant+'-'+nyfg2+'cyclo'+parentRoots[n]+'an-1-'+cycloPrincipalSuffix(nyfg1);
+            } else if (nyfg1 === nyfg2) { // Two functional groups of same type
+                return 'cyclo'+parentRoots[n]+'an-1,'+secondLocant+"-di"+cycloPrincipalSuffix(nyfg1);
+            } else { // Two diff functional groups
+                return secondLocant+'-'+cycloFgNamePart(nyfg2)+'cyclo'+parentRoots[n]+'an-1-'+cycloPrincipalSuffix(fg1);
+            }
+        }
+    }
+
+    
+
+
+
+
+  //
+  // ANDRE FUNKSJONER
+  //
+  const OPSIN_BASE = "https://www.ebi.ac.uk/opsin/ws/";
+  async function fetchSvgFromOpsin(iupacName) {
+    const url = OPSIN_BASE + encodeURIComponent(iupacName) + ".svg";
+    const res = await fetch(url);
+    if (!res.ok) {
+      const text = await res.text().catch(()=> "");
+      throw new Error("OPSIN error (" + res.status + "): " + (text.slice(0,160) || res.statusText));
+    }
+    const svgText = await res.text();
+    return { svgText, url };
+  }
+
+  function sanitizeSvg(svgText) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgText, "image/svg+xml");
+
+    doc.querySelectorAll("script").forEach(n => n.remove());
+
+    doc.querySelectorAll("*").forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        const name = attr.name.toLowerCase();
+        if (name.startsWith("on")) el.removeAttribute(attr.name);
+      });
+    });
+
+    const svgEl = doc.querySelector("svg");
+    if (!svgEl) return "";
+
+    svgEl.removeAttribute("width");
+    svgEl.removeAttribute("height");
+    svgEl.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+    return new XMLSerializer().serializeToString(svgEl);
+  }
+
+  const nameOut = document.getElementById("nameOut");
+  const rulesOut = document.getElementById("rulesOut");
+  const statusEl = document.getElementById("status");
+  const expectedEl = document.getElementById("expected");
+  const svgHost = document.getElementById("svgHost");
+  const fallbackText = document.getElementById("fallbackText");
+  const svgInfo = document.getElementById("svgInfo");
+
+  let currentName = "";
+  let currentSvgText = "";
+
+  
+  //
+  // Vanskelighetsgrad (1–6)
+  //
+  let difficulty = 1;
+  
+  const diffBar = document.getElementById("diffBar");
+  const diffButtons = Array.from(diffBar.querySelectorAll(".diffBtn"));
+  const diffDescTitle = document.getElementById("diffDescTitle");
+  const diffDescBody = document.getElementById("diffDescBody");
+
+  function setDifficulty(level) {
+    difficulty = Math.max(1, Math.min(7, Number(level) || 1));
+
+    diffButtons.forEach(btn => {
+      const isActive = Number(btn.dataset.level) === difficulty;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-checked", isActive ? "true" : "false");
+    });
+  
+    const dl = LANG[lang].diffLevels?.[difficulty];
+    diffDescTitle.textContent = dl?.title || "—";
+    diffDescBody.textContent = dl?.body || "—";
+
+    document.getElementById("diffDesc").setAttribute("data-level", String(difficulty));
+
+  
+    applyDifficultyPreset(difficulty);
+    updateUnsatAvailability();
+    updateRulesOut();
+  }
+  
+  function setSliderByValue(sliderEl, val) {
+    sliderEl.value = String(val);
+    sliderEl.dispatchEvent(new Event("input"));
+  }
+  
+  function setCheckbox(id, checked) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.checked = checked;
+    el.dispatchEvent(new Event("change"));
+  }
+  
+  function applyDifficultyPreset(level) {  // TODO: BØR SIKKER ENDRE 1 til kun alkaner/sykloalkaner/benzen, 2 til alkener/alkyner, 3 til alkaner/sykloalkaner/benzen med sidegrener, 4 til alkener/alkyner med sidegrener, 5 funksjonell gruppe, 6 flere funksjonelle grupper, 7 funksjonelle grupper og sidegrener
+
+    // 1: Enkle hydrokarboner (alkaner / sykloalkaner / benzen)
+    if (level === 1) {
+      setSliderByValue(unsatCount, 0);
+      setSliderByValue(branchCount, 0);
+      setSliderByValue(fgCount, 0);
+      lockFunctionalGroups(true);
+      fgCount.disabled = true;
+    
+      setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", false);
+      setHydrocarbonGroup("alkynes", false);
+      setHydrocarbonGroup("cyclic", true);
+      setHydrocarbonGroup("aromatic", true);
+
+      return;
+    }
+
+     // 2: Alkaner med sidegrener
+    if (level === 2) {
+      setSliderByValue(unsatCount, 0);
+      setSliderByValue(branchCount, 4); // Tilfeldig antall sidegrener
+      setSliderByValue(fgCount, 0);
+      lockFunctionalGroups(true);
+      fgCount.disabled = true;
+
+      setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", false);
+      setHydrocarbonGroup("alkynes", false);
+      setHydrocarbonGroup("cyclic", false);
+      setHydrocarbonGroup("aromatic", false);
+
+      return;
+    }
+  
+    // 3: alkener og alkyner
+    if (level === 3) {
+      setSliderByValue(unsatCount, 1); // 1 dobbelt eller trippelbinding
+      setSliderByValue(branchCount, 0);
+      setSliderByValue(fgCount, 0);
+      lockFunctionalGroups(true);
+      fgCount.disabled = true;
+
+      setHydrocarbonGroup("alkanes", false);
+      setHydrocarbonGroup("alkenes", true);
+      setHydrocarbonGroup("alkynes", true);
+      setHydrocarbonGroup("cyclic", false);
+      setHydrocarbonGroup("aromatic", false);
+
+      return;
+    }
+    
+    // 4: alkener og alkyner med sidegrener
+    if (level === 4) {
+      setSliderByValue(unsatCount, 1); // 1 dobbelt eller trippelbinding
+      setSliderByValue(branchCount, 4); // Tilfeldig antall sidegrener
+      setSliderByValue(fgCount, 0);
+      lockFunctionalGroups(true);
+      fgCount.disabled = true;
+
+      setHydrocarbonGroup("alkanes", false);
+      setHydrocarbonGroup("alkenes", true);
+      setHydrocarbonGroup("alkynes", true);
+      setHydrocarbonGroup("cyclic", false);
+      setHydrocarbonGroup("aromatic", false);
+      return;
+    }
+    
+    // 5: Alkaner med 1 funksjonell gruppe
+    if (level === 5) {
+      setSliderByValue(unsatCount, 0);
+      setSliderByValue(branchCount, 0);
+      setSliderByValue(fgCount, 1); // 1 funksjonell gruppe
+      lockFunctionalGroups(false);
+      fgCount.disabled = false;
+      
+      setAllFunctionalGroups(true);
+
+      setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", false);
+      setHydrocarbonGroup("alkynes", false);
+      setHydrocarbonGroup("cyclic", false);
+      setHydrocarbonGroup("aromatic", false);
+      return;
+    }
+    
+    // 6: flere funksjonelle grupper
+    if (level === 6) {
+      setSliderByValue(unsatCount, 1); // opptil 1 umettet binding
+      setSliderByValue(branchCount, 0);
+      setSliderByValue(fgCount, 4); // Tilfeldig antall funksjonelle grupper
+      lockFunctionalGroups(false);
+      fgCount.disabled = false;
+      
+      setAllFunctionalGroups(true);
+
+      setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", true);
+      setHydrocarbonGroup("alkynes", true);
+      setHydrocarbonGroup("cyclic", true);
+      setHydrocarbonGroup("aromatic", true);
+      return;
+    }
+
+    // 7: funksjonelle grupper og sidekjeder
+    if (level === 7) {
+      setSliderByValue(unsatCount, 4); // Tilfeldig antall umettede bindinger
+      setSliderByValue(branchCount, 4); // Tilfeldig antall sidekjeder
+      setSliderByValue(fgCount, 4); // Tilfeldig antall funksjonelle grupper
+      lockFunctionalGroups(false);
+      fgCount.disabled = false;
+      
+      setAllFunctionalGroups(true);
+
+      setHydrocarbonGroup("alkanes", true);
+      setHydrocarbonGroup("alkenes", true);
+      setHydrocarbonGroup("alkynes", true);
+      setHydrocarbonGroup("cyclic", true);
+      setHydrocarbonGroup("aromatic", true);
+      return;
+    }
+
+  }
+
+  function setHydrocarbonGroup(category, boolean) {
+    if (!["alkanes","alkenes","alkynes","cyclic","aromatic"].includes(category)) return;
+    hcState[category] = boolean;
+    const cb = document.getElementById("hc_" + category);
+    if (cb) cb.checked = boolean;
+  }
+
+  function setAllFunctionalGroups(value) {
+    FG_LIST.forEach(fg => {
+      fgState[fg.key] = value;
+      const cb = document.getElementById("fg_" + fg.key);
+      if (cb) cb.checked = value;
+    });
+  }
+  
+  function lockFunctionalGroups(locked) {
+    FG_LIST.forEach(fg => {
+      const cb = document.getElementById("fg_" + fg.key);
+      if (!cb) return;
+      const chip = cb.closest(".chip");
+      cb.disabled = locked;
+      chip?.classList.toggle("disabled", locked);
+      if (locked) {
+        cb.checked = false;
+        fgState[fg.key] = false;
+      }
+    });
+  }
+  
+
+  //
+  // Debug output
+  //
+  function updateRulesOut() {
+    const enabled = [];
+    enabled.push((lang === "no" ? "Vanskelighet" : "Difficulty") + ": " + difficulty);
+    enabled.push(t("maxChain") + ": " + maxChain.value);
+    const fgEnabled = FG_LIST.filter(f => fgState[f.key]).map(f => t("fgs." + f.key));
+    enabled.push(t("fgTitle") + ": " + (fgEnabled.length ? fgEnabled.join(", ") : (lang === "no" ? "Ingen" : "None")));
+    const hcEnabled = HC_LIST.filter(h => hcState[h.key]).map(h => t("hydroTypes." + h.key));
+    enabled.push(t("hcTitle") + ": " + (hcEnabled.length ? hcEnabled.join(", ") : "-"));
+    enabled.push(t("unsatCount") + ": " + sliderLabel(unsatCount.value));
+    enabled.push(t("branches") + ": " + sliderLabel(branchCount.value));
+    enabled.push(t("fgCount") + ": " + sliderLabel(fgCount.value));
+    rulesOut.textContent = enabled.join(" • ");
+  }
+
+  function addDebugLine(text) {
+    const oldDebug = document.getElementById("debuggingOutput").textContent;
+    document.getElementById("debuggingOutput").textContent = oldDebug + "\n" + text;
+    document.getElementById("debuggingOutput").style.whiteSpace = 'pre-line';
+  }
+
+  function resetDebugLine() {
+    document.getElementById("debuggingOutput").textContent = "";
+  }
+
+  function setStatus(msg, kind) {
+    statusEl.className = "status" + (kind ? " " + kind : "");
+    statusEl.textContent = msg;
+  }
+
+  function clearVisual() {
+    svgHost.style.display = "none";
+    svgHost.innerHTML = "";
+    fallbackText.style.display = "block";
+    fallbackText.textContent = "–";
+    currentSvgText = "";
+    svgInfo.textContent = "–";
+  }
+
+
+  //
+  // NY FORBINDELSE
+  //
+  async function newTask() {
+
+    resetDebugLine();
+    currentName = buildMoleculeName();
+    nameOut.textContent = currentName;
+
+    clearVisual();
+    clearFeedback();
+    lastCheckCorrect = false;
+    document.getElementById("answer").value = "";
+    fallbackText.textContent = ""; // Ingen tekst bak SVG bildet
+    updateRulesOut();
+
+    await drawCurrent();
+  }
+
+  async function drawCurrent() {
+    if (!currentName) return;
+
+    try {
+      const result = await fetchSvgFromOpsin(currentName);
+      currentSvgText = result.svgText;
+      svgInfo.textContent = result.url;
+
+      const safeSvg = sanitizeSvg(result.svgText);
+      svgHost.innerHTML = safeSvg;
+      svgHost.style.display = "grid";
+      fallbackText.style.display = "none";
+
+    } catch (e) {
+      console.error(e);
+      svgHost.style.display = "none";
+      svgHost.innerHTML = "";
+      fallbackText.style.display = "block";
+      fallbackText.textContent = (lang === "no" ? "Kunne ikke laste struktur. Prøv igjen!" : "Could not load structure. Try again!");
+      setStatus("Error: " + (e && e.message ? e.message : e), "err");
+    }
+  }
+
+  function clearFeedback() {
+    setStatus("", "");
+    expectedEl.style.display = "none";
+    expectedEl.textContent = "";
+  }
+
+  function normalizeName(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")     // ignorer mellomrom
+      .replace(/[‐-–—]/g, "-"); // tillater alle bindestreker
+  }
+  
+  //
+  // Sjekker om riktig IUPAC navn er skrevet
+  //
+  function checkAnswer() {
+    clearFeedback();
+  
+    const user = normalizeName(document.getElementById("answer").value);
+    if (!user) {
+      lastCheckCorrect = false;
+      setStatus(lang === "no" ? "Du har ikke skrevet noe." : "You haven't typed anything.", "err");
+      return;
+    }
+  
+    const exp = normalizeName(currentName);
+    const expNO = iupacEnToNo(exp);
+  
+    if (user === exp || user == expNO) {
+      lastCheckCorrect = true;
+      setStatus(t("statusCorrect"), "ok");
+    } else {
+      lastCheckCorrect = false;
+      setStatus(t("statusWrong"), "err");
+      //expectedEl.style.display = "block";
+      //expectedEl.textContent = (lang === "no" ? "Forventet: " : "Expected: ") + currentName;
+    }
+  }
+  
+  
+  
+  //
+  // REGISTRERER LISTENERS
+  //
+  document.getElementById("newBtn").addEventListener("click", async () => {
+    await newTask();
+    //const a = document.getElementById("answer");
+    //a.focus();
+  });
+    
+  document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+  
+  document.getElementById("answer").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (lastCheckCorrect) { newTask(); } else { checkAnswer(); } // ENTER funksjonalitet
+  });
+  
+  document.getElementById("showBtn").addEventListener("click", () => {
+    clearFeedback();
+    setStatus((lang === "no" ? "Fasit:" : "Answer:"), "warn");
+    expectedEl.style.display = "block";
+    expectedEl.textContent =  (lang === "no" ? iupacEnToNo(currentName) : currentName);
+  });
+  
+  document.getElementById("langBtn").addEventListener("click", () => {
+    lang = (lang === "no") ? "en" : "no";
+    applyLANG();
+    setDifficulty(difficulty);
+    updateRulesOut();
+    clearFeedback();
+  });
+  
+  diffButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      setDifficulty(Number(btn.dataset.level));
+    });
+  });
+  
+  applyLANG();
+  setDifficulty(1);
+  updateRulesOut();
+  newTask();
+</script>
+</body>
+</html>
