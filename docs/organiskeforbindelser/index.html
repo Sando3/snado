@@ -1234,6 +1234,7 @@
         } else if (mustBeInternal) {
           pos1 = randint(2, n-1);
           occupy = 2;
+          if (n <= 2) occupy = 3;
         } else {
           pos1 = randint(1, n);
           occupy = 1;
@@ -1244,6 +1245,7 @@
 
         const idx = remaining.indexOf(principalFg);
         if (idx !== -1) remaining.splice(idx,1);
+        if (mustBeInternal && n <= 2) principalFg = "aldehydes";
 
     }
 
@@ -1452,7 +1454,6 @@
   }
 
   function functionalizedHydrocarbonName(n, type, fgN, brN, unsat) { 
-    //if (type !== "alkanes") throw new Error("Only alkanes implemented first");
 
     const fgEnabledKeys = FG_LIST.filter(f => fgState[f.key]).map(f => f.key);
     if (!fgEnabledKeys.length) return `${parentRoots[n]}ane`;
