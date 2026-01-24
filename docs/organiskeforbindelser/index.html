@@ -210,6 +210,223 @@
       line-height: 1.35;
     }
 
+    /* Help button style */
+    .iconBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      padding:.55rem .85rem;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.12);
+      background:rgba(255,255,255,.75);
+      color:#111;
+      cursor:pointer;
+      font-weight:600;
+      transition:transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .iconBtn:hover{ background:rgba(255,255,255,.92); border-color:rgba(0,0,0,.18); }
+    .iconBtn:active{ transform:scale(0.99); }
+    .iconBtn.ghost{ background:transparent; border-color:transparent; }
+    .iconBtn .icon{
+      width:26px;height:26px;
+      display:inline-grid;
+      place-items:center;
+      border-radius:10px;
+      background:rgba(0,0,0,.06);
+    }
+
+    .primaryBtn{
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:12px;
+      padding:.7rem 1rem;
+      background:#111;
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .primaryBtn:hover{ opacity:.92; }
+
+    /* Modal */
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index:9999;
+    }
+    .modalOverlay.open{ display:flex; }
+
+    .modalCard{
+      width:min(980px, 100%);
+      max-height:min(88vh, 860px);
+      overflow:hidden;
+      border-radius:18px;
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .modalHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 18px 12px 18px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+    .modalHeader h2{ margin:0; font-size:1.25rem; }
+    .muted{ color:rgba(0,0,0,.65); }
+
+    .modalBody{
+      padding:16px 18px;
+      overflow:auto;
+    }
+    .modalFooter{
+      padding:14px 18px 18px 18px;
+      border-top:1px solid rgba(0,0,0,.08);
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .helpSection{
+      padding:14px 0;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+    .helpSection:last-child{ border-bottom:none; }
+    .helpSection h3{
+      margin:0 0 8px 0;
+      font-size:1.05rem;
+    }
+
+    .tableWrap{
+      overflow:auto;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.85);
+    }
+    .helpTable{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.95rem;
+    }
+    .helpTable th, .helpTable td{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+    .helpTable thead th{
+      text-align:left;
+      background:rgba(0,0,0,.04);
+      position:sticky; top:0;
+    }
+    .helpTable tbody tr:last-child td{ border-bottom:none; }
+
+    .priorityList{
+      margin:10px 0 0 18px;
+      padding:0;
+      line-height:1.55;
+    }
+    .noteBox{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(0,0,0,.04);
+      border:1px solid rgba(0,0,0,.08);
+    }
+
+    .diagramRow{
+      display:grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 860px){
+      .diagramRow{ grid-template-columns: 1fr; }
+    }
+
+    .diagramCard{
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.82);
+      padding:12px;
+    }
+    .diagramTitle{
+      font-weight:800;
+      margin-bottom:10px;
+    }
+    .helpSvg{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .exampleCard{
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.82);
+      padding:14px;
+    }
+    .exampleLabel{ font-size:.85rem; color:rgba(0,0,0,.65); }
+    .exampleName{ font-size:1.05rem; font-weight:800; margin-top:2px; }
+
+    .stepsList{
+      margin:10px 0 0 18px;
+      line-height:1.6;
+    }
+    .bullets{
+      margin:10px 0 0 18px;
+      line-height:1.6;
+    }
+    code{
+      background:rgba(0,0,0,.05);
+      padding:1px 6px;
+      border-radius:8px;
+    }
+
+    .exampleGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    @media (max-width: 900px){
+      .exampleGrid{ grid-template-columns: 1fr; }
+    }
+
+    .exampleFigure{
+      margin:0;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      background:rgba(255,255,255,.82);
+      padding:12px;
+    }
+
+    .helpPng{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:12px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(0,0,0,.08);
+    }
+
+    .exampleCaption{
+      margin-top:10px;
+      line-height:1.35;
+    }
+
+    .exampleName{
+      font-size:1.0rem;
+      font-weight:800;
+      margin-bottom:2px;
+    }
+
   </style>
 </head>
 <body>
@@ -225,6 +442,11 @@
         </label>
         <input id="maxChain" type="range" min="1" max="12" value="10" />
       </div>
+
+      <!-- Åpne hjelpinstruksjoner -->
+      <button id="helpBtn" class="iconBtn" type="button" aria-haspopup="dialog" aria-controls="helpModal">
+        <span data-lang="helpinstructions" class="label">Instruksjoner</span>
+      </button>
 
       <!-- Språk -->
       <div class="right">
@@ -323,6 +545,31 @@
           <div><span class="mono">Output</span>: <span id="debuggingOutput">–</span></div>
         </div>
       </details>
+
+      <!-- Hjelp / instruksjoner -->
+      <div id="helpModal" class="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="helpTitle" aria-hidden="true">
+        <div class="modalCard" role="document">
+          <div class="modalHeader">
+            <div>
+              <h2 id="helpTitle">Organic nomenclature rules</h2>
+              <p id="helpDescription" class="muted">A short summary of the nomenclature rules set in place by the International Union of Pure and Applied Chemistry (IUPAC) to systematically name organic compounds.</p>
+            </div>
+
+            <button id="helpCloseBtn" class="iconBtn ghost" type="button" aria-label="Close help">
+              ✕
+            </button>
+          </div>
+
+          <div class="modalBody" id="helpContent">
+            <!-- Hjelp instruksjoner er injektet her avhengig av språk -->
+          </div>
+
+          <div class="modalFooter">
+            <button id="helpCloseBtn2" class="primaryBtn">Got it</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -331,6 +578,7 @@
     no: {
       title: "Organiske forbindelser — øvingsspill",
       maxChain: "Maks lengde (lengste kjede)",
+      helpinstructions: "Instruksjoner",
       language: "Språk",
       new: "Ny forbindelse",
       question: "Hva er det systematiske IUPAC navnet til denne forbindelsen?",
@@ -399,6 +647,7 @@
     en: {
       title: "Organic compounds — practice game",
       maxChain: "Max parent chain length",
+      helpinstructions: "Instructions",
       language: "Language",
       new: "New compound",
       question: "What is the systematic IUPAC name of this compound?",
@@ -466,6 +715,7 @@
     }
   };
 
+
   //
   // NORSK IUPAC
   //
@@ -523,7 +773,7 @@
   }
 
   function splitPrefixAndBase(iupac) {
-    const m = iupac.match(/(cyclo)?(meth|eth|prop|but|pent|hex|hept|oct|non|dec|undec|dodec)[-\d,]*(?:an|en|dien|trien|yn|diyn|triyn)/);
+    const m = iupac.match(/(cyclo)?(meth|eth|prop|but|pent|hex|hept|oct|non|dec|undec|(?<!io)dodec)[-\d,]*(?:an|en|dien|trien|yn|diyn|triyn)/);
     if (!m) return { prefix: "", base: iupac }; // ingen substituenter
   
     return { prefix: iupac.slice(0, m.index), base: iupac.slice(m.index) };
@@ -632,14 +882,30 @@
     return `${prefixNo}${baseNo}`;
   }
 
-  // Midlertidig
-  function debugChars(label, s) {
-    console.log(label, JSON.stringify(s));
-    console.log([...s].map(ch => `${ch}(${ch.codePointAt(0)})`).join(" "));
-  }
+  const SPECIAL_ACCEPT_NO = {
+    "methanal": "formaldehyd",
+    "propanone": "aceton",
+    "propan-1,2,3-triol": "glyserol",
+    "methanoic acid": "maursyre",
+    "ethanoic acid": "eddiksyre",
+    "butanoic acid": "smørsyre",
+    "methanol": "tresprit",
+    "ethanol": "sprit",
+    "methyl ethanoate": "metylacetat",
+    "ethyl ethanoate": "etylacetat",
+    "propyl ethanoate": "propylacetat",
+    "butyl ethanoate": "butylacetat",
+    "pentyl ethanoate": "pentylacetat",
+    "hexyl ethanoate": "heksylacetat",
+    "heptyl ethanoate": "heptylacetat",
+    "octyl ethanoate": "oktylacetat",
+    "nonyl ethanoate": "nonylacetat",
+    "decyl ethanoate": "dekylacetat",
+    "undecyl ethanoate": "undekylacetat",
+    "dodecyl ethanoate": "dodekylacetat",
+  };
 
-
-
+  
   //
   // PRELOAD
   //
@@ -1910,6 +2176,77 @@
     svgInfo.textContent = "–";
   }
 
+  //
+  // HJELP INSTRUKSJONER
+  //
+  async function loadHelpContent(lang) {
+    const helpContent = document.getElementById("helpContent");
+    const helpTitle = document.getElementById("helpTitle");
+    const helpDescription = document.getElementById("helpDescription");
+    const helpCloseBtn2 = document.getElementById("helpCloseBtn2"); 
+
+    const file = lang === "no"
+      ? "help.no.html"
+      : "help.en.html";
+
+    helpTitle.textContent = (lang === "no") ? "Regler for organisk nomenklatur" : "Organic nomenclature rules";
+    helpDescription.textContent = (lang === "no")
+      ? "En kort oppsummering av navnsettingsregler satt av IUPAC (International Union of Pure and Applied Chemistry) for å systematisk sette navn på organiske forbindelser."
+      : "A short summary of the nomenclature rules set in place by the International Union of Pure and Applied Chemistry (IUPAC) to systematically name organic compounds.";
+    helpCloseBtn2.textContent = lang === "no" ? "Skjønner" : "Got it";
+    
+
+    try {
+      const res = await fetch(file);
+      helpContent.innerHTML = await res.text();
+    } catch (e) {
+      helpContent.innerHTML = (lang === "no") ? "<p>Hadde problemer med å laste inn hjelp instruksjonene! :(</p>" : "<p>Failed to load help content! :(</p>";
+    }
+  }
+
+  (function initHelpModal(){
+    const helpBtn = document.getElementById("helpBtn");
+    const modal = document.getElementById("helpModal");
+    const closeBtn = document.getElementById("helpCloseBtn");
+    const closeBtn2 = document.getElementById("helpCloseBtn2");
+
+    if (!helpBtn || !modal || !closeBtn || !closeBtn2) return;
+
+    function openModal(){
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      // Focus close for accessibility
+      closeBtn.focus();
+      // Prevent background scrolling
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      helpBtn.focus();
+    }
+
+    helpBtn.addEventListener("click", () => {
+      loadHelpContent(lang);
+      openModal();
+    });
+    closeBtn.addEventListener("click", closeModal);
+    closeBtn2.addEventListener("click", closeModal);
+
+    // Close on overlay click (but not when clicking inside the card)
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Escape to close
+    document.addEventListener("keydown", (e) => {
+      if (!modal.classList.contains("open")) return;
+      if (e.key === "Escape") closeModal();
+    });
+  })();
+
 
   //
   // NY FORBINDELSE
@@ -1982,9 +2319,10 @@
   
     const exp = normalizeName(currentName);
     const expNO = iupacEnToNo(currentName);
-    console.log(expNO);
+    const otherNO = SPECIAL_ACCEPT_NO[currentName];
+    console.log(expNO+" "+otherNO);
   
-    if (user === exp || user === expNO) {
+    if (user === exp || user === expNO || user === otherNO) {
       lastCheckCorrect = true;
       setStatus(t("statusCorrect"), "ok");
     } else {
@@ -2017,8 +2355,9 @@
   document.getElementById("showBtn").addEventListener("click", () => {
     clearFeedback();
     setStatus((lang === "no" ? "Fasit:" : "Answer:"), "warn");
+    const otherNO = SPECIAL_ACCEPT_NO[currentName];
     expectedEl.style.display = "block";
-    expectedEl.textContent =  (lang === "no" ? iupacEnToNo(currentName) : currentName);
+    expectedEl.textContent =  (lang === "no" ? iupacEnToNo(currentName)+(otherNO ? " ("+SPECIAL_ACCEPT_NO[currentName]+")" : "") : currentName);
   });
   
   document.getElementById("langBtn").addEventListener("click", () => {
