@@ -1704,7 +1704,7 @@
         });
 
     let finishedName = `${prefixParts.join("-")}${base}`;
-    if (n === 1) finishedName = finishedName.replace(/\d/g, "").replace(/,/g, "").replace(/-/g, "");
+    if (n === 1 || (n === 2 && !placed.principal && placed.subs.length === 1 && placed.subs[0].locants.length <= 1)) finishedName = finishedName.replace(/\d/g, "").replace(/,/g, "").replace(/-/g, "");
     return finishedName;
   }
 
