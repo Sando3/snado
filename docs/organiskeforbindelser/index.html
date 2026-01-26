@@ -861,9 +861,11 @@
 
   function translateEther(str) {
     const alkyls = str.replace("ane","").split("oxy");
-    if (alkyls[0] < alkyls[1]) return translateRootInBase(alkyls[0])+"yl"+translateRootInBase(alkyls[1])+"yleter";
-    if (alkyls[1] < alkyls[0]) return translateRootInBase(alkyls[1])+"yl"+translateRootInBase(alkyls[0])+"yleter";
-    return "di"+translateRootInBase(alkyls[0])+"yleter";
+    const shortalkyl = translateRootInBase(alkyls[0]);
+    const longalkyl = translateRootInBase(alkyls[1])
+    if (shortalkyl < longalkyl) return shortalkyl+"yl"+longalkyl+"yleter";
+    if (longalkyl < shortalkyl) return longalkyl+"yl"+shortalkyl+"yleter";
+    return "di"+shortalkyl+"yleter";
   }
 
   function iupacEnToNo(nameEn) {
@@ -903,6 +905,7 @@
     "decyl ethanoate": "dekylacetat",
     "undecyl ethanoate": "undekylacetat",
     "dodecyl ethanoate": "dodekylacetat",
+    "methylbenzene": "toluen",
   };
 
   
