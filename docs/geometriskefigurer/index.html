@@ -235,8 +235,10 @@
     <h1>Areal, omkrets og Pytagoras – uendelig med oppgaver</h1>
     <p class="intro">
       Skriv inn svarene dine i feltene og trykk på <strong>Sjekk svar</strong> eller <strong>Enter</strong>. Trykk på <strong>Ny oppgave</strong> for å få nye tall.
-      <br><strong>Husk å alltid ha med enhet i svaret!</strong> Du kan trykke på <strong>Alt+2</strong> for å få <strong>²</strong>. Dersom du må ta kvadratroten kan du skrive <strong>sqrt(10) cm</strong> istedenfor <strong>3,16 cm</strong>.
-      <br>Enheten byttes automatisk når det lages en ny oppgave.
+      <br>- Du kan skrive <strong>Alt+2</strong> for å få <strong>²</strong>.
+      <br>- Dersom du må ta kvadratroten kan du skrive <strong>sqrt(36-16) cm</strong> istedenfor 4,47 cm.
+      <br>- Bruk <strong>3,14</strong> som verdi for pi (π).
+      <br>Husk å alltid ha med enhet i svaret! Enheten byttes automatisk når det lages en ny oppgave.
     </p>
 
     <h2 class="section-title">Areal og omkrets</h2>
@@ -299,6 +301,25 @@
       </div>
 
       <div class="card">
+        <h2>Sirkel</h2>
+        <div class="figure-box"><svg id="svg-circle" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-circle"></div>
+        <div class="field">
+          <label for="circle-area">Areal</label>
+          <input id="circle-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="circle-circumference">Omkrets</label>
+          <input id="circle-circumference" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateCircle()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkCircle()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-circle">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
         <h2>Trapes</h2>
         <div class="figure-box"><svg id="svg-trapezoid" viewBox="0 0 240 200"></svg></div>
         <div class="data" id="data-trapezoid"></div>
@@ -334,6 +355,85 @@
           <button class="btn-check" onclick="checkParallelogram()">Sjekk svar</button>
         </div>
         <div class="feedback neutral" id="feedback-parallelogram">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Sammensatte figurer</h2>
+    <div class="grid">
+      <div class="card">
+        <h2>Hus</h2>
+        <div class="figure-box"><svg id="svg-house" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-house"></div>
+        <div class="field">
+          <label for="house-area">Areal</label>
+          <input id="house-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="house-perimeter">Omkrets</label>
+          <input id="house-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateHouse()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkHouse()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-house">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Iskrem</h2>
+        <div class="figure-box"><svg id="svg-icecream" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-icecream"></div>
+        <div class="field">
+          <label for="icecream-area">Areal</label>
+          <input id="icecream-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="icecream-perimeter">Omkrets</label>
+          <input id="icecream-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateIcecream()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkIcecream()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-icecream">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Donut</h2>
+        <div class="figure-box"><svg id="svg-donut" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-donut"></div>
+        <div class="field">
+          <label for="donut-area">Areal</label>
+          <input id="donut-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="donut-perimeter">Omkrets</label>
+          <input id="donut-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateDonut()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkDonut()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-donut">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Mynt</h2>
+        <div class="figure-box"><svg id="svg-coin" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-coin"></div>
+        <div class="field">
+          <label for="coin-area">Areal</label>
+          <input id="coin-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="coin-perimeter">Omkrets</label>
+          <input id="coin-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateCoin()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkCoin()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-coin">Her får du tilbakemelding på svaret ditt.</div>
       </div>
     </div>
 
@@ -799,6 +899,69 @@
       }
     }
 
+    function generateCircle(){
+      const r = randInt(2, 15);
+      const unit = choose(units);
+
+      state.circle = {
+        r,
+        unit,
+        area: 3.14 * r * r,
+        circumference: 2 * 3.14 * r
+      };
+
+      const svg = document.getElementById("svg-circle");
+      clearSVG(svg);
+
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", "120");
+      circle.setAttribute("cy", "100");
+      circle.setAttribute("r", "58");
+      circle.setAttribute("fill", getComputedStyle(document.documentElement).getPropertyValue('--shape').trim());
+      circle.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      circle.setAttribute("stroke-width", "3");
+      svg.appendChild(circle);
+
+      addLine(svg, 120, 100, 178, 100);
+      addText(svg, 150, 92, `${r} ${unit}`, 13);
+
+      const centerDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      centerDot.setAttribute("cx", "120");
+      centerDot.setAttribute("cy", "100");
+      centerDot.setAttribute("r", "3.5");
+      centerDot.setAttribute("fill", "#111827");
+      svg.appendChild(centerDot);
+
+      document.getElementById("data-circle").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>Radius = ${r} ${unit}`;
+
+      clearInputs(["circle-area","circle-circumference"]);
+      setNeutral("feedback-circle");
+    }
+    function checkCircle(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("circle-area").value,
+        state.circle.area,
+        `${state.circle.unit}²`
+      );
+      const circumferenceResult = evaluateAnswer(
+        document.getElementById("circle-circumference").value,
+        state.circle.circumference,
+        state.circle.unit
+      );
+      const s = state.circle;
+
+      if (areaResult.numericCorrect && circumferenceResult.numericCorrect &&
+          areaResult.unitCorrect && circumferenceResult.unitCorrect) {
+        setFeedback("feedback-circle", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.circumference)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && circumferenceResult.numericCorrect &&
+                (!areaResult.hasUnit || !circumferenceResult.hasUnit)) {
+        setWarning("feedback-circle", `Riktig, men husk enhet! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.circumference)} ${s.unit}.`);
+      } else {
+        setFeedback("feedback-circle", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.circumference)} ${s.unit}.`);
+      }
+    }
+
     function generateTrapezoid(){
       const top = randInt(4, 12), bottom = randInt(top + 2, top + 10), height = randInt(3, 10);
       const left = randInt(3, 10), right = randInt(3, 10), unit = choose(units);
@@ -811,8 +974,8 @@
       addText(svg, 120, 52, `${top} ${unit}`);
       addText(svg, 120, 170, `${bottom} ${unit}`);
       addText(svg, 86, 110, `${height} ${unit}`, 13, "start");
-      addText(svg, 54, 105, `${left} ${unit}`, 13);
-      addText(svg, 186, 105, `${right} ${unit}`, 13);
+      addText(svg, 52, 105, `${left} ${unit}`, 13);
+      addText(svg, 198, 105, `${right} ${unit}`, 13);
       document.getElementById("data-trapezoid").innerHTML = `<strong>Oppgitte mål:</strong><br>Øvre grunnlinje = ${top} ${unit}<br>Nedre grunnlinje = ${bottom} ${unit}<br>Høyde = ${height} ${unit}<br>Sider = ${left} ${unit} og ${right} ${unit}`;
       clearInputs(["trapezoid-area","trapezoid-perimeter"]);
       setNeutral("feedback-trapezoid");
@@ -850,8 +1013,8 @@
       addPolygon(svg, [p1,p2,p3,p4]);
       addLine(svg, 160, 65, 160, 150, true);
       addText(svg, 122, 170, `${base} ${unit}`);
-      addText(svg, 171, 110, `${height} ${unit}`, 13, "start");
-      addText(svg, 42, 110, `${side} ${unit}`, 13);
+      addText(svg, 164, 126, `${height} ${unit}`, 13, "start");
+      addText(svg, 58, 110, `${side} ${unit}`, 13);
       document.getElementById("data-parallelogram").innerHTML = `<strong>Oppgitte mål:</strong><br>Grunnlinje = ${base} ${unit}<br>Side = ${side} ${unit}<br>Høyde = ${height} ${unit}`;
       clearInputs(["parallelogram-area","parallelogram-perimeter"]);
       setNeutral("feedback-parallelogram");
@@ -878,6 +1041,242 @@
       } else {
         setFeedback("feedback-parallelogram", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
       }
+    }
+
+    function setCompositeFeedback(prefix, areaValue, perimeterValue, unit){
+      const areaResult = evaluateAnswer(
+        document.getElementById(`${prefix}-area`).value,
+        areaValue,
+        `${unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById(`${prefix}-perimeter`).value,
+        perimeterValue,
+        unit
+      );
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback(`feedback-${prefix}`, true, `Riktig! Areal = ${fmt(areaValue)} ${unit}² og omkrets = ${fmt(perimeterValue)} ${unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning(`feedback-${prefix}`, `Riktig, men husk enhet! Areal = ${fmt(areaValue)} ${unit}² og omkrets = ${fmt(perimeterValue)} ${unit}.`);
+      } else {
+        setFeedback(`feedback-${prefix}`, false, `Ikke helt riktig. Fasit: Areal = ${fmt(areaValue)} ${unit}², omkrets = ${fmt(perimeterValue)} ${unit}.`);
+      }
+    }
+
+    function generateHouse(){
+      const roofs = [
+        {halfBase:3, roofHeight:4, roofSide:5},
+        {halfBase:5, roofHeight:12, roofSide:13},
+        {halfBase:8, roofHeight:15, roofSide:17}
+      ];
+      const roof = choose(roofs);
+      const wallHeight = choose([4,5,6,7,8,9]);
+      const base = roof.halfBase * 2;
+      const unit = choose(units);
+
+      state.house = {
+        base,
+        wallHeight,
+        roofHeight: roof.roofHeight,
+        roofSide: roof.roofSide,
+        unit,
+        area: base * wallHeight + (base * roof.roofHeight) / 2,
+        perimeter: base + 2 * wallHeight + 2 * roof.roofSide
+      };
+
+      const svg = document.getElementById("svg-house");
+      clearSVG(svg);
+
+      const p1 = [55, 150];
+      const p2 = [185, 150];
+      const p3 = [185, 95];
+      const p4 = [120, 45];
+      const p5 = [55, 95];
+
+      addPolygon(svg, [p1, p2, p3, p4, p5]);
+      addLine(svg, 120, 95, 120, 45, true);
+
+      addText(svg, 120, 170, `${base} ${unit}`);
+      addText(svg, 42, 125, `${wallHeight} ${unit}`, 13);
+      addText(svg, 124, 80, `${roof.roofHeight} ${unit}`, 12, "start");
+      addText(svg, 80, 64, `${roof.roofSide} ${unit}`, 12);
+      addText(svg, 160, 64, `${roof.roofSide} ${unit}`, 12);
+
+      document.getElementById("data-house").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>` +
+        `Lengde = ${base} ${unit}, Hushøyde = ${wallHeight} ${unit}<br>` +
+        `Takhøyde = ${roof.roofHeight} ${unit}, Taksider = ${roof.roofSide} ${unit}`;
+
+      clearInputs(["house-area", "house-perimeter"]);
+      setNeutral("feedback-house");
+    }
+    function checkHouse(){
+      setCompositeFeedback("house", state.house.area, state.house.perimeter, state.house.unit);
+    }
+
+    function generateIcecream(){
+      const cones = [
+        {r:3, triHeight:4, side:5},
+        {r:5, triHeight:12, side:13},
+        {r:8, triHeight:15, side:17}
+      ];
+      const chosen = choose(cones);
+      const unit = choose(units);
+      const diameter = chosen.r * 2;
+
+      state.icecream = {
+        r: chosen.r,
+        diameter,
+        triHeight: chosen.triHeight,
+        side: chosen.side,
+        unit,
+        area: 0.5 * 3.14 * chosen.r * chosen.r + chosen.r * chosen.triHeight,
+        perimeter: 3.14 * chosen.r + 2 * chosen.side
+      };
+
+      const svg = document.getElementById("svg-icecream");
+      clearSVG(svg);
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const d = `
+        M 70 80
+        A 50 50 0 0 1 170 80
+        L 120 160
+        Z
+      `;
+      path.setAttribute("d", d);
+      path.setAttribute("fill", getComputedStyle(document.documentElement).getPropertyValue('--shape').trim());
+      path.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      path.setAttribute("stroke-width", "3");
+      svg.appendChild(path);
+
+      addLine(svg, 70, 80, 170, 80);
+      addText(svg, 120, 72, `${diameter} ${unit}`, 13);
+
+      addText(svg, 92, 126, `${chosen.side} ${unit}`, 12);
+      addText(svg, 148, 126, `${chosen.side} ${unit}`, 12);
+
+      document.getElementById("data-icecream").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>` +
+        `Iskrem diameter = ${diameter} ${unit}<br>` +
+        `Kjeks sider = ${chosen.side} ${unit}`;
+
+      clearInputs(["icecream-area", "icecream-perimeter"]);
+      setNeutral("feedback-icecream");
+    }
+    function checkIcecream(){
+      setCompositeFeedback("icecream", state.icecream.area, state.icecream.perimeter, state.icecream.unit);
+    }
+
+    function generateDonut(){
+      const outerR = choose([5, 6, 7, 8, 9]);
+      const innerR = choose([2, 3, 4]);
+      const unit = choose(units);
+
+      state.donut = {
+        outerR,
+        innerR,
+        unit,
+        area: 3.14 * (outerR * outerR - innerR * innerR),
+        perimeter: 2 * 3.14 * outerR + 2 * 3.14 * innerR
+      };
+
+      const svg = document.getElementById("svg-donut");
+      clearSVG(svg);
+
+      const cx = 120;
+      const cy = 100;
+
+      const outer = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      outer.setAttribute("cx", String(cx));
+      outer.setAttribute("cy", String(cy));
+      outer.setAttribute("r", "62");
+      outer.setAttribute("fill", getComputedStyle(document.documentElement).getPropertyValue('--shape').trim());
+      outer.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      outer.setAttribute("stroke-width", "3");
+      svg.appendChild(outer);
+
+      const inner = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      inner.setAttribute("cx", String(cx));
+      inner.setAttribute("cy", String(cy));
+      inner.setAttribute("r", "28");
+      inner.setAttribute("fill", "#f8fbff");
+      inner.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      inner.setAttribute("stroke-width", "3");
+      svg.appendChild(inner);
+
+      addLine(svg, cx, cy, cx + 62, cy);
+      addText(svg, cx + 42, cy - 10, `${outerR} ${unit}`, 13);
+
+      const angle = Math.PI / 4;
+      const innerX = cx + 28 * Math.cos(angle);
+      const innerY = cy + 28 * Math.sin(angle);
+
+      addLine(svg, cx, cy, innerX, innerY);
+      addText(svg, innerX + 12, innerY + 2, `${innerR} ${unit}`, 12, "start");
+
+      document.getElementById("data-donut").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>` +
+        `Ytre radius = ${outerR} ${unit}<br>` +
+        `Indre radius = ${innerR} ${unit}`;
+
+      clearInputs(["donut-area", "donut-perimeter"]);
+      setNeutral("feedback-donut");
+    }
+    function checkDonut(){
+      setCompositeFeedback("donut", state.donut.area, state.donut.perimeter, state.donut.unit);
+    }
+
+    function generateCoin(){
+      const r = choose([4, 5, 6, 7, 8, 9]);
+      const unit = choose(units);
+
+      state.coin = {
+        r,
+        unit,
+        squareSide: r * Math.sqrt(2),
+        area: 3.14 * r * r - 2 * r * r,
+        perimeter: 2 * 3.14 * r + 4 * r * Math.sqrt(2)
+      };
+
+      const svg = document.getElementById("svg-coin");
+      clearSVG(svg);
+
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", "120");
+      circle.setAttribute("cy", "100");
+      circle.setAttribute("r", "60");
+      circle.setAttribute("fill", getComputedStyle(document.documentElement).getPropertyValue('--shape').trim());
+      circle.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      circle.setAttribute("stroke-width", "3");
+      svg.appendChild(circle);
+
+      const square = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      square.setAttribute("x", "78");
+      square.setAttribute("y", "58");
+      square.setAttribute("width", "84");
+      square.setAttribute("height", "84");
+      square.setAttribute("fill", "#f8fbff");
+      square.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      square.setAttribute("stroke-width", "3");
+      svg.appendChild(square);
+
+      addLine(svg, 120, 100, 180, 100);
+      addText(svg, 150, 92, `${r} ${unit}`, 13);
+
+      document.getElementById("data-coin").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>` +
+        `Sirkel radius = ${r} ${unit}<br>` +
+        `Kvadratet passer perfekt inni sirkelen.`;
+
+      clearInputs(["coin-area", "coin-perimeter"]);
+      setNeutral("feedback-coin");
+    }
+    function checkCoin(){
+      setCompositeFeedback("coin", state.coin.area, state.coin.perimeter, state.coin.unit);
     }
 
     function drawRightTriangle(svgId, labels){
@@ -1149,6 +1548,7 @@
       "square-area", "square-perimeter",
       "rectangle-area", "rectangle-perimeter",
       "triangle-area", "triangle-perimeter",
+      "circle-area", "circle-circumference",
       "trapezoid-area", "trapezoid-perimeter",
       "parallelogram-area", "parallelogram-perimeter",
       "pyth1-answer", "pyth2-answer",
@@ -1162,8 +1562,13 @@
     bindEnterToCheck(["square-area", "square-perimeter"], checkSquare);
     bindEnterToCheck(["rectangle-area", "rectangle-perimeter"], checkRectangle);
     bindEnterToCheck(["triangle-area", "triangle-perimeter"], checkTriangle);
+    bindEnterToCheck(["circle-area", "circle-circumference"], checkCircle);
     bindEnterToCheck(["trapezoid-area", "trapezoid-perimeter"], checkTrapezoid);
     bindEnterToCheck(["parallelogram-area", "parallelogram-perimeter"], checkParallelogram);
+    bindEnterToCheck(["house-area", "house-perimeter"], checkHouse);
+    bindEnterToCheck(["icecream-area", "icecream-perimeter"], checkIcecream);
+    bindEnterToCheck(["donut-area", "donut-perimeter"], checkDonut);
+    bindEnterToCheck(["coin-area", "coin-perimeter"], checkCoin);
     bindEnterToCheck(["pyth1-answer"], checkPyth1);
     bindEnterToCheck(["pyth2-answer"], checkPyth2);
     bindEnterToCheck(["pyth3-answer1", "pyth3-answer2"], checkPyth3);
@@ -1175,8 +1580,13 @@
     generateSquare();
     generateRectangle();
     generateTriangle();
+    generateCircle();
     generateTrapezoid();
     generateParallelogram();
+    generateHouse();
+    generateIcecream();
+    generateDonut();
+    generateCoin();
     generatePyth1();
     generatePyth2();
     generatePyth3();
