@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Areal, omkrets og Pytagoras – oppgaver</title>
+  <style>
+    :root{
+      --bg:#eef3f9;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --accent:#2563eb;
+      --accent2:#059669;
+      --danger:#dc2626;
+      --border:#d6dfec;
+      --shape:#93c5fd;
+      --shape-stroke:#1d4ed8;
+      --okbg:#ecfdf5;
+      --ok:#065f46;
+      --badbg:#fef2f2;
+      --bad:#991b1b;
+      --warnbg:#fffbeb;
+      --warn:#92400e;
+      --input-bg:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html{
+      font-size:16px;
+    }
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    .wrap{
+      max-width:1500px;
+      margin:0 auto;
+      padding:32px 24px 40px;
+    }
+    h1{
+      margin:0 0 12px 0;
+      font-size:clamp(2rem, 2.8vw, 2.6rem);
+      line-height:1.15;
+      letter-spacing:-0.02em;
+    }
+    .intro{
+      margin:0 0 28px 0;
+      color:var(--muted);
+      line-height:1.65;
+      max-width:160ch;
+      font-size:1.05rem;
+      text-wrap:balance;
+    }
+    .section-title{
+      margin:34px 0 16px 0;
+      font-size:1.5rem;
+      line-height:1.25;
+      letter-spacing:-0.01em;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+      gap:20px;
+      align-items:stretch;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 8px 24px rgba(15,23,42,0.06);
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      min-height:560px;
+    }
+    .card.compact{
+      min-height:470px;
+    }
+    .card h2{
+      margin:0 0 14px 0;
+      font-size:1.2rem;
+      text-align:left;
+      line-height:1.3;
+      letter-spacing:-0.01em;
+    }
+    .figure-box{
+      width:100%;
+      height:220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f8fbff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      margin-bottom:14px;
+      overflow:hidden;
+    }
+    svg{
+      width:100%;
+      height:100%;
+    }
+    .data{
+      width:100%;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px 15px;
+      margin-bottom:14px;
+      line-height:1.75;
+      font-size:1rem;
+      color:#1e293b;
+    }
+    .data strong{
+      display:block;
+      margin-bottom:2px;
+      font-size:0.97rem;
+      letter-spacing:0.01em;
+    }
+    .field{
+      width:100%;
+      margin-bottom:10px;
+    }
+    .field label{
+      display:block;
+      font-size:0.98rem;
+      margin-bottom:6px;
+      font-weight:700;
+      color:#0f172a;
+    }
+    .field input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #cbd5e1;
+      background:var(--input-bg);
+      font-size:1rem;
+      line-height:1.4;
+      color:var(--text);
+    }
+    .field input::placeholder{
+      color:#94a3b8;
+    }
+    .field input:focus{
+      outline:none;
+      border-color:#60a5fa;
+      box-shadow:0 0 0 4px rgba(37,99,235,0.12);
+    }
+    .buttons{
+      width:100%;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:auto;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      color:white;
+      padding:13px 14px;
+      font-size:0.98rem;
+      line-height:1.3;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform 0.05s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+      min-height:48px;
+    }
+    .btn-new{background:var(--accent);}
+    .btn-check{background:var(--accent2);}
+    button:hover{opacity:0.95; box-shadow:0 6px 16px rgba(15,23,42,0.12)}
+    button:active{transform:translateY(1px)}
+    .feedback{
+      width:100%;
+      min-height:52px;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:0.97rem;
+      line-height:1.6;
+      margin-top:10px;
+      border:1px solid transparent;
+    }
+    .feedback.ok{
+      background:var(--okbg);
+      color:var(--ok);
+      border-color:#a7f3d0;
+    }
+    .feedback.bad{
+      background:var(--badbg);
+      color:var(--bad);
+      border-color:#fecaca;
+    }
+    .feedback.warn{
+      background:var(--warnbg);
+      color:var(--warn);
+      border-color:#fcd34d;
+    }
+    .feedback.neutral{
+      background:#f8fafc;
+      color:#475569;
+      border-color:#e2e8f0;
+    }
+    @media (max-width: 700px){
+      .wrap{
+        padding:20px 14px 28px;
+      }
+      .grid{
+        grid-template-columns:1fr;
+      }
+      .card,
+      .card.compact{
+        min-height:auto;
+      }
+      .buttons{
+        grid-template-columns:1fr;
+      }
+      h1{
+        font-size:1.9rem;
+      }
+      .section-title{
+        font-size:1.35rem;
+      }
+      .figure-box{
+        height:200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Areal, omkrets og Pytagoras – uendelig med oppgaver</h1>
+    <p class="intro">
+      Skriv inn svarene dine i feltene og trykk på <strong>Sjekk svar</strong> eller <strong>Enter</strong>. Trykk på <strong>Ny oppgave</strong> for å få nye tall.
+      <br><strong>Husk å alltid ha med enhet i svaret!</strong> Du kan trykke på <strong>Alt+2</strong> for å få <strong>²</strong>. Dersom du må ta kvadratroten kan du skrive <strong>sqrt(10) cm</strong> istedenfor <strong>3,16 cm</strong>.
+      <br>Enheten byttes automatisk når det lages en ny oppgave.
+    </p>
+
+    <h2 class="section-title">Areal og omkrets</h2>
+    <div class="grid">
+      <div class="card">
+        <h2>Kvadrat</h2>
+        <div class="figure-box"><svg id="svg-square" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-square"></div>
+        <div class="field">
+          <label for="square-area">Areal</label>
+          <input id="square-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="square-perimeter">Omkrets</label>
+          <input id="square-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateSquare()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkSquare()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-square">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Rektangel</h2>
+        <div class="figure-box"><svg id="svg-rectangle" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-rectangle"></div>
+        <div class="field">
+          <label for="rectangle-area">Areal</label>
+          <input id="rectangle-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="rectangle-perimeter">Omkrets</label>
+          <input id="rectangle-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateRectangle()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkRectangle()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-rectangle">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Trekant</h2>
+        <div class="figure-box"><svg id="svg-triangle" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-triangle"></div>
+        <div class="field">
+          <label for="triangle-area">Areal</label>
+          <input id="triangle-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="triangle-perimeter">Omkrets</label>
+          <input id="triangle-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateTriangle()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkTriangle()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-triangle">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Trapes</h2>
+        <div class="figure-box"><svg id="svg-trapezoid" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-trapezoid"></div>
+        <div class="field">
+          <label for="trapezoid-area">Areal</label>
+          <input id="trapezoid-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="trapezoid-perimeter">Omkrets</label>
+          <input id="trapezoid-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateTrapezoid()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkTrapezoid()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-trapezoid">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card">
+        <h2>Parallellogram</h2>
+        <div class="figure-box"><svg id="svg-parallelogram" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-parallelogram"></div>
+        <div class="field">
+          <label for="parallelogram-area">Areal</label>
+          <input id="parallelogram-area" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="parallelogram-perimeter">Omkrets</label>
+          <input id="parallelogram-perimeter" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generateParallelogram()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkParallelogram()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-parallelogram">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Pytagoras og spesielle trekanter</h2>
+    <div class="grid">
+      <div class="card compact">
+        <h2>To kateter kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth1" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth1"></div>
+        <div class="field">
+          <label for="pyth1-answer">Hypotenusen</label>
+          <input id="pyth1-answer" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth1()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth1()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth1">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>Én katet og hypotenus kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth2" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth2"></div>
+        <div class="field">
+          <label for="pyth2-answer">Manglende katet</label>
+          <input id="pyth2-answer" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth2()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth2()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth2">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>45-45-90: én katet kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth3" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth3"></div>
+        <div class="field">
+          <label for="pyth3-answer1">Andre katet</label>
+          <input id="pyth3-answer1" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="pyth3-answer2">Hypotenusen</label>
+          <input id="pyth3-answer2" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth3()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth3()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth3">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>45-45-90: hypotenusen kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth4" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth4"></div>
+        <div class="field">
+          <label for="pyth4-answer">Katet</label>
+          <input id="pyth4-answer" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth4()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth4()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth4">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>30-60-90: hypotenusen kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth5" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth5"></div>
+        <div class="field">
+          <label for="pyth5-answer1">Korteste katet</label>
+          <input id="pyth5-answer1" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="pyth5-answer2">Lengste katet</label>
+          <input id="pyth5-answer2" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth5()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth5()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth5">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>30-60-90: korteste katet kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth6" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth6"></div>
+        <div class="field">
+          <label for="pyth6-answer1">Lengste katet</label>
+          <input id="pyth6-answer1" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="pyth6-answer2">Hypotenusen</label>
+          <input id="pyth6-answer2" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth6()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth6()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth6">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+
+      <div class="card compact">
+        <h2>30-60-90: lengste katet kjent</h2>
+        <div class="figure-box"><svg id="svg-pyth7" viewBox="0 0 240 200"></svg></div>
+        <div class="data" id="data-pyth7"></div>
+        <div class="field">
+          <label for="pyth7-answer1">Korteste katet</label>
+          <input id="pyth7-answer1" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="field">
+          <label for="pyth7-answer2">Hypotenusen</label>
+          <input id="pyth7-answer2" type="text" inputmode="decimal" placeholder="Skriv svaret her">
+        </div>
+        <div class="buttons">
+          <button class="btn-new" onclick="generatePyth7()">Ny oppgave</button>
+          <button class="btn-check" onclick="checkPyth7()">Sjekk svar</button>
+        </div>
+        <div class="feedback neutral" id="feedback-pyth7">Her får du tilbakemelding på svaret ditt.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const units = ["mm", "cm", "dm", "m"];
+    const state = {};
+
+    function randInt(min, max){
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function choose(arr){
+      return arr[randInt(0, arr.length - 1)];
+    }
+    function clearSVG(svg){
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+    }
+    function addText(svg, x, y, text, size=14, anchor="middle"){
+      const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t.setAttribute("x", x);
+      t.setAttribute("y", y);
+      t.setAttribute("font-size", size);
+      t.setAttribute("font-family", "Arial, Helvetica, sans-serif");
+      t.setAttribute("fill", "#111827");
+      t.setAttribute("text-anchor", anchor);
+      t.textContent = text;
+      svg.appendChild(t);
+    }
+    function addLine(svg, x1, y1, x2, y2, dashed=false){
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#111827");
+      line.setAttribute("stroke-width", "2");
+      if (dashed) line.setAttribute("stroke-dasharray", "5 4");
+      svg.appendChild(line);
+    }
+    function addPolygon(svg, points){
+      const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      poly.setAttribute("points", points.map(p => p.join(",")).join(" "));
+      poly.setAttribute("fill", getComputedStyle(document.documentElement).getPropertyValue('--shape').trim());
+      poly.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue('--shape-stroke').trim());
+      poly.setAttribute("stroke-width", "3");
+      svg.appendChild(poly);
+      return poly;
+    }
+    function addAngleMark(svg, x, y, size=14){
+      addLine(svg, x, y, x+size, y);
+      addLine(svg, x, y, x, y-size);
+      addLine(svg, x+size, y, x+size, y-size);
+      addLine(svg, x, y-size, x+size, y-size);
+    }
+    function addAngleArc(svg, cx, cy, r, startAngle, endAngle, label, labelRadius=14){
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const toRad = deg => deg * Math.PI / 180;
+
+      const x1 = cx + r * Math.cos(toRad(startAngle));
+      const y1 = cy - r * Math.sin(toRad(startAngle));
+      const x2 = cx + r * Math.cos(toRad(endAngle));
+      const y2 = cy - r * Math.sin(toRad(endAngle));
+
+      const d = `M ${x1} ${y1} A ${r} ${r} 0 0 0 ${x2} ${y2}`;
+      path.setAttribute("d", d);
+      path.setAttribute("stroke", "#111827");
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke-width", "2");
+      svg.appendChild(path);
+
+      const midAngle = (startAngle + endAngle) / 2;
+      const tx = cx + (r + labelRadius) * Math.cos(toRad(midAngle));
+      const ty = cy - (r + labelRadius) * Math.sin(toRad(midAngle));
+      addText(svg, tx, ty, label, 12);
+    }
+    function fmt(n){
+      if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+      return n.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1").replace(".", ",");
+    }
+    function normalizeUnit(unit){
+      if (!unit) return "";
+      let normalized = String(unit).toLowerCase().trim();
+      normalized = normalized.replace(/\s+/g, "");
+      normalized = normalized.replace(/\^2/g, "²");
+      normalized = normalized.replace(/2$/g, "²");
+      return normalized;
+    }
+
+    function evaluateMathExpression(expr){
+      if (!expr) return NaN;
+
+      let normalized = String(expr).toLowerCase().trim();
+      normalized = normalized.replace(/,/g, ".");
+      normalized = normalized.replace(/\s+/g, "");
+
+      if (!/^[0-9+\-*/().sqrt]+$/.test(normalized)) return NaN;
+
+      normalized = normalized.replace(/sqrt\(/g, "Math.sqrt(");
+
+      try {
+        const result = Function(`"use strict"; return (${normalized});`)();
+        return typeof result === "number" && Number.isFinite(result) ? result : NaN;
+      } catch {
+        return NaN;
+      }
+    }
+
+    function parseAnswer(value){
+      if (!value) return { number: NaN, unit: "", hasUnit: false };
+
+      let normalized = String(value).toLowerCase().trim();
+      normalized = normalized.replace(/,/g, ".");
+      normalized = normalized.replace(/\s+/g, "");
+      normalized = normalized.replace(/\^2/g, "²");
+      normalized = normalized.replace(/(mm|cm|dm|m)2$/i, "$1²");
+
+      let unit = "";
+      const unitMatch = normalized.match(/(mm²|cm²|dm²|m²|mm|cm|dm|m)$/i);
+      if (unitMatch) {
+        unit = normalizeUnit(unitMatch[1]);
+        normalized = normalized.slice(0, -unitMatch[1].length);
+      }
+
+      return {
+        number: evaluateMathExpression(normalized),
+        unit,
+        hasUnit: unit.length > 0
+      };
+    }
+
+    function parseInput(value){
+      return parseAnswer(value).number;
+    }
+    function closeEnough(a, b){
+      return Math.abs(a - b) < 0.05;
+    }
+    function setFeedback(id, ok, message){
+      const el = document.getElementById(id);
+      el.className = "feedback " + (ok ? "ok" : "bad");
+      el.textContent = message;
+    }
+    function setWarning(id, message){
+      const el = document.getElementById(id);
+      el.className = "feedback warn";
+      el.textContent = message;
+    }
+    function setNeutral(id, message="Svarene sjekkes her."){
+      const el = document.getElementById(id);
+      el.className = "feedback neutral";
+      el.textContent = message;
+    }
+    function clearInputs(ids){
+      ids.forEach(id => document.getElementById(id).value = "");
+    }
+    function evaluateAnswer(value, expectedNumber, expectedUnit){
+      const parsed = parseAnswer(value);
+      return {
+        numericCorrect: closeEnough(parsed.number, expectedNumber),
+        unitCorrect: parsed.unit === normalizeUnit(expectedUnit),
+        hasUnit: parsed.hasUnit
+      };
+    }
+    function bindAlt2ToSuperscript(inputIds){
+      inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener("keydown", (event) => {
+          if (event.altKey && event.key === "2") {
+            event.preventDefault();
+            const start = el.selectionStart ?? el.value.length;
+            const end = el.selectionEnd ?? el.value.length;
+            el.value = el.value.slice(0, start) + "²" + el.value.slice(end);
+            const pos = start + 1;
+            el.setSelectionRange(pos, pos);
+          }
+        });
+      });
+    }
+    function bindEnterToCheck(inputIds, checkFn){
+      inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            checkFn();
+          }
+        });
+      });
+    }
+
+    function generateSquare(){
+      const s = randInt(3, 15);
+      const unit = choose(units);
+      state.square = {s, unit, area:s*s, perimeter:4*s};
+
+      const svg = document.getElementById("svg-square");
+      clearSVG(svg);
+      const size = 110, x = 65, y = 40;
+      addPolygon(svg, [[x,y],[x+size,y],[x+size,y+size],[x,y+size]]);
+      addText(svg, x + size/2, y - 10, `${s} ${unit}`);
+      addText(svg, x + size + 25, y + size/2 + 5, `${s} ${unit}`, 14, "start");
+
+      document.getElementById("data-square").innerHTML = `<strong>Oppgitte mål:</strong><br>Side = ${s} ${unit}`;
+      clearInputs(["square-area","square-perimeter"]);
+      setNeutral("feedback-square");
+    }
+        function checkSquare(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("square-area").value,
+        state.square.area,
+        `${state.square.unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById("square-perimeter").value,
+        state.square.perimeter,
+        state.square.unit
+      );
+      const s = state.square;
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback("feedback-square", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning("feedback-square", `Riktig, men husk enhet! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else {
+        setFeedback("feedback-square", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      }
+    }
+
+    function generateRectangle(){
+      const w = randInt(4, 18), h = randInt(3, 12), unit = choose(units);
+      state.rectangle = {w,h,unit,area:w*h,perimeter:2*(w+h)};
+      const svg = document.getElementById("svg-rectangle");
+      clearSVG(svg);
+      const drawW = 140, drawH = 90, x = 50, y = 55;
+      addPolygon(svg, [[x,y],[x+drawW,y],[x+drawW,y+drawH],[x,y+drawH]]);
+      addText(svg, x + drawW/2, y - 10, `${w} ${unit}`);
+      addText(svg, x + drawW + 25, y + drawH/2 + 5, `${h} ${unit}`, 14, "start");
+      document.getElementById("data-rectangle").innerHTML = `<strong>Oppgitte mål:</strong><br>Lengde = ${w} ${unit}<br>Bredde = ${h} ${unit}`;
+      clearInputs(["rectangle-area","rectangle-perimeter"]);
+      setNeutral("feedback-rectangle");
+    }
+    function checkRectangle(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("rectangle-area").value,
+        state.rectangle.area,
+        `${state.rectangle.unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById("rectangle-perimeter").value,
+        state.rectangle.perimeter,
+        state.rectangle.unit
+      );
+      const s = state.rectangle;
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback("feedback-rectangle", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning("feedback-rectangle", `Riktig, men husk enhet! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else {
+        setFeedback("feedback-rectangle", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      }
+    }
+
+    function generateTriangle(){
+      const options = [
+        {base:10, height:6, side1:8, side2:9, apexX:95},
+        {base:12, height:7, side1:9, side2:10, apexX:100},
+        {base:14, height:8, side1:10, side2:12, apexX:110},
+        {base:9, height:5, side1:6, side2:8, apexX:85},
+        {base:15, height:9, side1:11, side2:13, apexX:115},
+        {base:11, height:6, side1:7, side2:10, apexX:90}
+      ];
+
+      const chosen = choose(options);
+      const {base, height, side1, side2, apexX} = chosen;
+      const unit = choose(units);
+
+      state.triangle = {
+        base,
+        height,
+        side1,
+        side2,
+        unit,
+        area:(base * height) / 2,
+        perimeter:base + side1 + side2
+      };
+
+      const svg = document.getElementById("svg-triangle");
+      clearSVG(svg);
+
+      const p1 = [40, 160];
+      const p2 = [200, 160];
+      const p3 = [apexX, 70];
+
+      addPolygon(svg, [p1, p2, p3]);
+
+      addLine(svg, apexX, 70, apexX, 160, true);
+
+      addText(svg, 120, 178, `${base} ${unit}`);
+      addText(svg, apexX + 12, 118, `${height} ${unit}`, 13, "start");
+      addText(svg, 72, 108, `${side1} ${unit}`, 13);
+      addText(svg, 165, 108, `${side2} ${unit}`, 13);
+
+      document.getElementById("data-triangle").innerHTML =
+        `<strong>Oppgitte mål:</strong><br>` +
+        `Grunnlinje = ${base} ${unit}<br>` +
+        `Høyde = ${height} ${unit}<br>` +
+        `Side = ${side1} ${unit}<br>` +
+        `Side = ${side2} ${unit}`;
+
+      clearInputs(["triangle-area","triangle-perimeter"]);
+      setNeutral("feedback-triangle");
+    }
+
+    function checkTriangle(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("triangle-area").value,
+        state.triangle.area,
+        `${state.triangle.unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById("triangle-perimeter").value,
+        state.triangle.perimeter,
+        state.triangle.unit
+      );
+      const s = state.triangle;
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback("feedback-triangle", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning("feedback-triangle", `Riktig, men husk enhet! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else {
+        setFeedback("feedback-triangle", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      }
+    }
+
+    function generateTrapezoid(){
+      const top = randInt(4, 12), bottom = randInt(top + 2, top + 10), height = randInt(3, 10);
+      const left = randInt(3, 10), right = randInt(3, 10), unit = choose(units);
+      state.trapezoid = {top,bottom,height,left,right,unit,area:((top+bottom)*height)/2, perimeter:top+bottom+left+right};
+      const svg = document.getElementById("svg-trapezoid");
+      clearSVG(svg);
+      const p1 = [45, 150], p2 = [195, 150], p3 = [165, 60], p4 = [75, 60];
+      addPolygon(svg, [p1,p2,p3,p4]);
+      addLine(svg, 75, 60, 75, 150, true);
+      addText(svg, 120, 52, `${top} ${unit}`);
+      addText(svg, 120, 170, `${bottom} ${unit}`);
+      addText(svg, 86, 110, `${height} ${unit}`, 13, "start");
+      addText(svg, 54, 105, `${left} ${unit}`, 13);
+      addText(svg, 186, 105, `${right} ${unit}`, 13);
+      document.getElementById("data-trapezoid").innerHTML = `<strong>Oppgitte mål:</strong><br>Øvre grunnlinje = ${top} ${unit}<br>Nedre grunnlinje = ${bottom} ${unit}<br>Høyde = ${height} ${unit}<br>Sider = ${left} ${unit} og ${right} ${unit}`;
+      clearInputs(["trapezoid-area","trapezoid-perimeter"]);
+      setNeutral("feedback-trapezoid");
+    }
+    function checkTrapezoid(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("trapezoid-area").value,
+        state.trapezoid.area,
+        `${state.trapezoid.unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById("trapezoid-perimeter").value,
+        state.trapezoid.perimeter,
+        state.trapezoid.unit
+      );
+      const s = state.trapezoid;
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback("feedback-trapezoid", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning("feedback-trapezoid", `Riktig, men husk enhet! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else {
+        setFeedback("feedback-trapezoid", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      }
+    }
+
+    function generateParallelogram(){
+      const base = randInt(5, 18), side = randInt(4, 12), height = randInt(3, 10), unit = choose(units);
+      state.parallelogram = {base,side,height,unit,area:base*height, perimeter:2*(base+side)};
+      const svg = document.getElementById("svg-parallelogram");
+      clearSVG(svg);
+      const p1 = [55, 150], p2 = [190, 150], p3 = [160, 65], p4 = [25, 65];
+      addPolygon(svg, [p1,p2,p3,p4]);
+      addLine(svg, 160, 65, 160, 150, true);
+      addText(svg, 122, 170, `${base} ${unit}`);
+      addText(svg, 171, 110, `${height} ${unit}`, 13, "start");
+      addText(svg, 42, 110, `${side} ${unit}`, 13);
+      document.getElementById("data-parallelogram").innerHTML = `<strong>Oppgitte mål:</strong><br>Grunnlinje = ${base} ${unit}<br>Side = ${side} ${unit}<br>Høyde = ${height} ${unit}`;
+      clearInputs(["parallelogram-area","parallelogram-perimeter"]);
+      setNeutral("feedback-parallelogram");
+    }
+    function checkParallelogram(){
+      const areaResult = evaluateAnswer(
+        document.getElementById("parallelogram-area").value,
+        state.parallelogram.area,
+        `${state.parallelogram.unit}²`
+      );
+      const perimeterResult = evaluateAnswer(
+        document.getElementById("parallelogram-perimeter").value,
+        state.parallelogram.perimeter,
+        state.parallelogram.unit
+      );
+      const s = state.parallelogram;
+
+      if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+          areaResult.unitCorrect && perimeterResult.unitCorrect) {
+        setFeedback("feedback-parallelogram", true, `Riktig! Areal = ${fmt(s.area)} ${s.unit}² og omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      } else if (areaResult.numericCorrect && perimeterResult.numericCorrect &&
+                 (!areaResult.hasUnit || !perimeterResult.hasUnit)) {
+        setWarning("feedback-parallelogram", `Riktig, men husk enhet! Areal skal skrives i ${s.unit}² og omkrets i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-parallelogram", false, `Ikke helt riktig. Fasit: Areal = ${fmt(s.area)} ${s.unit}², omkrets = ${fmt(s.perimeter)} ${s.unit}.`);
+      }
+    }
+
+    function drawRightTriangle(svgId, labels){
+      const svg = document.getElementById(svgId);
+      clearSVG(svg);
+      const p1 = [45, 160], p2 = [200, 160], p3 = [45, 55];
+      addPolygon(svg, [p1,p2,p3]);
+      addAngleMark(svg, 45, 160, 14);
+      if (labels.base) addText(svg, 120, 178, labels.base);
+      if (labels.height) addText(svg, 20, 110, labels.height, 13, "start");
+      if (labels.hyp) addText(svg, 130, 100, labels.hyp, 13);
+    }
+
+    function draw456090(svgId, labels){
+      const svg = document.getElementById(svgId);
+      clearSVG(svg);
+      const p1 = [50, 160], p2 = [200, 160], p3 = [50, 60];
+      addPolygon(svg, [p1,p2,p3]);
+      addAngleMark(svg, 50, 160, 14);
+
+      addAngleArc(svg, 50, 60, 24, 270, 315, "45°", 12);
+      addAngleArc(svg, 200, 160, 24, 135, 180, "45°", 14);
+
+      if (labels.base) addText(svg, 125, 178, labels.base);
+      if (labels.height) addText(svg, 20, 112, labels.height, 13, "start");
+      if (labels.hyp) addText(svg, 132, 102, labels.hyp, 13);
+    }
+
+    function draw306090(svgId, labels){
+      const svg = document.getElementById(svgId);
+      clearSVG(svg);
+      const p1 = [45, 160], p2 = [205, 160], p3 = [45, 68];
+      addPolygon(svg, [p1,p2,p3]);
+      addAngleMark(svg, 45, 160, 14);
+
+      addAngleArc(svg, 45, 68, 24, 270, 330, "30°", 12);
+      addAngleArc(svg, 205, 160, 24, 150, 180, "60°", 14);
+
+      if (labels.base) addText(svg, 125, 178, labels.base);
+      if (labels.height) addText(svg, 20, 115, labels.height, 13, "start");
+      if (labels.hyp) addText(svg, 132, 105, labels.hyp, 13);
+    }
+
+    function generatePyth1(){
+      const triples = [[3,4,5],[5,12,13],[6,8,10],[8,15,17],[7,24,25],[9,12,15]];
+      const [a,b,c] = choose(triples);
+      const unit = choose(units);
+      state.pyth1 = {a,b,c,unit};
+      drawRightTriangle("svg-pyth1", {base:`${a} ${unit}`, height:`${b} ${unit}`, hyp:`?`});
+      document.getElementById("data-pyth1").innerHTML = `<strong>Finn hypotenusen.</strong><br>Kateter: ${a} ${unit} og ${b} ${unit}`;
+      clearInputs(["pyth1-answer"]);
+      setNeutral("feedback-pyth1", "Svaret sjekkes her.");
+    }
+    function checkPyth1(){
+      const result = evaluateAnswer(
+        document.getElementById("pyth1-answer").value,
+        state.pyth1.c,
+        state.pyth1.unit
+      );
+      const s = state.pyth1;
+
+      if (result.numericCorrect && result.unitCorrect) {
+        setFeedback("feedback-pyth1", true, `Riktig! Hypotenusen er ${fmt(s.c)} ${s.unit}.`);
+      } else if (result.numericCorrect && !result.hasUnit) {
+        setWarning("feedback-pyth1", `Riktig, men husk enhet! Hypotenusen skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth1", false, `Ikke helt riktig. Fasit: ${fmt(s.c)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth2(){
+      const triples = [[3,4,5],[5,12,13],[6,8,10],[8,15,17],[7,24,25]];
+      const [a,b,c] = choose(triples);
+      const unit = choose(units);
+      const knownBase = Math.random() < 0.5;
+      state.pyth2 = {knownBase, known: knownBase ? a : b, missing: knownBase ? b : a, c, unit};
+      drawRightTriangle("svg-pyth2", {
+        base: knownBase ? `${a} ${unit}` : `?`,
+        height: knownBase ? `?` : `${b} ${unit}`,
+        hyp: `${c} ${unit}`
+      });
+      document.getElementById("data-pyth2").innerHTML = `<strong>Finn den manglende kateten.</strong><br>Kjent katet = ${state.pyth2.known} ${unit}<br>Hypotenus = ${c} ${unit}`;
+      clearInputs(["pyth2-answer"]);
+      setNeutral("feedback-pyth2", "Svaret sjekkes her.");
+    }
+    function checkPyth2(){
+      const result = evaluateAnswer(
+        document.getElementById("pyth2-answer").value,
+        state.pyth2.missing,
+        state.pyth2.unit
+      );
+      const s = state.pyth2;
+
+      if (result.numericCorrect && result.unitCorrect) {
+        setFeedback("feedback-pyth2", true, `Riktig! Manglende katet er ${fmt(s.missing)} ${s.unit}.`);
+      } else if (result.numericCorrect && !result.hasUnit) {
+        setWarning("feedback-pyth2", `Riktig, men husk enhet! Kateten skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth2", false, `Ikke helt riktig. Fasit: ${fmt(s.missing)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth3(){
+      const leg = randInt(2, 15);
+      const unit = choose(units);
+      state.pyth3 = {leg, hyp: leg * Math.sqrt(2), unit};
+      draw456090("svg-pyth3", {base:`${leg} ${unit}`, height:`?`, hyp:`?`});
+      document.getElementById("data-pyth3").innerHTML = `<strong>45-45-90 trekant.</strong><br>Én katet = ${leg} ${unit}<br>Finn den andre kateten og hypotenusen.`;
+      clearInputs(["pyth3-answer1","pyth3-answer2"]);
+      setNeutral("feedback-pyth3", "Svarene sjekkes her.");
+    }
+    function checkPyth3(){
+      const legResult = evaluateAnswer(
+        document.getElementById("pyth3-answer1").value,
+        state.pyth3.leg,
+        state.pyth3.unit
+      );
+      const hypResult = evaluateAnswer(
+        document.getElementById("pyth3-answer2").value,
+        state.pyth3.hyp,
+        state.pyth3.unit
+      );
+      const s = state.pyth3;
+
+      if (legResult.numericCorrect && hypResult.numericCorrect &&
+          legResult.unitCorrect && hypResult.unitCorrect) {
+        setFeedback("feedback-pyth3", true, `Riktig! Andre katet = ${fmt(s.leg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      } else if (legResult.numericCorrect && hypResult.numericCorrect &&
+                 (!legResult.hasUnit || !hypResult.hasUnit)) {
+        setWarning("feedback-pyth3", `Riktig, men husk enhet! Begge svarene skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth3", false, `Ikke helt riktig. Fasit: Andre katet = ${fmt(s.leg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth4(){
+      const leg = randInt(2, 15);
+      const hyp = leg * Math.sqrt(2);
+      const unit = choose(units);
+      state.pyth4 = {leg, hyp, unit};
+      draw456090("svg-pyth4", {base:`?`, height:`?`, hyp:`${fmt(hyp)} ${unit}`});
+      document.getElementById("data-pyth4").innerHTML = `<strong>45-45-90 trekant.</strong><br>Hypotenusen er ${fmt(hyp)} ${unit}<br>Finn katetene.`;
+      clearInputs(["pyth4-answer"]);
+      setNeutral("feedback-pyth4", "Svaret sjekkes her.");
+    }
+    function checkPyth4(){
+      const result = evaluateAnswer(
+        document.getElementById("pyth4-answer").value,
+        state.pyth4.leg,
+        state.pyth4.unit
+      );
+      const s = state.pyth4;
+
+      if (result.numericCorrect && result.unitCorrect) {
+        setFeedback("feedback-pyth4", true, `Riktig! Hver katet er ${fmt(s.leg)} ${s.unit}.`);
+      } else if (result.numericCorrect && !result.hasUnit) {
+        setWarning("feedback-pyth4", `Riktig, men husk enhet! Kateten skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth4", false, `Ikke helt riktig. Fasit: Hver katet er ${fmt(s.leg)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth5(){
+      const shortLeg = randInt(2, 15);
+      const hyp = shortLeg * 2;
+      const longLeg = shortLeg * Math.sqrt(3);
+      const unit = choose(units);
+      state.pyth5 = {shortLeg, longLeg, hyp, unit};
+      draw306090("svg-pyth5", {base:`?`, height:`?`, hyp:`${fmt(hyp)} ${unit}`});
+      document.getElementById("data-pyth5").innerHTML = `<strong>30-60-90 trekant.</strong><br>Hypotenusen er ${fmt(hyp)} ${unit}<br>Finn korteste og lengste katet.`;
+      clearInputs(["pyth5-answer1","pyth5-answer2"]);
+      setNeutral("feedback-pyth5", "Svarene sjekkes her.");
+    }
+    function checkPyth5(){
+      const shortResult = evaluateAnswer(
+        document.getElementById("pyth5-answer1").value,
+        state.pyth5.shortLeg,
+        state.pyth5.unit
+      );
+      const longResult = evaluateAnswer(
+        document.getElementById("pyth5-answer2").value,
+        state.pyth5.longLeg,
+        state.pyth5.unit
+      );
+      const s = state.pyth5;
+
+      if (shortResult.numericCorrect && longResult.numericCorrect &&
+          shortResult.unitCorrect && longResult.unitCorrect) {
+        setFeedback("feedback-pyth5", true, `Riktig! Korteste katet = ${fmt(s.shortLeg)} ${s.unit}, lengste katet = ${fmt(s.longLeg)} ${s.unit}.`);
+      } else if (shortResult.numericCorrect && longResult.numericCorrect &&
+                 (!shortResult.hasUnit || !longResult.hasUnit)) {
+        setWarning("feedback-pyth5", `Riktig, men husk enhet! Begge svarene skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth5", false, `Ikke helt riktig. Fasit: Korteste katet = ${fmt(s.shortLeg)} ${s.unit}, lengste katet = ${fmt(s.longLeg)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth6(){
+      const shortLeg = randInt(2, 15);
+      const hyp = shortLeg * 2;
+      const longLeg = shortLeg * Math.sqrt(3);
+      const unit = choose(units);
+      state.pyth6 = {shortLeg, longLeg, hyp, unit};
+      draw306090("svg-pyth6", {base:`?`, height:`${fmt(shortLeg)} ${unit}`, hyp:`?`});
+      document.getElementById("data-pyth6").innerHTML = `<strong>30-60-90 trekant.</strong><br>Korteste katet = ${fmt(shortLeg)} ${unit}<br>Finn lengste katet og hypotenusen.`;
+      clearInputs(["pyth6-answer1","pyth6-answer2"]);
+      setNeutral("feedback-pyth6", "Svarene sjekkes her.");
+    }
+    function checkPyth6(){
+      const longResult = evaluateAnswer(
+        document.getElementById("pyth6-answer1").value,
+        state.pyth6.longLeg,
+        state.pyth6.unit
+      );
+      const hypResult = evaluateAnswer(
+        document.getElementById("pyth6-answer2").value,
+        state.pyth6.hyp,
+        state.pyth6.unit
+      );
+      const s = state.pyth6;
+
+      if (longResult.numericCorrect && hypResult.numericCorrect &&
+          longResult.unitCorrect && hypResult.unitCorrect) {
+        setFeedback("feedback-pyth6", true, `Riktig! Lengste katet = ${fmt(s.longLeg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      } else if (longResult.numericCorrect && hypResult.numericCorrect &&
+                 (!longResult.hasUnit || !hypResult.hasUnit)) {
+        setWarning("feedback-pyth6", `Riktig, men husk enhet! Begge svarene skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth6", false, `Ikke helt riktig. Fasit: Lengste katet = ${fmt(s.longLeg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      }
+    }
+
+    function generatePyth7(){
+      const shortLeg = randInt(2, 15);
+      const hyp = shortLeg * 2;
+      const longLeg = shortLeg * Math.sqrt(3);
+      const unit = choose(units);
+      state.pyth7 = {shortLeg, longLeg, hyp, unit};
+      draw306090("svg-pyth7", {base:`${fmt(longLeg)} ${unit}`, height:`?`, hyp:`?`});
+      document.getElementById("data-pyth7").innerHTML = `<strong>30-60-90 trekant.</strong><br>Lengste katet = ${fmt(longLeg)} ${unit}<br>Finn korteste katet og hypotenusen.`;
+      clearInputs(["pyth7-answer1","pyth7-answer2"]);
+      setNeutral("feedback-pyth7", "Svarene sjekkes her.");
+    }
+    function checkPyth7(){
+      const shortResult = evaluateAnswer(
+        document.getElementById("pyth7-answer1").value,
+        state.pyth7.shortLeg,
+        state.pyth7.unit
+      );
+      const hypResult = evaluateAnswer(
+        document.getElementById("pyth7-answer2").value,
+        state.pyth7.hyp,
+        state.pyth7.unit
+      );
+      const s = state.pyth7;
+
+      if (shortResult.numericCorrect && hypResult.numericCorrect &&
+          shortResult.unitCorrect && hypResult.unitCorrect) {
+        setFeedback("feedback-pyth7", true, `Riktig! Korteste katet = ${fmt(s.shortLeg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      } else if (shortResult.numericCorrect && hypResult.numericCorrect &&
+                 (!shortResult.hasUnit || !hypResult.hasUnit)) {
+        setWarning("feedback-pyth7", `Riktig, men husk enhet! Begge svarene skal skrives i ${s.unit}.`);
+      } else {
+        setFeedback("feedback-pyth7", false, `Ikke helt riktig. Fasit: Korteste katet = ${fmt(s.shortLeg)} ${s.unit}, hypotenus = ${fmt(s.hyp)} ${s.unit}.`);
+      }
+    }
+
+    bindAlt2ToSuperscript([
+      "square-area", "square-perimeter",
+      "rectangle-area", "rectangle-perimeter",
+      "triangle-area", "triangle-perimeter",
+      "trapezoid-area", "trapezoid-perimeter",
+      "parallelogram-area", "parallelogram-perimeter",
+      "pyth1-answer", "pyth2-answer",
+      "pyth3-answer1", "pyth3-answer2",
+      "pyth4-answer",
+      "pyth5-answer1", "pyth5-answer2",
+      "pyth6-answer1", "pyth6-answer2",
+      "pyth7-answer1", "pyth7-answer2"
+    ]);
+
+    bindEnterToCheck(["square-area", "square-perimeter"], checkSquare);
+    bindEnterToCheck(["rectangle-area", "rectangle-perimeter"], checkRectangle);
+    bindEnterToCheck(["triangle-area", "triangle-perimeter"], checkTriangle);
+    bindEnterToCheck(["trapezoid-area", "trapezoid-perimeter"], checkTrapezoid);
+    bindEnterToCheck(["parallelogram-area", "parallelogram-perimeter"], checkParallelogram);
+    bindEnterToCheck(["pyth1-answer"], checkPyth1);
+    bindEnterToCheck(["pyth2-answer"], checkPyth2);
+    bindEnterToCheck(["pyth3-answer1", "pyth3-answer2"], checkPyth3);
+    bindEnterToCheck(["pyth4-answer"], checkPyth4);
+    bindEnterToCheck(["pyth5-answer1", "pyth5-answer2"], checkPyth5);
+    bindEnterToCheck(["pyth6-answer1", "pyth6-answer2"], checkPyth6);
+    bindEnterToCheck(["pyth7-answer1", "pyth7-answer2"], checkPyth7);
+
+    generateSquare();
+    generateRectangle();
+    generateTriangle();
+    generateTrapezoid();
+    generateParallelogram();
+    generatePyth1();
+    generatePyth2();
+    generatePyth3();
+    generatePyth4();
+    generatePyth5();
+    generatePyth6();
+    generatePyth7();
+  </script>
+</body>
+</html>
