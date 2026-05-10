@@ -1,0 +1,942 @@
+[
+  {
+    "id": "S1.1-Q001",
+    "level": "SL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.1 Particulate nature of matter",
+    "command": "explain",
+    "marks": 1,
+    "question": "Steel is an alloy of iron. It contains mainly iron with small amounts of other elements.\nExplain why steel is considered to be a homogeneous mixture rather than a compound.",
+    "markscheme": [
+      "Elements are physically mixed, not chemically bonded in a fixed ratio."
+    ]
+  },
+  {
+    "id": "S1.1-Q002",
+    "level": "SL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.1 Particulate nature of matter",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why temperature remains constant during the flat section of a cooling curve when a liquid changes into a solid.",
+    "markscheme": [
+      "Energy released is used only for change of state, not a change in the average kinetic energy / temperature."
+    ]
+  },
+  {
+    "id": "S1.1-Q003",
+    "level": "SL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.1 Particulate nature of matter",
+    "command": "describe",
+    "marks": 3,
+    "question": "Describe the arrangement and motion of particles in:\n(a) a solid\n(b) a liquid\n(c) a gas",
+    "markscheme": [
+      "(a) Particles closely packed, vibrate in fixed positions. [1]",
+      "(b) Particles close, move past each other. [1]",
+      "(c) Particles far apart, move randomly. [1]"
+    ]
+  },
+  {
+    "id": "S1.1-Q004",
+    "level": "HL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.1 Particulate nature of matter",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain, in terms of kinetic energy and intermolecular forces, why a substance boils at a constant temperature.",
+    "markscheme": [
+      "Energy used to overcome intermolecular forces. [1]",
+      "Average kinetic energy remains constant. [1]"
+    ],
+    "explanation": [
+      "Temperature reflects kinetic energy.",
+      "Energy goes into separating particles rather than increasing motion."
+    ]
+  },
+  {
+    "id": "S1.3-Q001",
+    "level": [
+      "SL"
+    ],
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "describe",
+    "marks": 3,
+    "question": "Describe the arrows you would need to draw on the hydrogen energy level diagram to show:\n\n(a) the transition giving the third line in the visible series of the hydrogen emission spectrum.\n(b) the transition giving the third line in the ultraviolet series of the hydrogen emission spectrum.\n(c) the transition that relates to the ionisation energy of a hydrogen atom.",
+    "image": "images/S1.3-hydrogen.png",
+    "markscheme": [
+      "(a) Arrow down from n = 5 to n = 2.",
+      "(b) Arrow down from n = 4 to n = 1.",
+      "(c) Arrow up from n = 1 to n = ∞."
+    ],
+    "explanation": [
+      "(a) Visibile light corresponds to electrons falling down to n=2",
+      "(b) UV light corresponds to electrons falling down to n=1",
+      "(c) Ionization is removing removing the electron fully."
+    ]
+  },
+  {
+    "id": "S1.3-Q002a",
+    "level": [
+      "SL"
+    ],
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "describe",
+    "marks": 1,
+    "question": "Describe how arrows should be added to the orbital box diagram to represent the electrons in sulfur",
+    "image": "images/S1.3-sulfur.png",
+    "markscheme": [
+      "3s contains a pair of electrons with opposite spins and 3p contains one pair and two single electrons with parallel spins."
+    ]
+  },
+  {
+    "id": "S1.3-Q002b",
+    "level": [
+      "HL"
+    ],
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "describe",
+    "marks": 1,
+    "question": "Describe how arrows should be added to the orbital box diagram to represent the electrons in copper.",
+    "image": "images/S1.3-copper.png",
+    "markscheme": [
+      "4s contains one electron, 3d contains five pairs of electrons and 4p is empty."
+    ]
+  },
+  {
+    "id": "S1.3-Q003",
+    "level": [
+      "SL"
+    ],
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why it is important to label the x, y and z axes when drawing the shape of a p orbital.",
+    "markscheme": [
+      "p_{x}, p_{y} and p_{z} orbitals are oriented along different axes **OR** the three p orbitals are mutually perpendicular **OR** the axes show which p orbital is being represented."
+    ]
+  },
+  {
+    "id": "S1.3-Q004",
+    "level": [
+      "HL"
+    ],
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why a potassium atom contains an electron in a 4s orbital with no electrons in a 3d orbital whereas a copper(I) ion, Cu^{+}, has the electronic configuration [Ar]3d^{10} with no electrons in the 4s orbital.",
+    "markscheme": [
+      "In potassium, the 4s orbital is lower in energy than the 3d orbitals, so the 4s orbital is occupied first.",
+      "Copper has the electron configuration [Ar]3d^{10} 4s^{1}; when Cu^{+} forms, the 4s electron is removed, leaving [Ar]3d^{10}."
+    ],
+    "explanation": [
+      "The last point explains why Cu^{+} has no 4s electron rather than acting as a separate marking point.",
+      "A filled 3d¹⁰ subshell is stable, but this should not replace the point that the 4s electron is removed first."
+    ]
+  },
+  {
+    "id": "S1.3-Q005",
+    "level": "HL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 6,
+    "question": "The graph below shows first ionization energy against atomic number.\n\nExplain how the graph provides evidence for:\n(a) the maximum number of electrons in the 2p sub-level is six.\n(b) the 3s sub-level is lower in energy than the 3p sub-level.\n(c) the 4s sub-level is lower in energy than the 3d sub-level.\n(d) Hund’s rule.\n(e) how the graph of second ionization energy would differ from the graph above.",
+    "image": "images/S1.3-ionization-graph.png",
+    "markscheme": [
+      "(a) Six elements from B to Ne. [1]",
+      "(b) Drop from Mg to Al suggests easier to remove e^{-} from 3p than 3s. [1]",
+      "(c) Drop from Ar to K suggests 4s filled before 3d. [1]",
+      "(d) Drop from N to O suggests pairing of e^{-}. [1]",
+      "(e) All values higher. [1]",
+      "(e) Pattern shifted by one atomic number. [1]"
+    ],
+    "explanation": [
+      "(a) B → Ne corresponds to filling the 2p sub-level, showing it holds 6 electrons.",
+      "(b) Electron removed from Al is from 3p, which is higher in energy than 3s in Mg.",
+      "(c) K loses a 4s electron, showing 4s is filled before 3d.",
+      "(d) Drop from N to O shows electron pairing increases repulsion (and makes it easier to remove electron).",
+      "(e) Second ionization involves removing electrons from positive ions, so values are higher (Coulombs law) and pattern shifts (fewer valence electrons to ionize)."
+    ]
+  },
+  {
+    "id": "S1.3-Q006",
+    "level": "HL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the fifth ionization energy of vanadium is higher than the fourth ionization energy.",
+    "markscheme": [
+      "The ion has a greater positive charge after the fourth ionization.",
+      "More energy is required to remove the fifth electron **OR** there is stronger attraction between the nucleus and remaining electrons."
+    ]
+  },
+  {
+    "id": "S1.3-Q007",
+    "level": "HL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 4,
+    "question": "Explain why there is a much larger increase between the fifth and sixth ionization energies of vanadium compared to earlier ionization energies.",
+    "markscheme": [
+      "The first five electrons removed are from the 3d sub-level.",
+      "The sixth electron is removed from an inner 3p sub-level.",
+      "Inner electrons are closer to the nucleus and more strongly attracted.",
+      "Therefore significantly more energy is required."
+    ]
+  },
+  {
+    "id": "S1.3-Q008",
+    "level": "HL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.3 Electron configurations",
+    "command": "explain",
+    "marks": 3,
+    "question": "Explain why the convergence limit in the ultraviolet emission spectrum must be used to determine the ionization energy of hydrogen rather than the visible spectrum.",
+    "image": "images/S1.3-uv-spectrum.png",
+    "markscheme": [
+      "The ultraviolet series (Lyman series) corresponds to transitions to n = 1.",
+      "Ionization energy is the energy required to remove the electron from n = 1 to n = ∞.",
+      "The visible series involves transitions to n = 2 and does not represent ionization from the ground state."
+    ]
+  },
+  {
+    "id": "S1.5-Q001",
+    "level": "SL",
+    "topic": "S1 Models of the particulate nature of matter",
+    "subtopic": "S1.5 Ideal gases",
+    "command": "discuss",
+    "marks": 3,
+    "question": "Discuss why some gases deviate more from ideal behaviour than others under the same conditions.",
+    "markscheme": [
+      "Stronger intermolecular forces cause greater deviation.",
+      "Larger molecules (greater volume of particles) cause greater deviation.",
+      "Deviation is greater at high pressure and low temperature."
+    ],
+    "explanation": [
+      "The ideal gas model assumes no intermolecular forces and negligible volume. Polar or large molecules experience stronger attractions and occupy more space.",
+      "At low temperature more intermolecular forces are formed, and at high pressure molecules are closer together and collide with the walls more frequently."
+    ]
+  },
+  {
+    "id": "S2.1-Q003",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.1 Ionic model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why sulfur forms ionic compounds containing the S^{2-} ion.",
+    "markscheme": [
+      "Needs two electrons to achieve full outer shell / noble gas configuration. [1]"
+    ],
+    "explanation": [
+      "Sulfur has 6 valence electrons and gains 2 to complete its octet, leading to the S^{2-} ion"
+    ]
+  },
+  {
+    "id": "S2.1-Q004",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.1 Ionic model",
+    "command": "explain",
+    "marks": 3,
+    "question": "Use sodium chloride as an example to explain what is meant by ionic bonding.",
+    "markscheme": [
+      "Electrostatic attraction between oppositely charged ions.",
+      "Each ion is surrounded by oppositely charged ions in a 3D structure (ionic lattice).",
+      "Na loses electron to form Na^{+}, Cl gains electron to form Cl^{-}."
+    ]
+  },
+  {
+    "id": "S2.1-Q005",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.1 Ionic model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why sodium oxide, Na_{2}O, is ionic whereas chlorine oxide, Cl_{2}O, is covalent.",
+    "markscheme": [
+      "Na (metal) + O (non-metal) **OR** large electronegativity difference leads to ionic bonding.",
+      "Cl (non-metal) + O (non-metal) **OR** small electronegativity difference leads to covalent bonding."
+    ]
+  },
+  {
+    "id": "S2.1-Q006",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.1 Ionic model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why aluminium fluoride and aluminium oxide are ionic whereas aluminium chloride is covalent.",
+    "markscheme": [
+      "Greater electronegativity difference with O/F than Cl **OR** smaller difference with Cl leads to covalent bonding."
+    ]
+  },
+  {
+    "id": "S2.1-Q007",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.1 Ionic model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the lattice enthalpy of calcium oxide, CaO, is lower than that of magnesium oxide, MgO.",
+    "markscheme": [
+      "Ca^{2+} has larger ionic radius than Mg^{2+}.",
+      "Weaker electrostatic attraction / lower charge density means less energy is needed to break the ionic bonds"
+    ],
+    "explanation": [
+      "Both have same charges, so size is the key factor (larger ions → greater distance → weaker attraction)."
+    ]
+  },
+  {
+    "id": "S2.2-Q001",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the bond between two oxygen atoms in oxygen gas is a double bond whereas the bond between two nitrogen atoms in nitrogen gas is a triple bond.",
+    "markscheme": [
+      "O needs 2 electrons to complete octet → forms 2 shared pairs.",
+      "N needs 3 electrons to complete octet → forms 3 shared pairs."
+    ]
+  },
+  {
+    "id": "S2.2-Q002",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why a proton in water, H^{+}(aq), is often written as H_{3}O^{+}(aq).",
+    "markscheme": [
+      "H^{+} has no electrons and is attracted to lone pairs on oxygen.",
+      "Water donates a lone pair to form a coordinate bond, resulting in H_{3}O^{+}."
+    ]
+  },
+  {
+    "id": "S2.2-Q003",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the carbon–carbon bond in ethyne, C_{2}H_{2}, is stronger and shorter than the carbon–carbon bond in ethene, C_{2}H_{4}.",
+    "markscheme": [
+      "Ethyne has a triple bond; ethene has a double bond.",
+      "More shared electron pairs means stronger attraction → stronger and shorter bond."
+    ]
+  },
+  {
+    "id": "S2.2-Q004",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why there are two different carbon–oxygen bond lengths in a molecule of ethanoic acid.",
+    "markscheme": [
+      "Contains one C=O and one C–O bond (double vs single)."
+    ],
+    "explanation": [
+      "Double bonds are shorter than single bonds, and ethanoic acid contains both bond types."
+    ]
+  },
+  {
+    "id": "S2.2-Q005",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Use data from the IB data booklet to explain why a carbon–chlorine bond is polar.",
+    "markscheme": [
+      "Cl more electronegative than C.",
+      "The electrons in the bond are pulled more towards Cl, leading to partial charges."
+    ],
+    "explanation": [
+      "Cl ≈ 3.2, C ≈ 2.6 in electronegativity, creating δ− on Cl and δ+ on C."
+    ]
+  },
+  {
+    "id": "S2.2-Q006",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why a white precipitate forms when silver nitrate solution is added to potassium chloride solution but not when added to tetrachloromethane.",
+    "markscheme": [
+      "Cl^{-} ions present in KCl react with Ag^{+} to form AgCl.",
+      "No Cl^{-} ions in CCl_{4} (covalent), so no precipitate."
+    ],
+    "explanation": [
+      "KCl is ionic and dissociates in water, while CCl₄ is covalent and does not form ions."
+    ]
+  },
+  {
+    "id": "S2.2-Q007",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why sulfur dioxide, SO_{2}, is bent whereas carbon dioxide, CO_{2}, is linear.",
+    "markscheme": [
+      "SO_{2} has a lone pair on central atom → repulsion changes shape.",
+      "CO_{2} has no lone pairs on central atom → linear."
+    ]
+  },
+  {
+    "id": "S2.2-Q008",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why C=O bonds are polar but carbon dioxide is non-polar.",
+    "markscheme": [
+      "C=O bond is polar due to electronegativity difference.",
+      "Linear molecule → dipoles cancel."
+    ]
+  },
+  {
+    "id": "S2.2-Q009",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the H–N–H bond angle in ammonia is smaller than in the ammonium ion.",
+    "markscheme": [
+      "NH_{3} has a lone pair → greater repulsion.",
+      "NH_{4}^{+} has no lone pairs → larger angle."
+    ],
+    "explanation": [
+      "Lone pairs take more space, pushing the hydrogens closer together making the angle 107° instead of 109.5°."
+    ]
+  },
+  {
+    "id": "S2.2-Q010",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why HF and H_{2}O are polar molecules whereas CF_{4} and CO_{2} are non-polar.",
+    "markscheme": [
+      "H_{2}O is bent and HF is linear → dipole present.",
+      "CF_{4} and CO_{2} are symmetrical → dipoles cancel."
+    ]
+  },
+  {
+    "id": "S2.2-Q011",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why water heats in a microwave oven whereas tetrachloromethane does not.",
+    "markscheme": [
+      "Water is polar while CCl_{4} is not.",
+      "Only polar molecules interact with microwaves."
+    ],
+    "explanation": [
+      "Microwaves cause polar molecules to rotate and absorb energy, while non-polar molecules are unaffected."
+    ]
+  },
+  {
+    "id": "S2.2-Q012",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why graphite and diamond both have very high melting points but diamond is a poor electrical conductor whereas graphite is a good conductor.",
+    "markscheme": [
+      "Both have giant covalent structures (strong covalent bonds).",
+      "Diamond has no delocalised electrons, while graphite has delocalised electrons that can move."
+    ],
+    "explanation": [
+      "Graphite has C-atoms bonded to 3 other C-atoms. The last electron stays unbonded and becomes delocalised. The electron is mobile and gives the material good electrical conducitivity.",
+      "Diamond has C-atoms bonded to 4 other C-atoms and therefore no mobile electrons."
+    ]
+  },
+  {
+    "id": "S2.2-Q013",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "describe",
+    "marks": 2,
+    "question": "Describe the structures of diamond and silicon and explain why silicon has a lower melting point than diamond.",
+    "markscheme": [
+      "Both have giant covalent tetrahedral structures.",
+      "Si–Si bonds weaker than C–C bonds."
+    ],
+    "explanation": [
+      "Silicon atoms are larger leading to longer bonds and weaker attraction. Less energy is then needed to break the bonds."
+    ]
+  },
+  {
+    "id": "S2.2-Q014",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why silicon dioxide has a high melting point whereas carbon dioxide is a gas at room temperature.",
+    "markscheme": [
+      "SiO_{2} is held together by strong covalent bonds, while CO_{2} is held together by weak intermolecular forces."
+    ]
+  },
+  {
+    "id": "S2.2-Q015",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why water has a higher boiling point than ethanol.",
+    "markscheme": [
+      "Water forms more hydrogen bonds per molecule than ethanol."
+    ],
+    "explanation": [
+      "Water can form up to 4 hydrogen bonds, ethanol forms fewer hydrogen bonds overall since it only contains one OH-group and also has a carbon-chain."
+    ]
+  },
+  {
+    "id": "S2.2-Q016",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why a mixture of trichloromethane and propanone has a higher boiling point than either pure substance.",
+    "markscheme": [
+      "Stronger intermolecular forces form between different molecules then pure substances.",
+      "CHCl_{3} and C_{3}H_{6}O can only bind to themselves through weak dipole bonds, but hydrogen-bonds with each other."
+    ],
+    "explanation": [
+      "Stronger dipole interactions (hydrogen-bonding) occur in the mixture as the H-atom in CHCl_{3} is more positively charged than H-atoms in C_{3}H_{6}O."
+    ]
+  },
+  {
+    "id": "S2.2-Q017",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why changing the solvent in chromatography changes the R_{f} values.",
+    "markscheme": [
+      "Solvent polarity changes",
+      "Polarity affects the interaction with the stationary and mobile phase"
+    ],
+    "explanation": [
+      "Changing the polarity of the solvent affects the preference to the mobile and stationary phase. The stronger the substance binds to the mobile phase, the further the substance will travel."
+    ]
+  },
+  {
+    "id": "S2.2-HL-Q018",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the two C–O bond lengths in propanoic acid are different but the two C–O bonds in the propanoate ion are identical.",
+    "markscheme": [
+      "Propanoic acid has one C=O and one C–O bond.",
+      "Propanoate ion has delocalised electrons (shows resonance) → bonds are identical."
+    ],
+    "explanation": [
+      "Delocalisation spreads electron density over both C–O bonds, so each bond has intermediate (≈1.5) bond order and equal length."
+    ]
+  },
+  {
+    "id": "S2.2-HL-Q019",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the enthalpy change of hydrogenation of benzene is not three times that of cyclohexene.",
+    "markscheme": [
+      "Benzene shows resonance / has delocalised electrons (not alternating double bonds).",
+      "Delocalisation increases stability."
+    ],
+    "explanation": [
+      "Benzene is a resonance hybrid with equal bond lengths. This provides extra stability to the compound, and said resonance energy reduces the enthalpy change upon hydrogenation."
+    ]
+  },
+  {
+    "id": "S2.2-HL-Q020",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why p orbitals can form one sigma bond and two pi bonds when overlapping with p orbitals on another atom.",
+    "markscheme": [
+      "One pair overlaps end-on → sigma bond.",
+      "Two pairs overlap sideways → pi bonds."
+    ],
+    "explanation": [
+      "p orbitals are oriented along x, y, z axes. Only one can align head-on; the others overlap side-on."
+    ]
+  },
+  {
+    "id": "S2.2-HL-Q021",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.2 The covalent model",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain what happens to the hybridization of the labelled carbon in phenolphthalein as pH changes from acid to alkali.",
+    "image": "images/S2.2-phenolphtalein.png",
+    "markscheme": [
+      "Changes from sp^{3} to sp^{2}."
+    ],
+    "explanation": [
+      "sp² allows conjugation across the molecule, where the extended delocalisation causes the colour change from colourless to pink."
+    ]
+  },
+  {
+    "id": "S2.3-Q001",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.3 The metallic model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why aluminium conducts electricity and is malleable.",
+    "markscheme": [
+      "Delocalised electrons can move.",
+      "Layers of metal ions can slide over each other."
+    ],
+    "explanation": [
+      "Metallic bonding consists of positive ions in a sea of electrons.",
+      "Non-directional bonding allows layers to shift."
+    ]
+  },
+  {
+    "id": "S2.3-Q002",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.3 The metallic model",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the melting points of alkali metals decrease down the group.",
+    "markscheme": [
+      "Ionic radius increases down the group.",
+      "Weaker attraction between ions and delocalised electrons **OR** charge stays the same but distance increases."
+    ]
+  },
+  {
+    "id": "S2.4-Q001",
+    "level": "SL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.4 From models to materials",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the boiling point of BeCl_{2} is much lower than that of MgCl_{2}.",
+    "markscheme": [
+      "BeCl_{2} has more covalent character than MgCl_{2} which has more of an ionic character.",
+      "Molecules are held together by weak intermolecular forces, salts by strong ionic bonds."
+    ]
+  },
+  {
+    "id": "S2.4-Q002",
+    "level": "HL",
+    "topic": "S2 Models of bonding & structure",
+    "subtopic": "S2.4 From models to materials",
+    "command": "explain",
+    "marks": 2,
+    "question": "The molecular formula of Kevlar is shown below.\n\n(a) Identify the class of condensation polymers Kevlar belongs to.\n(b) Explain why Kevlar is resistant to penetration by bullets.\n(c) Explain why concentrated sulfuric acid reduces the effectiveness of Kevlar.",
+    "image": "images/S2.4-kevlar.png",
+    "markscheme": [
+      "(a) Polyamide",
+      "(b) Strong intermolecular hydrogen bonding between chains.",
+      "(c) The acid protonates atoms involved in hydrogen bonding **OR** the acid may hydrolyse the amide links (break the polymer apart)."
+    ],
+    "explanation": [
+      "Amides have a -CON- bond",
+      "Hydrogen bonds occur between –NH and C=O groups gives very high tensile strength.",
+      "The polymer was produced through condensation, and can be broken apart by hydrolysis."
+    ]
+  },
+  {
+    "id": "S3.1-Q001",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why modern periodic tables are arranged by atomic number rather than atomic mass.",
+    "markscheme": [
+      "The chemical and physical properties depend on the number (and arrangement) of electrons which is equal to the number of protons (atomic number) rather than mass."
+    ]
+  },
+  {
+    "id": "S3.1-Q002",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why modern periodic tables contain eighteen groups rather than seven.",
+    "markscheme": [
+      "Modern tables include s-, p-, and d-block elements, giving a total of 18 groups.",
+      "Discovery of noble gases added an additional group **AND** d-block elements form ten additional groups."
+    ],
+    "explanation": [
+      "Mendeleev’s table had fewer known elements and did not include noble gases. d-metals were previously put in other groups, but have now their own groups since they share common chemical properties. For example Ag and Cu both having +1 as a stable oxidation state."
+    ]
+  },
+  {
+    "id": "S3.1-Q003",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "comment",
+    "marks": 1,
+    "question": "Comment on why helium is placed in group 18 despite being an s-block element.",
+    "markscheme": [
+      "Has full outer shell (noble gas configuration), and is therefore placed with the noble gases."
+    ],
+    "explanation": [
+      "The electron configuration is 1s^{2}. Even though no p orbitals exist in first shell, it is very stable and chemically behaves like the other noble gases."
+    ]
+  },
+  {
+    "id": "S3.1-Q004",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why the atomic radius of sodium is larger than that of chlorine.",
+    "markscheme": [
+      "Same shell but chlorine has higher nuclear charge.",
+      "Greater attraction pulls electrons closer in chlorine."
+    ]
+  },
+  {
+    "id": "S3.1-Q005",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why atomic radius increases down group 17.",
+    "markscheme": [
+      "Additional shells increase shielding and distance from nucleus."
+    ]
+  },
+  {
+    "id": "S3.1-Q006",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "describe",
+    "marks": 3,
+    "question": "Describe what happens when chlorine water is added to:\n(a) a solution of chloride ions.\n(b) a solution of bromide ions.\n(c) a solution of iodide ions.",
+    "markscheme": [
+      "No reaction / no change.",
+      "Solution turns orange/brown as bromine is formed.",
+      "Solution turns darkbrown as iodine is formed."
+    ],
+    "explanation": [
+      "Chlorine wants to be reduced more than bromine: Cl_{2} + 2Br^{-} → 2Cl^{-} + Br_{2}",
+      "Chlorine wants to be reduced more than iodine: Cl_{2} + 2I^{-} → 2Cl^{-} + I_{2}"
+    ]
+  },
+  {
+    "id": "S3.1-Q007",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 3,
+    "question": "Explain the difference between (III), 3+ and +3 when applied to Fe.",
+    "markscheme": [
+      "(III) refers to oxidation number used in naming (iron(III)oxide).",
+      "3+ refers to the charge on the ion (Fe^{3+}).",
+      "+3 refers to the oxidiation state."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q008",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why zinc is not considered to be a transition element.",
+    "markscheme": [
+      "**ANY THREE OF:**",
+      "Transition elements have an incomplete d sub-level in atoms or ions **AND** Zn^{2+} has a full d^{10} configuration.",
+      "Transition elements make colourful complexes in water **AND** Zn^{2+} does not.",
+      "Transition elements have variable oxidation states **AND** zink only has Zn^{2+}."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q009",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why most first-row transition elements show an oxidation state of +2, whereas copper also shows +1.",
+    "markscheme": [
+      "+2 forms by loss of two 4s electrons.",
+      "Cu^{+} is stable due to full d^{10} configuration."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q010",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why carbon monoxide is a good ligand whereas methane is not.",
+    "markscheme": [
+      "CO has a lone pair to donate.",
+      "CH_{4} has no lone pairs."
+    ],
+    "explanation": [
+      "Ligands must donate an electron pair to form a coordinate bond to the metal cation. Methane cannot act as a Lewis base."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q011",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why transition metals can form variable oxidation states.",
+    "markscheme": [
+      "4s and 3d orbitals have similar energies **OR** energy differences between removing successive electrons are relatively small."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q012",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why many transition metal complexes are coloured and why different ligands give different colours.",
+    "markscheme": [
+      "d-orbitals split into different energy levels.",
+      "Different ligands cause different splitting energies."
+    ],
+    "explanation": [
+      "Electrons absorb specific wavelengths to move between split d-orbitals. Different energy gaps lead to different colours."
+    ]
+  },
+  {
+    "id": "S3.1-HL-Q013",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.1 Periodic table",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why [Fe(H_{2}O)_{6}]^{2+} has a different colour to [Cu(H_{2}O)_{6}]^{2+}.",
+    "markscheme": [
+      "Different metal ions have different d-electron configurations.",
+      "Different splitting of d-orbitals → different wavelengths absorbed."
+    ],
+    "explanation": [
+      "Fe^{2+} and Cu^{2+} have different nuclear charge and electron arrangements. This changes the energy gap between split d orbitals."
+    ]
+  },
+  {
+    "id": "S3.2-HL-Q001",
+    "level": "SL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.2 Functional groups",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why alcohols generally have higher boiling points than ketones of similar relative molecular mass.",
+    "markscheme": [
+      "Alcohols can form hydrogen bonds.",
+      "Ketones cannot form hydrogen bonds (only dipole–dipole forces)."
+    ],
+    "explanation": [
+      "Hydrogen bonding is stronger than dipole–dipole interactions, meaning more energy is required to separate alcohol molecules."
+    ]
+  },
+  {
+    "id": "S3.2-HL-Q002",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.2 Functional groups",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why 1,2-dichloroethane cannot show cis/trans isomerism whereas 1,2-dichloroethene can.",
+    "markscheme": [
+      "Free rotation about C–C single bond in 1,2-dichloroethane **AND** no rotation about C=C bond in 1,2-dichloroethene."
+    ],
+    "explanation": [
+      "Rotation around a double bond would require breaking the π bond. Restricted rotation allows geometric isomerism."
+    ]
+  },
+  {
+    "id": "S3.2-HL-Q003",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.2 Functional groups",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why cis-butenedioic acid forms a cyclic product on heating whereas trans-butenedioic acid does not.",
+    "markscheme": [
+      "cis has functional groups on same side / close together **AND** trans does not (groups are too far apart to react)."
+    ],
+    "explanation": [
+      "In cis isomer the –COOH groups can interact to eliminate water. In trans isomer the geometry prevents cyclisation."
+    ]
+  },
+  {
+    "id": "S3.2-HL-Q004",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.2 Functional groups",
+    "command": "explain",
+    "marks": 1,
+    "question": "Explain why glycine, H_{2}NCH_{2}COOH, does not exhibit optical isomerism whereas all other 2-amino acids do.",
+    "markscheme": [
+      "No chiral carbon **OR** two identical groups on central carbon."
+    ],
+    "explanation": [
+      "Glycine has two H atoms attached to the α-carbon. Other amino acids have four different groups → chiral."
+    ]
+  },
+  {
+    "id": "S3.2-HL-Q005",
+    "level": "HL",
+    "topic": "S3 Classification of matter",
+    "subtopic": "S3.2 Functional groups",
+    "command": "explain",
+    "marks": 2,
+    "question": "Explain why glucose can form diastereomers. The straight chain structural formula of glucose is shown below.",
+    "image": "images/S3.2-glucose.png",
+    "markscheme": [
+      "Multiple chiral centres present.",
+      "Different configurations not mirror images."
+    ],
+    "explanation": [
+      "Glucose has several stereocentres in its structure. This allows many stereoisomers that are not enantiomers."
+    ]
+  }
+
+
+]
