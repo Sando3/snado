@@ -5,10 +5,14 @@
     "topic": "S1 Models of the particulate nature of matter",
     "subtopic": "S1.1 Particulate nature of matter",
     "command": "explain",
-    "marks": 1,
+    "marks": 2,
     "question": "Steel is an alloy of iron. It contains mainly iron with small amounts of other elements.\nExplain why steel is considered to be a homogeneous mixture rather than a compound.",
     "markscheme": [
-      "Elements are physically mixed, not chemically bonded in a fixed ratio."
+      "Composition is variable (no fixed ratio).",
+      "Components are physically mixed, not chemically combined (retain their properties)."
+    ],
+    "explanation": [
+      "Alloys are mixtures where elements are physically combined. Compounds have fixed ratios and chemical bonding. Compounds usually have different properties than the elements it is made out of, whereas alloys tend to keep the properties of both and combine them."
     ]
   },
   {
@@ -17,10 +21,11 @@
     "topic": "S1 Models of the particulate nature of matter",
     "subtopic": "S1.1 Particulate nature of matter",
     "command": "explain",
-    "marks": 1,
+    "marks": 2,
     "question": "Explain why temperature remains constant during the flat section of a cooling curve when a liquid changes into a solid.",
     "markscheme": [
-      "Energy released is used only for change of state, not a change in the average kinetic energy / temperature."
+      "During freezing, particles lose potential energy as intermolecular forces are formed.",
+      "Average kinetic energy remains constant (temperature does not change)."
     ]
   },
   {
@@ -32,9 +37,9 @@
     "marks": 3,
     "question": "Describe the arrangement and motion of particles in:\n(a) a solid\n(b) a liquid\n(c) a gas",
     "markscheme": [
-      "(a) Particles closely packed, vibrate in fixed positions. [1]",
-      "(b) Particles close, move past each other. [1]",
-      "(c) Particles far apart, move randomly. [1]"
+      "(a) Particles closely packed, vibrate in fixed positions.",
+      "(b) Particles close, move past each other.",
+      "(c) Particles far apart, move randomly."
     ]
   },
   {
@@ -46,8 +51,8 @@
     "marks": 2,
     "question": "Explain, in terms of kinetic energy and intermolecular forces, why a substance boils at a constant temperature.",
     "markscheme": [
-      "Energy used to overcome intermolecular forces. [1]",
-      "Average kinetic energy remains constant. [1]"
+      "Energy used to overcome intermolecular forces.",
+      "Average kinetic energy remains constant."
     ],
     "explanation": [
       "Temperature reflects kinetic energy.",
@@ -118,6 +123,10 @@
     "question": "Explain why it is important to label the x, y and z axes when drawing the shape of a p orbital.",
     "markscheme": [
       "p_{x}, p_{y} and p_{z} orbitals are oriented along different axes **OR** the three p orbitals are mutually perpendicular **OR** the axes show which p orbital is being represented."
+    ],
+    "explanation": [
+      "p orbitals are degenerate, meaning they have the same energy.",
+      "There are three p orbitals oriented in perpendicular directions, which can hold a total of six electrons."
     ]
   },
   {
