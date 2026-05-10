@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IB Chemistry Describe & Explain Practice</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --sl: #2563eb;
+      --hl: #facc15;
+      --hl-text: #422006;
+      --accent: #4f46e5;
+      --soft-accent: #e0edff;
+      --markscheme-bg: #dff3e8;
+      --markscheme-text: #006b3f;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --danger-text: #991b1b;
+      --success-bg: #ecfdf5;
+      --success-border: #a7f3d0;
+      --success-text: #065f46;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .title-row, .filter-row, .jump-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .segmented {
+      display: inline-flex;
+      gap: 0.25rem;
+      padding: 0.2rem;
+      background: #eef2f7;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .segmented button, .jump-btn, .download-btn {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 0.42rem 0.75rem;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+    }
+
+    .segmented button.active, .jump-btn.active {
+      background: white;
+      color: var(--accent);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .jump-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .jump-btn {
+      background: var(--soft-accent);
+      color: #1d4ed8;
+      min-width: 2.1rem;
+      padding-inline: 0.7rem;
+    }
+
+    .download-btn {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 0.5rem;
+      color: var(--text);
+    }
+
+    .autosave-note {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    select, input[type="search"], input[type="file"] {
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      background: white;
+      color: var(--text);
+      font: inherit;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem;
+    }
+
+    .intro, .notice {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .notice.error {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: var(--danger-text);
+    }
+
+    .notice.success {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success-text);
+    }
+
+    code {
+      background: rgba(0,0,0,0.06);
+      border-radius: 0.35rem;
+      padding: 0.1rem 0.25rem;
+    }
+
+    .topic {
+      margin: 1.5rem 0;
+      scroll-margin-top: 11rem;
+    }
+
+    .topic h2 {
+      font-size: 1.35rem;
+      margin: 0 0 0.75rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+
+    .subtopic h3 {
+      font-size: 1.05rem;
+      margin: 1rem 0 0.75rem;
+      color: #374151;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1rem;
+      margin: 0.75rem 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .question-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 0.65rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.55rem;
+    }
+
+    .tag.sl { background: var(--sl); color: white; }
+    .tag.hl { background: var(--hl); color: var(--hl-text); }
+
+    .command {
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .marks {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .question-text {
+      font-size: 1rem;
+      margin: 0.5rem 0 0.9rem;
+    }
+
+    .question-image {
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .answer-box {
+      width: 100%;
+      min-height: 7rem;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      padding: 0.85rem;
+      font: inherit;
+      background: #fffefa;
+      margin: 0.5rem 0 0.75rem;
+    }
+
+    .answer-box:focus {
+      outline: 2px solid #2563eb;
+      border-color: #2563eb;
+      background: white;
+    }
+
+    details {
+      background: var(--markscheme-bg);
+      border: 0;
+      border-radius: 0.6rem;
+      padding: 0.75rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--markscheme-text);
+    }
+
+    .markscheme {
+      margin: 0.75rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    .explanation-details {
+      margin-top: 0.75rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+    }
+
+    .explanation-details summary {
+      color: #374151;
+      font-size: 0.95rem;
+    }
+
+    .explanation-list {
+      margin: 0.75rem 0 0;
+      padding-left: 1.2rem;
+      color: #374151;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem;
+      display: none;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      .title-row, .filter-row, .jump-row { align-items: flex-start; }
+      .controls { width: 100%; }
+      select, input[type="search"], input[type="file"], .download-btn { width: 100%; }
+      .segmented { width: 100%; justify-content: space-between; }
+      .segmented button { flex: 1; }
+      .marks { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="title-row">
+        <h1>IB Chemistry Describe & Explain Practice</h1>
+        <div class="controls">
+          <button id="downloadAnswersBtn" class="download-btn" type="button">Download my answers</button>
+          <span class="autosave-note">Answers autosave in this browser</span>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="controls" aria-label="Question filters">
+          <div class="segmented" aria-label="Level filter">
+            <button type="button" class="active" data-level-filter="all">All</button>
+            <button type="button" data-level-filter="SL">SL</button>
+            <button type="button" data-level-filter="HL">HL</button>
+          </div>
+          <div class="segmented" aria-label="Command filter">
+            <button type="button" class="active" data-command-filter="all">All commands</button>
+            <button type="button" data-command-filter="describe">Describe</button>
+            <button type="button" data-command-filter="explain">Explain</button>
+            <button type="button" data-command-filter="discuss">Discuss</button>
+          </div>
+        </div>
+        <input id="searchBox" type="search" placeholder="Search questions..." />
+      </div>
+
+      <div class="jump-row">
+        <div class="controls" id="jumpButtons">
+          <span class="jump-label">Jump:</span>
+          <button class="jump-btn" type="button" data-jump="S1">S1</button>
+          <button class="jump-btn" type="button" data-jump="S2">S2</button>
+          <button class="jump-btn" type="button" data-jump="S3">S3</button>
+          <button class="jump-btn" type="button" data-jump="R1">R1</button>
+          <button class="jump-btn" type="button" data-jump="R2">R2</button>
+          <button class="jump-btn" type="button" data-jump="R3">R3</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <strong>How to use:</strong> Write your answer in the box, then open the markscheme. Use the top buttons to filter by level, command term, or jump to a syllabus section.
+    </section>
+
+    <div id="statusMessage"></div>
+    <div id="questionContainer"></div>
+    <p id="emptyMessage" class="empty">No questions match the current filters.</p>
+  </main>
+
+  <script>
+    let questions = [];
+    let activeLevelFilter = "all";
+    let activeCommandFilter = "all";
+
+    const ANSWER_STORAGE_PREFIX = "ib-chem-answer:";
+
+    const container = document.getElementById("questionContainer");
+    const statusMessage = document.getElementById("statusMessage");
+    const searchBox = document.getElementById("searchBox");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const downloadAnswersBtn = document.getElementById("downloadAnswersBtn");
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatText(text) {
+      return escapeHtml(text)
+        .replace(/\n/g, "<br>")
+        .replace(/\^\{([^}]+)\}/g, "<sup>$1</sup>")
+        .replace(/_\{([^}]+)\}/g, "<sub>$1</sub>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    }
+
+    function normaliseLevel(question) {
+      // Accept both "SL" and ["SL"] formats from JSON
+      if (Array.isArray(question.level)) {
+        return question.level[0] || "SL";
+      }
+      return question.level || "SL";
+    }
+
+    function normaliseCommand(question) {
+      return String(question.command || "").trim().toLowerCase();
+    }
+
+    function getSectionCode(question) {
+      const source = `${question.subtopic || ""} ${question.topic || ""}`;
+      const match = source.match(/\b[SR]\d\b/i);
+      return match ? match[0].toUpperCase() : "OTHER";
+    }
+
+    function getAnswerKey(questionId) {
+      return `${ANSWER_STORAGE_PREFIX}${questionId}`;
+    }
+
+    function getSavedAnswer(questionId) {
+      return localStorage.getItem(getAnswerKey(questionId)) || "";
+    }
+
+    function saveAnswer(questionId, value) {
+      localStorage.setItem(getAnswerKey(questionId), value);
+    }
+
+    function validateQuestions(data) {
+      if (!Array.isArray(data)) {
+        throw new Error("questions.json must contain an array of question objects. It should start with [ and end with ].");
+      }
+
+      data.forEach((question, index) => {
+        const location = `Question ${index + 1}${question && question.id ? ` (${question.id})` : ""}`;
+        if (!question || typeof question !== "object") throw new Error(`${location} must be an object.`);
+        if (!question.id) throw new Error(`${location} is missing an id.`);
+        if (!question.level) throw new Error(`${location} is missing level: use "SL" or "HL".`);
+        const level = normaliseLevel(question);
+        if (!["SL", "HL"].includes(level)) {
+          throw new Error(`${location} has invalid level: use "SL" or "HL".`);
+        }
+        if (!question.topic) throw new Error(`${location} is missing topic.`);
+        if (!question.subtopic) throw new Error(`${location} is missing subtopic.`);
+        if (!question.command) throw new Error(`${location} is missing command.`);
+        if (!question.question) throw new Error(`${location} is missing question text.`);
+        if (!Array.isArray(question.markscheme)) throw new Error(`${location} needs markscheme as an array.`);
+        if (question.explanation && !Array.isArray(question.explanation)) throw new Error(`${location} has explanation, but it must be an array.`);
+      });
+    }
+
+    function runTests() {
+      console.assert(formatText("Cu^{+}") === "Cu<sup>+</sup>", "Superscript formatting failed");
+      console.assert(formatText("H_{2}O") === "H<sub>2</sub>O", "Subscript formatting failed");
+      console.assert(formatText("**bold**") === "<strong>bold</strong>", "Bold formatting failed");
+      console.assert(normaliseLevel({ level: "HL" }) === "HL", "String level failed");
+      console.assert(getSectionCode({ subtopic: "S1.3 Electron configurations" }) === "S1", "Section code parsing failed");
+      validateQuestions([
+        {
+          id: "TEST-Q001",
+          level: "SL",
+          topic: "S1 Test topic",
+          subtopic: "S1.1 Test subtopic",
+          command: "describe",
+          marks: 1,
+          question: "Test question with Cu^{+}.",
+          markscheme: ["Test markscheme."],
+          explanation: ["Test explanation."]
+        }
+      ]);
+    }
+
+    async function loadQuestions() {
+      runTests();
+
+      try {
+        const response = await fetch("questions.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Could not load questions.json (${response.status})`);
+
+        const data = await response.json();
+        validateQuestions(data);
+        questions = data;
+
+        statusMessage.innerHTML = `
+          <section class="notice success">
+            Loaded <strong>${questions.length}</strong> question${questions.length === 1 ? "" : "s"} from <code>questions.json</code>.
+          </section>
+        `;
+
+        render();
+      } catch (error) {
+        console.error(error);
+        showLoadError(error);
+      }
+    }
+
+    function showLoadError(error) {
+      container.innerHTML = "";
+      emptyMessage.style.display = "none";
+
+      statusMessage.innerHTML = `
+        <section class="notice error">
+          <strong>questions.json could not be loaded.</strong><br><br>
+          <strong>Error:</strong> ${escapeHtml(error.message)}<br><br>
+          Most likely fixes:<br>
+          1. Put <code>questions.json</code> in the exact same folder as <code>index.html</code>.<br>
+          2. Check the filename is exactly <code>questions.json</code>, not <code>questions.json.txt</code>.<br>
+          3. Open the folder using VS Code Live Server, so the URL starts with <code>http://127.0.0.1:</code> or <code>http://localhost:</code>, not <code>file:///</code>.<br>
+          4. If your JSON is in another folder, change this line in the script: <code>fetch("questions.json")</code>.<br><br>
+          <label><strong>Temporary workaround:</strong> choose your JSON file manually:</label><br><br>
+          <input id="jsonFileInput" type="file" accept=".json,application/json" />
+          <p class="small">This manual import is useful for testing. For GitHub Pages, keep using the automatic <code>questions.json</code> file.</p>
+        </section>
+      `;
+
+      document.getElementById("jsonFileInput").addEventListener("change", handleManualJsonUpload);
+    }
+
+    async function handleManualJsonUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        validateQuestions(data);
+        questions = data;
+        statusMessage.innerHTML = `
+          <section class="notice success">
+            Loaded <strong>${questions.length}</strong> question${questions.length === 1 ? "" : "s"} from the selected JSON file.
+          </section>
+        `;
+        render();
+      } catch (error) {
+        console.error(error);
+        statusMessage.innerHTML += `
+          <section class="notice error">
+            <strong>The selected JSON file could not be used.</strong><br>
+            ${escapeHtml(error.message)}
+          </section>
+        `;
+      }
+    }
+
+    function groupQuestions(filteredQuestions) {
+      return filteredQuestions.reduce((groups, question) => {
+        const section = getSectionCode(question);
+        groups[section] ??= {};
+        groups[section][question.subtopic] ??= [];
+        groups[section][question.subtopic].push(question);
+        return groups;
+      }, {});
+    }
+
+    function renderQuestion(question) {
+      const card = document.createElement("article");
+      card.className = "question-card";
+
+      const level = normaliseLevel(question);
+      const savedAnswer = getSavedAnswer(question.id);
+      const levelTagHtml = `<span class="tag ${escapeHtml(level.toLowerCase())}">[${escapeHtml(level)}]</span>`;
+      const imageHtml = question.image ? `<img class="question-image" src="${escapeHtml(question.image)}" alt="Question diagram for ${escapeHtml(question.id)}">` : "";
+      const markschemeHtml = question.markscheme.map(point => `<li>${formatText(point)}</li>`).join("");
+      const explanationHtml = question.explanation && question.explanation.length
+        ? `
+          <details class="explanation-details">
+            <summary>Show detailed explanation</summary>
+            <ul class="explanation-list">
+              ${question.explanation.map(point => `<li>${formatText(point)}</li>`).join("")}
+            </ul>
+          </details>
+        `
+        : "";
+
+      card.innerHTML = `
+        <div class="question-meta">
+          ${levelTagHtml}
+          <span class="command">${formatText(question.command)}</span>
+          <span>${formatText(question.id)}</span>
+          <span class="marks">${Number(question.marks) || 0} mark${Number(question.marks) === 1 ? "" : "s"}</span>
+        </div>
+        <p class="question-text">${formatText(question.question)}</p>
+        ${imageHtml}
+        <textarea class="answer-box" data-question-id="${escapeHtml(question.id)}" placeholder="Write your answer here...">${escapeHtml(savedAnswer)}</textarea>
+        <details>
+          <summary>Show mark scheme</summary>
+          <ul class="markscheme">${markschemeHtml}</ul>
+          ${explanationHtml}
+        </details>
+      `;
+
+      const textarea = card.querySelector("textarea");
+      textarea.addEventListener("input", event => saveAnswer(question.id, event.target.value));
+
+      return card;
+    }
+
+    function getFilteredQuestions() {
+      const query = searchBox.value.trim().toLowerCase();
+
+      return questions.filter(question => {
+        const level = normaliseLevel(question);
+        const command = normaliseCommand(question);
+        const matchesLevel = activeLevelFilter === "all" || level === activeLevelFilter;
+        const matchesCommand = activeCommandFilter === "all" || command === activeCommandFilter;
+        const searchableText = `${question.id} ${question.topic} ${question.subtopic} ${question.command} ${question.question}`.toLowerCase();
+        const matchesSearch = searchableText.includes(query);
+        return matchesLevel && matchesCommand && matchesSearch;
+      });
+    }
+
+    function render() {
+      const filtered = getFilteredQuestions();
+      container.innerHTML = "";
+      emptyMessage.style.display = filtered.length ? "none" : "block";
+
+      const grouped = groupQuestions(filtered);
+
+      const sectionOrder = ["S1", "S2", "S3", "R1", "R2", "R3", "OTHER"];
+      sectionOrder.forEach(section => {
+        const subtopics = grouped[section];
+        if (!subtopics) return;
+
+        const topicSection = document.createElement("section");
+        topicSection.className = "topic";
+        topicSection.id = `section-${section}`;
+        topicSection.innerHTML = `<h2>${formatText(section)}</h2>`;
+
+        for (const [subtopic, subtopicQuestions] of Object.entries(subtopics)) {
+          const subtopicSection = document.createElement("section");
+          subtopicSection.className = "subtopic";
+          subtopicSection.innerHTML = `<h3>${formatText(subtopic)}</h3>`;
+
+          subtopicQuestions.forEach(question => {
+            subtopicSection.appendChild(renderQuestion(question));
+          });
+
+          topicSection.appendChild(subtopicSection);
+        }
+
+        container.appendChild(topicSection);
+      });
+
+      updateJumpButtons();
+    }
+
+    function updateJumpButtons() {
+      document.querySelectorAll("[data-jump]").forEach(button => {
+        const section = button.dataset.jump;
+        const exists = Boolean(document.getElementById(`section-${section}`));
+        button.disabled = !exists;
+        button.style.opacity = exists ? "1" : "0.35";
+      });
+    }
+
+    function setActiveButton(selector, attr, value) {
+      document.querySelectorAll(selector).forEach(button => {
+        button.classList.toggle("active", button.dataset[attr] === value);
+      });
+    }
+
+    function downloadAnswers() {
+      const lines = [];
+      lines.push("IB Chemistry Describe & Explain Practice - My Answers");
+      lines.push(`Exported: ${new Date().toLocaleString()}`);
+      lines.push("");
+
+      questions.forEach(question => {
+        const answer = getSavedAnswer(question.id).trim();
+        if (!answer) return;
+        lines.push(`${question.id} [${normaliseLevel(question)}] ${question.subtopic}`);
+        lines.push(`${question.command}: ${question.question.replace(/\s+/g, " ")}`);
+        lines.push("");
+        lines.push(answer);
+        lines.push("");
+        lines.push("---");
+        lines.push("");
+      });
+
+      if (lines.length <= 3) {
+        lines.push("No answers written yet.");
+      }
+
+      const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "ib-chemistry-answers.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll("[data-level-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeLevelFilter = button.dataset.levelFilter;
+        setActiveButton("[data-level-filter]", "levelFilter", activeLevelFilter);
+        render();
+      });
+    });
+
+    document.querySelectorAll("[data-command-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeCommandFilter = button.dataset.commandFilter;
+        setActiveButton("[data-command-filter]", "commandFilter", activeCommandFilter);
+        render();
+      });
+    });
+
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => {
+        const target = document.getElementById(`section-${button.dataset.jump}`);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    downloadAnswersBtn.addEventListener("click", downloadAnswers);
+    searchBox.addEventListener("input", render);
+
+    loadQuestions();
+  </script>
+</body>
+</html>
