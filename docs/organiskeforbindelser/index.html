@@ -779,6 +779,13 @@
     return { prefix: iupac.slice(0, m.index), base: iupac.slice(m.index) };
   }
 
+  const ROOT_LEN = { meth: 1, eth: 2, prop: 3, but: 4, pent: 5, hex: 6, hept: 7, oct: 8, non: 9, dec: 10, undec: 11, dodec: 12, };
+  function getParentLengthFromBase(base) {
+    const m = base.match(/(?:cyclo)?(meth|eth|prop|but|pent|hex|hept|oct|non|dec|undec|dodec)/);
+    if (!m) return null;
+    return ROOT_LEN[m[1]] || null;
+  }
+
   function translateRootInBase(base) {
     const roots = Object.keys(ROOT_MAP).sort((a,b)=>b.length-a.length);
     for (const r of roots) base = base.replace(new RegExp(r, "g"), ROOT_MAP[r]);
@@ -802,12 +809,17 @@
     return matches ? matches : [];
   }
 
+  function parseLocants(loc) {
+    if (!loc) return [];
+    return loc.split(",").map(Number).filter(Number.isFinite);
+  }
+
   function translateOnePrefix(seg) {
     const m = seg.match(/^([0-9,]+)-(?:(di|tri|tetra))?([a-z]+)$/i);
     const m2 = seg.match(/^(?:(di|tri|tetra))?([a-z]+)$/i);
-    if (!m && !m2) { 
+    if (!m && !m2) {
     
-      return { loc: "", sortKey: seg, toString() { return seg; } };
+      return { loc: "", sortKey: seg, toString(){ return seg; } };
     
     } else if (m2) { // ikke noe tall foran substituent
     
@@ -824,17 +836,17 @@
     }
       
     const loc = m[1];
+    const locants = parseLocants(loc);
     const mult = m[2] || "";
     const nameEn = m[3];
 
     const nameNo = SUB_MAP[nameEn] || nameEn;
     const multNo = mult ? (MULT_MAP[mult] || mult) : "";
-
     const sortKey = nameNo;
 
-    // NB: 1-chloro-2-iodoethane IKKE fungerende for norsk ennå!!!
     return {
       loc,
+      locants,
       mult: multNo,
       nameNo,
       sortKey,
@@ -844,10 +856,12 @@
     };
   }
 
-  function translateAndResortPrefixes(prefixStr) {
+  function translateAndResortPrefixes(prefixStr, hasSuffix, isCyclic, parentLength) {
 
     const segs = parsePrefixSegments(prefixStr);
-    const items = segs.map(translateOnePrefix);
+    let items = segs.map(translateOnePrefix);
+
+    if (!hasSuffix && prefixStr.includes("chloro") && (prefixStr.includes("fluoro") || prefixStr.includes("iodo"))) items = chooseNorwegianHalogeneNumbering(items, isCyclic, parentLength);
 
     // sorter alfabetisk på norsk substituentnavn, tie-break på locants (numerisk/lex)
     items.sort((a,b) => {
@@ -856,7 +870,62 @@
       return a.loc.localeCompare(b.loc);
     });
 
-    return items.map(x => x.toString()).join("-");
+    return items.map(formatPrefixItem).join("-");
+  }
+
+  function formatPrefixItem(item) {
+    if (!item.loc) return `${item.mult || ""}${item.nameNo || item.sortKey}`;
+    return `${item.loc}-${item.mult || ""}${item.nameNo}`;
+  }
+
+  // Funksjon som fikser på 1-chloro-2-iodoethane til 1-jod-2-kloretan
+  const HALOGEN_NO = new Set(["fluor", "klor", "brom", "jod"]);
+  function chooseNorwegianHalogeneNumbering(items, isCyclic, parentLength) { //NB: SYKLO MÅ HA EGEN INVERTERINGSSJEKK (kun 2 substituenter)
+    if (!parentLength) return items;
+    if (!items.some(item => item.locants && item.locants.length)) return items;
+    if (isCyclic) { return swapTwoLocants(items); } // Locants må swappes for sykliske forbindelser (koden kjøres kun ved klor+jod/fluor)
+
+    const original = items;
+    const reversed = items.map(item => reversePrefixItem(item, parentLength));
+    const originalHalogens = original.filter(item => HALOGEN_NO.has(item.nameNo));
+    const reversedHalogens = reversed.filter(item => HALOGEN_NO.has(item.nameNo));
+
+    // Sjekker om nummereringen av halogenene er lik eller ulik 
+    const overallCmp = compareNumberLists(allLocants(originalHalogens), allLocants(reversedHalogens));
+    if (overallCmp < 0) return original; // Ikke symmetrisk (e.g. ingen tiebreak regel nødvendig)
+
+    const noCmp = compareNumberLists(
+      halogenCitationLocantVector(originalHalogens),
+      halogenCitationLocantVector(reversedHalogens)
+    );
+    if (noCmp <= 0) return original;
+    return reversed;
+  }
+
+  function swapTwoLocants(items) {
+    if (items.length !== 2) return items;
+    const a = items[0];
+    const b = items[1];
+    if (!a.locants?.length || !b.locants?.length) return items;
+    return [ {...a, locants: [...b.locants], loc: b.locants.join(",") }, { ...b, locants: [...a.locants], loc: a.locants.join(",") } ];
+  }
+  function allLocants(items) { return items.flatMap(item => item.locants || []).sort((a, b) => a - b); }
+  function reverseLocants(locants, parentLength) { return locants.map(n => parentLength + 1 - n).sort((a, b) => a - b); } // Hjelpefunksjon for den under
+  function reversePrefixItem(item, parentLength) {
+    const newLocants = reverseLocants(item.locants, parentLength);
+    return { ...item, locants: newLocants, loc: newLocants.join(",")}; } // Inverterer locants
+  function compareNumberLists(a, b) {
+    const len = Math.max(a.length, b.length);
+    for (let i = 0; i < len; i++) {
+      if (a[i] != b[i]) return a[i] - b[i]; }
+    return 0;
+  }
+  function halogenCitationLocantVector(halogenItems) {
+    return halogenItems.sort((a, b) => {
+        const c = a.nameNo.localeCompare(b.nameNo, "nb");
+        if (c) return c;
+        return compareNumberLists(a.locants || [], b.locants || []);
+      }).flatMap(item => item.locants || []);
   }
 
   function translateEther(str) {
@@ -877,11 +946,11 @@
     if (nameEn.includes("oxy") && nameEn.includes("ane")) { return translateEther(nameEn); }
 
     const { prefix, base } = splitPrefixAndBase(nameEn);
-    const prefixNo = translateAndResortPrefixes(prefix);
-    let baseNo = translateRootInBase(base);
-    baseNo = translateBase(baseNo);
+    const baseNo1 = translateRootInBase(base);
+    const baseNo2 = translateBase(baseNo1);
+    const prefixNo = translateAndResortPrefixes(prefix, baseNo1==baseNo2, base.includes("cyclo"), getParentLengthFromBase(base));
 
-    return `${prefixNo}${baseNo}`;
+    return `${prefixNo}${baseNo2}`;
   }
 
   const SPECIAL_ACCEPT_NO = {
@@ -2323,8 +2392,8 @@
     const exp = normalizeName(currentName);
     const expNO = iupacEnToNo(currentName);
     const otherNO = SPECIAL_ACCEPT_NO[currentName];
-    console.log(expNO+" "+otherNO);
-  
+    //console.log(expNO+" "+otherNO);
+
     if (user === exp || user === expNO || user === otherNO) {
       lastCheckCorrect = true;
       setStatus(t("statusCorrect"), "ok");
