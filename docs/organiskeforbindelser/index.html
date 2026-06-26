@@ -93,7 +93,7 @@
 
     .muted { font-size: 12px; color: #64748b; margin-top: 8px; }
 
-    input[type="range"] { width: 220px; }
+    input[type="range"]:not(.range-input) { width: 220px; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
     .genGrid {
@@ -127,6 +127,32 @@
     
     .genItem .mono {
       min-width: 70px;
+      text-align: right;
+    }
+
+    /* chain length selector */
+    .chain-pill {
+      padding: 4px 12px;
+      min-height: 0;
+      border-radius: 24px;
+    }
+    .chain-pill .dual-range {
+      height: 38px;
+      margin-top: 0;
+    }
+    .dual-range { position: relative; width: 220px; height: 38px; margin-top: 10px; }
+    .dual-range .range-track { position: absolute; left: 0; right: 0; top: 50%; height: 6px; transform: translateY(-50%); border-radius: 999px; background: #d7e4f2; }
+    .dual-range .range-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: #75cdf5; }
+    .dual-range input[type="range"] { position: absolute; left: 0; top: 0; width: 100%; height: 38px; margin: 0; padding: 0; background: transparent; border: 0; appearance: none; -webkit-appearance: none; pointer-events: none; }
+    .dual-range input[type="range"]::-webkit-slider-runnable-track { height: 6px; background: transparent; border: 0; }
+    .dual-range input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; border: 2px solid #1683e8; box-shadow: 0 1px 4px rgba(15,54,84,0.25); cursor: pointer; pointer-events: auto; margin-top: -6px; }
+    .dual-range input[type="range"]::-moz-range-track { height: 6px; background: transparent; border: 0; }
+    .dual-range input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #ffffff; border: 2px solid #1683e8; box-shadow: 0 1px 4px rgba(15,54,84,0.25); cursor: pointer; pointer-events: auto; }
+    #minChain { z-index: 4; }
+    #maxChain { z-index: 5; }
+    #minChainVal, #maxChainVal {
+      display: inline-block;
+      min-width: 2ch;
       text-align: right;
     }
 
@@ -434,13 +460,24 @@
     <h1 data-lang="title">Organiske forbindelser — øvingsspill</h1>
 
     <div class="topbar">
-      <!-- Maks karbonkjede lengde -->
-      <div class="pill">
+      <!-- Karbonkjede lengde -->
+      <div class="pill chain-pill">
         <label>
-          <span data-lang="maxChain">Maks lengde (lengste kjede)</span>:
+          <span data-lang="chainLength">Lengde på karbonkjede:</span>
+          <span id="minChainVal" class="mono">1</span>
+          -
           <span id="maxChainVal" class="mono">10</span>
+          <span></span>
         </label>
-        <input id="maxChain" type="range" min="1" max="12" value="10" />
+
+        <div class="dual-range">
+          <div class="range-track">
+            <div id="chainRangeFill" class="range-fill"></div>
+          </div>
+
+          <input id="minChain" class="range-input" type="range" min="1" max="12" step="1" value="1" />
+          <input id="maxChain" class="range-input" type="range" min="1" max="12" step="1" value="10" />
+        </div>
       </div>
 
       <!-- Åpne hjelpinstruksjoner -->
@@ -577,7 +614,7 @@
   const LANG = {
     no: {
       title: "Organiske forbindelser — øvingsspill",
-      maxChain: "Maks lengde (lengste kjede)",
+      chainLength: "Lengde på karbonkjede:",
       helpinstructions: "Instruksjoner",
       language: "Språk",
       new: "Ny forbindelse",
@@ -646,7 +683,7 @@
     },
     en: {
       title: "Organic compounds — practice game",
-      maxChain: "Max parent chain length",
+      chainLength: "Length of parent chain:",
       helpinstructions: "Instructions",
       language: "Language",
       new: "New compound",
@@ -856,12 +893,12 @@
     };
   }
 
-  function translateAndResortPrefixes(prefixStr, hasSuffix, isCyclic, parentLength) {
+  function translateAndResortPrefixes(prefixStr, baseStr, hasSuffix) {
 
     const segs = parsePrefixSegments(prefixStr);
     let items = segs.map(translateOnePrefix);
 
-    if (!hasSuffix && prefixStr.includes("chloro") && (prefixStr.includes("fluoro") || prefixStr.includes("iodo"))) items = chooseNorwegianHalogeneNumbering(items, isCyclic, parentLength);
+    if (prefixStr.includes("chloro") && (prefixStr.includes("fluoro") || prefixStr.includes("iodo"))) items = chooseNorwegianHalogeneNumbering(items, baseStr, getParentLengthFromBase(baseStr));
 
     // sorter alfabetisk på norsk substituentnavn, tie-break på locants (numerisk/lex)
     items.sort((a,b) => {
@@ -879,27 +916,68 @@
   }
 
   // Funksjon som fikser på 1-chloro-2-iodoethane til 1-jod-2-kloretan
+  const HALOGEN_EN = new Set(["fluoro", "chloro", "bromo", "iodo"]);
   const HALOGEN_NO = new Set(["fluor", "klor", "brom", "jod"]);
-  function chooseNorwegianHalogeneNumbering(items, isCyclic, parentLength) { //NB: SYKLO MÅ HA EGEN INVERTERINGSSJEKK (kun 2 substituenter)
+  function chooseNorwegianHalogeneNumbering(items, baseStr, parentLength) {
     if (!parentLength) return items;
     if (!items.some(item => item.locants && item.locants.length)) return items;
-    if (isCyclic) { return swapTwoLocants(items); } // Locants må swappes for sykliske forbindelser (koden kjøres kun ved klor+jod/fluor)
+    if (baseStr.includes("cyclo")) { return swapTwoLocants(items); } // Locants må swappes for sykliske forbindelser (koden kjøres kun ved klor+jod/fluor)
+
+    specialProcessing = baseAllowsHalogenTiebreak(baseStr, parentLength);
+    addDebugLine("Special processing of halogens in Norwegian required: "+specialProcessing);
+    if (!specialProcessing) return items;
 
     const original = items;
     const reversed = items.map(item => reversePrefixItem(item, parentLength));
     const originalHalogens = original.filter(item => HALOGEN_NO.has(item.nameNo));
     const reversedHalogens = reversed.filter(item => HALOGEN_NO.has(item.nameNo));
+    const cmp = compareNumberLists(allLocants(originalHalogens), allLocants(reversedHalogens));
+    if (cmp < 0) return original; // Ikke symmetrisk (e.g. ingen tiebreak regel nødvendig)
 
-    // Sjekker om nummereringen av halogenene er lik eller ulik 
-    const overallCmp = compareNumberLists(allLocants(originalHalogens), allLocants(reversedHalogens));
-    if (overallCmp < 0) return original; // Ikke symmetrisk (e.g. ingen tiebreak regel nødvendig)
-
-    const noCmp = compareNumberLists(
-      halogenCitationLocantVector(originalHalogens),
-      halogenCitationLocantVector(reversedHalogens)
-    );
+    const noCmp = compareNumberLists(halogenCitationLocantVector(originalHalogens), halogenCitationLocantVector(reversedHalogens));
     if (noCmp <= 0) return original;
     return reversed;
+  }
+
+  function baseAllowsHalogenTiebreak(baseStr, n) {
+    if (/ane$/i.test(baseStr) && !baseStr.includes("-")) return true; // Rene alkaner hvor substituentene bestemmer
+    if (/(oic acid|amide|al)$/i.test(baseStr)) return false; // Terminale suffixgrupper bestemmer alltid C1-retningen (karboksylsyrer, amider, aldehyder)
+
+    const suffixLocants = extractSuffixAtomLocants(baseStr, n);
+    if (suffixLocants.length) {
+      const A = [...suffixLocants].sort((a, b) => a - b);
+      const B = suffixLocants.map(p => n + 1 - p).sort((a, b) => a - b);
+      const cmp = compareNumberLists(A, B);
+      if (cmp !== 0) return false; // Hvis suffix selv avgjør retningen, skal ikke halogenene overstyre
+    }
+
+    const bondLocants = extractUnsatBondLocants(baseStr, n);
+    if (bondLocants.length) {
+      const A = [...bondLocants].sort((a, b) => a - b);
+      const B = bondLocants.map(p => n - p).sort((a, b) => a - b);
+      const cmp = compareNumberLists(A, B);
+      if (cmp !== 0) return false; // Hvis dobbelt/trippelbindingene avgjør retningen, skal ikke halogenene overstyre
+    }
+
+    return true; // Symmetrisk uavgjort siden maks 3 funksjonelle grupper (ingen andre substituenter skal prioriteres over halogenene)
+
+  }
+
+  function extractNumberList(str) { return str.split(",").map(Number).filter(Number.isFinite); }
+
+  function extractSuffixAtomLocants(baseStr, n) {
+    const m = baseStr.match(/-(\d+(?:,\d+)*)-(?:di|tri|tetra)?(?:ol|one|amine)\b/i);
+    if (m) return extractNumberList(m[1]);
+    if (/(propanone|butanone)$/i.test(baseStr)) return [2]; // Implisitt 2
+    if (/ethanol$/i.test(baseStr)) return [1]; // Implisitt 1
+    return [];
+  }
+
+  function extractUnsatBondLocants(baseStr, n) {
+    const m = baseStr.match(/-(\d+(?:,\d+)*)-(?:di|tri|tetra)?(?:en|ene|yn|yne)\b/i);
+    if (m) return extractNumberList(m[1]);
+    if (/(ethene|ethyne|propene|propyne)$/i.test(baseStr)) return [1]; // Implisitt 1
+    return [];
   }
 
   function swapTwoLocants(items) {
@@ -948,7 +1026,7 @@
     const { prefix, base } = splitPrefixAndBase(nameEn);
     const baseNo1 = translateRootInBase(base);
     const baseNo2 = translateBase(baseNo1);
-    const prefixNo = translateAndResortPrefixes(prefix, baseNo1==baseNo2, base.includes("cyclo"), getParentLengthFromBase(base));
+    const prefixNo = translateAndResortPrefixes(prefix, base, baseNo1==baseNo2);
 
     return `${prefixNo}${baseNo2}`;
   }
@@ -1111,11 +1189,41 @@
   });
 
   // Slider: Lengste kjede
+  const minChain = document.getElementById("minChain");
   const maxChain = document.getElementById("maxChain");
+  const minChainVal = document.getElementById("minChainVal");
   const maxChainVal = document.getElementById("maxChainVal");
-  function setMaxChainLabel() { maxChainVal.textContent = String(maxChain.value); }
-  maxChain.addEventListener("input", () => { setMaxChainLabel(); });
-  setMaxChainLabel();
+  const chainRangeFill = document.getElementById("chainRangeFill");
+
+  function setChainRangeLabel() {
+    const minLimit = Number(minChain.min);
+    const maxLimit = Number(minChain.max);
+    let minVal = Number(minChain.value);
+    let maxVal = Number(maxChain.value);
+    if (minVal > maxVal) {
+      if (document.activeElement === minChain) {
+        maxVal = minVal; maxChain.value = String(maxVal);
+      } else {
+        minVal = maxVal; minChain.value = String(minVal);
+      }
+    }
+    minChainVal.textContent = String(minVal);
+    maxChainVal.textContent = String(maxVal);
+    const minPct = ((minVal - minLimit) / (maxLimit - minLimit)) * 100;
+    const maxPct = ((maxVal - minLimit) / (maxLimit - minLimit)) * 100;
+    chainRangeFill.style.left = minPct + "%";
+    chainRangeFill.style.width = (maxPct - minPct) + "%";
+
+    if (minVal === maxVal && document.activeElement === minChain) {
+      minChain.style.zIndex = "5"; maxChain.style.zIndex = "4";
+    } else {
+      minChain.style.zIndex = "3"; maxChain.style.zIndex = "4";
+    }
+  }
+
+  minChain.addEventListener("input", setChainRangeLabel);
+  maxChain.addEventListener("input", setChainRangeLabel);
+  setChainRangeLabel();
 
   // SLIDERS: bindinger, sidegrener og funksjonelle grupper
   const unsatCount = document.getElementById("unsatCount");
@@ -1205,7 +1313,7 @@
   }
 
   function buildMoleculeName() {
-    
+
     const weighted = [];
     if (hcState.alkanes) weighted.push({ key: "alkanes", weight: 10 });
     if (hcState.alkenes) weighted.push({ key: "alkenes", weight: 5 });
@@ -1232,7 +1340,10 @@
   // ALKAN / ALKEN / ALKYN
   //
   function buildLinearHydrocarbon(type) {
-    const n = randint(1, Math.max(1, Number(maxChain.value)));
+    const minN = Math.min(Number(minChain.value), Number(maxChain.value));
+    const maxN = Math.max(Number(minChain.value), Number(maxChain.value));
+    const n = randint(minN, maxN);
+
     const brN = resolveCount(branchCount.value, 0, 3);
     const fgN = resolveCount(fgCount.value, 0, 3);
     const unsat = resolveCount(unsatCount.value, 0, Math.floor(n/2));
@@ -1553,6 +1664,12 @@
     return false; // tie
   }
 
+  function mappedAtomLocants(locants, n, flip) { return locants.map(p => flip? n-p+1 : p).sort((a, b) => a - b); }
+  function mappedBondLocants(locants, n, flip) { return locants.map(p => flip? n-p : p).sort((a, b) => a - b); }
+  function isHalogenSub(s) { return HALOGEN_EN.has(s.name); }
+  const alkylRootSet = new Set(Object.values(alkylRoots));
+  function isAlkylSub(s) { return alkylRootSet.has(s.name); }
+
   function placeLinearFunctionalGroupsOnAlkane(n, fgs, brN, unsattype, unsat) {
     const cap = makeAlkaneCapacity(n);
 
@@ -1590,7 +1707,7 @@
 
     }
 
-    const sameAsPrincipal = principalFg ? remaining.filter(fg => fg === principalFg) : []; // Dersom flere av den funksjonelle gruppen med høyest prioritet (NB: Kun OH mulig for øyeblikket)
+    const sameAsPrincipal = principalFg ? remaining.filter(fg => fg === principalFg) : []; // Dersom flere av den funksjonelle gruppen med høyest prioritet (NB: Kun OH og NH2 mulig for øyeblikket)
     if (principalFg && sameAsPrincipal.length) {
         for (let k = 0; k < sameAsPrincipal.length; k++) {
           const candidates = [];
@@ -1613,22 +1730,45 @@
         }
     }
 
-    let flip = false;
-    if (principalFg) { // Numrer i riktig retning
-        const A = [...principalLocants].sort((a,b)=>a-b);
-        const B = A.map(x => (n+1-x)).sort((a,b)=>a-b);
-        for (let i = 0; i < Math.min(A.length,B.length); i++) {
-          if (A[i] < B[i]) { flip = false; break; }
-          if (B[i] < A[i]) { flip = true; break; }
+    if (principalFg) addDebugLine("Class: "+principalFg+" ("+principalLocants.join(", ")+")");
+
+    // Plassering av dobbelt/trippelbindinger
+    let rawBonds = { type: "single", locants: [] };
+    if (unsattype === "alkenes" || unsattype === "alkynes") {
+      const possibleUnsatPos = [];
+      const unsatPos = [];
+      const capOcc = (unsattype === "alkynes") ? 2 : 1;
+      for (let i = 1; i <= n - 1; i++) { if (cap[i] >= capOcc && cap[i + 1] >= capOcc) { possibleUnsatPos.push(i); } }
+
+      for (let i = 1; i <= unsat; i++) { // Plasserer 'unsat' antall dobbelt/trippelbindinger
+        if (possibleUnsatPos.length < 1) break;
+
+        const pos = sample(possibleUnsatPos);
+        unsatPos.push(pos);
+        cap[pos] -= capOcc;
+        cap[pos + 1] -= capOcc;
+
+        // Hindrer naboplassering/konjugering
+        for (let j = pos - 1; j <= pos + 1; j++) {
+          const idx = possibleUnsatPos.indexOf(j);
+          if (idx !== -1) possibleUnsatPos.splice(idx, 1);
         }
-        if (flip) principalLocants = B;
-        else principalLocants = A;
+      }
+
+      const newUnsatPos = unsatPos.sort((a, b) => a - b);
+      if (newUnsatPos.length > 0) {
+        rawBonds = {
+          type: (unsattype === "alkynes")? "triple" : "double",
+          locants: newUnsatPos
+        };
+        addDebugLine("Bonds: "+newUnsatPos.join(", "));
+      }
     }
 
-    const mapPos = (p) => flip ? (n+1-p) : p;
-
+    // Plasserer resten av de funksjonelle gruppene som substituenter
     let subsFlat = [];
-    for (const fg of remaining) { // Plasserer resten av de funksjonelle gruppene som substituenter
+    addDebugLine("Capacity: "+cap.join("-").substring(2));
+    for (const fg of remaining) {
         const prefixName = fgPrefixLinear(fg);
         if (!prefixName) continue;
 
@@ -1641,89 +1781,138 @@
         if (!candidates.length) break;
         const p = sample(candidates);
         cap[p] -= 1;
-
-        subsFlat.push({ name: prefixName, pos: mapPos(p) });
+        subsFlat.push({ name: prefixName, pos: p });
     }
 
-    // Dersom kun halogener, pass på at numreringen er riktig
-    if (!principalFg) {
+    var debugSubstituents = "Substituents: ";
+    for (const i of subsFlat) { debugSubstituents += i.pos+"-"+i.name+" "; }
+    addDebugLine(debugSubstituents);
 
-      const Aitems = subsFlat.map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name));
-      const Bitems = subsFlat.map(s => ({ pos: (n + 1 - s.pos), name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name));
-      const Apos = Aitems.map(x => x.pos);
-      const Bpos = Bitems.map(x => x.pos);
-      addDebugLine("Halogens A: " + Apos.join(","));
-      addDebugLine("Halogens B: " + Bpos.join(","));
-
-      let tiebreak = true;
-      for (let i = 0; i < Math.min(Apos.length, Bpos.length); i++) {
-        if (Apos[i] < Bpos[i]) { flip = false; tiebreak = false; break; }
-        if (Bpos[i] < Apos[i]) { flip = true;  tiebreak = false; break; }
-      }
-
-      if (tiebreak) {
-        const Anames = Aitems.map(x => x.name);
-        const Bnames = Bitems.map(x => x.name);
-        for (let i = 0; i < Math.min(Anames.length, Bnames.length); i++) {
-          if (Anames[i] < Bnames[i]) { flip = false; break; }
-          if (Anames[i] > Bnames[i]) { flip = true; break; }
-        }
-      }
-
-      if (flip) addDebugLine("FLIP!");
-      subsFlat = subsFlat.map(s => ({ name: s.name, pos: mapPos(s.pos) }));
-
-    }
-
-    // Legger til sidekjeder
-    addDebugLine("Capacity: "+cap.join("-").substring(2));
+    // Legger til sidekjeder (alkyl)
     const sidechains = pickAlkylSubstituentsOnChain(n, brN, cap);
     var outputDebugText = "Sidechains: ";
-    for (const s of sidechains) outputDebugText += mapPos(s.pos)+"-"+s.name+" ";    
+    for (const s of sidechains) outputDebugText += s.pos+"-"+s.name+" ";    
     addDebugLine(outputDebugText);
-    for (const s of sidechains) subsFlat.push({ name: s.name, pos: mapPos(s.pos)});
+    for (const s of sidechains) subsFlat.push({ name: s.name, pos: s.pos});
 
-    const principalObj = principalFg ? { fg: principalFg, locants: principalLocants.map(x => x).sort((a,b)=>a-b) } : null;
+    // Velger endelig nummereringsretning
+    let flip = false;
+    let numberingDecided = false;
+    // 1. Den funksjonelle gruppen av høyest prioritet (principalFg) bestemmer først
+    if (principalFg && principalLocants.length) {
+      const A = mappedAtomLocants(principalLocants, n, false);
+      const B = mappedAtomLocants(principalLocants, n, true);
+      const cmp = compareNumberLists(A, B);
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      }
+    }
+
+    // 1,33. Ved keton + hydroxy: la hydroxy avgjøre
+    if (!numberingDecided && subsFlat.some(s => s.name === "hydroxy")) {
+      const Apos = subsFlat.filter(s => s.name === "hydroxy").map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const Bpos = subsFlat.filter(s => s.name === "hydroxy").map(s => ({ pos: (n + 1 -s.pos), name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const cmp = compareNumberLists(Apos, Bpos);
+      addDebugLine("Hydroxy considered to "+cmp+" (" + Apos.join(",")+" vs " + Bpos.join(",")+")");
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      }
+    }
+
+    // 1,66. Ved keton/alcohol + amino: la amino avgjøre
+    if (!numberingDecided && subsFlat.some(s => s.name === "amino")) {
+      const Apos = subsFlat.filter(s => s.name === "amino").map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const Bpos = subsFlat.filter(s => s.name === "amino").map(s => ({ pos: (n + 1 -s.pos), name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const cmp = compareNumberLists(Apos, Bpos);
+      addDebugLine("Amino considered to "+cmp+" (" + Apos.join(",")+" vs " + Bpos.join(",")+")");
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      }
+    }
+
+    // 2. Hvis en funksjonell gruppe ikke avgjør: dobbelt-/trippelbindinger
+    if (!numberingDecided && rawBonds.locants.length) {
+      const A = mappedBondLocants(rawBonds.locants, n, false);
+      const B = mappedBondLocants(rawBonds.locants, n, true);
+      const cmp = compareNumberLists(A, B);
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      }
+    }
+
+    // 3. Hvis ingen funksjonell suffix avgjør: halogener (funksjonelle substituenter)
+    if (!numberingDecided && subsFlat.some(isHalogenSub)) {
+      const Apos = subsFlat.filter(isHalogenSub).map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const Bpos = subsFlat.filter(isHalogenSub).map(s => ({ pos: (n + 1 - s.pos), name: s.name })).sort((x,y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      addDebugLine("Halogens A: " + Apos.join(","));
+      addDebugLine("Halogens B: " + Bpos.join(","));
+      const cmp = compareNumberLists(Apos, Bpos);
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      } else { // Tiebreak (alfabetisk rekkefølge av halogener bestemmer) [cmp=0]
+        const Anames = subsFlat.filter(isHalogenSub).map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => { const z = x.name.localeCompare(y.name, "nb"); if(z) return z; return x.pos-y.pos; }).map(s => s.pos);
+        const Bnames = subsFlat.filter(isHalogenSub).map(s => ({ pos: (n + 1 - s.pos), name: s.name })).sort((x,y) => { const z = x.name.localeCompare(y.name, "nb"); if(z) return z; return x.pos-y.pos; }).map(s => s.pos);
+        const nameCmp = compareNumberLists(Anames, Bnames);
+        addDebugLine("Halogens alphabetically considered to "+nameCmp+" (" + Anames.join(",")+" vs " + Bnames.join(",")+")");
+        if (nameCmp < 0) {
+          flip = false; numberingDecided = true;
+        } else if (nameCmp > 0) {
+          flip = true; numberingDecided = true;
+        }
+      }
+    }
+
+    // 4. Hvis fortsatt uavgjort: alkyl-sidekjeder (substituenter)
+    if (!numberingDecided && subsFlat.some(isAlkylSub)) {
+      const Apos = subsFlat.filter(isAlkylSub).map(s => ({ pos: s.pos, name: s.name })).sort((x, y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      const Bpos = subsFlat.filter(isAlkylSub).map(s => ({ pos: (n+1-s.pos), name: s.name })).sort((x, y) => x.pos - y.pos || x.name.localeCompare(y.name)).map(x => x.pos);
+      addDebugLine("Alkyl A: " + Apos.join(","));
+      addDebugLine("Alkyl B: " + Bpos.join(","));
+      const cmp = compareNumberLists(Apos, Bpos);
+      if (cmp < 0) {
+        flip = false; numberingDecided = true;
+      } else if (cmp > 0) {
+        flip = true; numberingDecided = true;
+      } else { // Tiebreak (alfabetisk rekkefølge av alkyl) [cmp=0]
+        const Anames = subsFlat.filter(isAlkylSub).map(s => ({ pos: s.pos, name: s.name })).sort((x,y) => { const z = x.name.localeCompare(y.name, "nb"); if(z) return z; return x.pos-y.pos; }).map(s => s.pos);
+        const Bnames = subsFlat.filter(isAlkylSub).map(s => ({ pos: (n+1-s.pos), name: s.name })).sort((x,y) => { const z = x.name.localeCompare(y.name, "nb"); if(z) return z; return x.pos-y.pos; }).map(s => s.pos);
+        const nameCmp = compareNumberLists(Anames, Bnames);
+        addDebugLine("Alkyl alphabetically considered to "+nameCmp+" (" + Anames.join(",")+" vs " + Bnames.join(",")+")");
+        if (nameCmp > 0) flip = true;
+      }
+    }
+
+    // Map alle posisjoner når flip er bestemt
+    if (flip) addDebugLine("FLIP!");
+    const principalObj = principalFg? { fg: principalFg, locants: mappedAtomLocants(principalLocants, n, flip) } : null;
+    const mappedSubsFlat = subsFlat.map(s => ({ name: s.name, pos: flip? n+1-s.pos : s.pos }));
     const byName = new Map();
-    for (const s of subsFlat) {
-        if (!byName.has(s.name)) byName.set(s.name, []);
-        byName.get(s.name).push(s.pos);
+
+    for (const s of mappedSubsFlat) {
+      if (!byName.has(s.name)) byName.set(s.name, []);
+      byName.get(s.name).push(s.pos);
     }
 
-    const subs = Array.from(byName.entries()).map(([name, locants]) => ({
-        name,
-        locants: locants.sort((a,b)=>a-b)
-    }));
+    const subs = Array.from(byName.entries()).map(([name, locants]) => ({ name, locants: locants.sort((a, b) => a - b) }));
+    const finalBondLocants = mappedBondLocants(rawBonds.locants, n, flip);
 
-    // Plasser eventuelle umettede bindinger
-    let bonds = { type: "single", locants: [] };
-    if (unsattype == "alkenes" || unsattype == "alkynes") {
-      const possibleUnsatPos = [];
-      const capOcc = (unsattype == "alkynes") ? 2 : 1;
-      for (let i = 1 ; i <= n-1; i++) if (cap[i] >= capOcc && cap[i+((mapPos(1) == 1) ? 1 : -1)] >= capOcc && mapPos(i) <= n-1) possibleUnsatPos.push(mapPos(i));
+    const bonds = {
+      type: rawBonds.type,
+      locants: finalBondLocants,
+      nameLocants: (finalBondLocants.length === 1 && finalBondLocants[0] === 1 && (n === 2 || n === 3))? [] : finalBondLocants
+    };
 
-      const unsatPos = [];
-      for (let i = 1 ; i <= unsat ; i++) {
-          if (possibleUnsatPos.length < 1) break;
-          const pos = sample(possibleUnsatPos);
-          unsatPos.push(pos);
-          for (let j = pos-1 ; j<=pos+1 ; j++) {
-              const idx = possibleUnsatPos.indexOf(j)
-              if (idx !== -1) possibleUnsatPos.splice(idx, 1);
-          }
-      }
-
-      newunsatPos = unsatPos.sort((a,b)=>a-b);
-      addDebugLine("Bonds: "+newunsatPos.join(", "));
-      if (principalObj == null && newunsatPos.length > 0 && newunsatPos[0] > subs[0].locants[0]) {
-        addDebugLine("Removing C=C due to error");
-      } else {
-        bonds = { type: (unsattype == "alkynes") ? "triple" : "double", locants: newunsatPos}; // halogen er IKKE høyeste funksjonelle gruppe, og dobbeltbindingen er IKKE i tidligere posisjon
-      }
-
-    }
-
-    return { n, principal: principalObj, subs, bonds};
+    return { n, principal: principalObj, subs, bonds };
     // { n,
     //   { fg: <key>, locants: [..] }                 // suffix (eller null hvis bare prefix)
     //   [ {name:<prefixName>, locants:[..]} ... ]    // prefixer (substituenter og deres posisjon)
@@ -1736,9 +1925,9 @@
     const root = parentRoots[n];
 
     // alkan/alken/alkyn ending:
-    let ending;
+    let ending = "";
     if (placed.bonds.locants.length > 0 && (placed.bonds.type == "double" || placed.bonds.type == "triple")) {
-      if (placed.bonds.locants.length > 0) ending = "-"+placed.bonds.locants.join(",")+"-"+mult[placed.bonds.locants.length];
+      if (n > 2) ending = "-"+placed.bonds.locants.join(",")+"-"+mult[placed.bonds.locants.length];
       ending += (placed.bonds.type == "triple") ? "yn" : "en";
     } else {
       ending = "an";
@@ -1781,16 +1970,20 @@
   }
 
   // Etere
-  function simpleEtherName(n, maxChain) {
-    const m = randint(1, Math.max(1, Number(maxChain)));
+  function simpleEtherName(n) {
+    const minN = Math.min(Number(minChain.value), Number(maxChain.value));
+    const maxN = Math.max(Number(minChain.value), Number(maxChain.value));
+    const m = randint(minN, maxN);
     const a = Math.min(n, m);
     const b = Math.max(n, m);
     return `${alkylRoots[a].replace("yl","")}oxy${parentRoots[b]}ane`;
   }
 
   // Estere
-  function simpleEsterName(n, maxChain) {
-    const alkyl = randint(1, Math.max(1, Number(maxChain)));
+  function simpleEsterName(n) {
+    const minN = Math.min(Number(minChain.value), Number(maxChain.value));
+    const maxN = Math.max(Number(minChain.value), Number(maxChain.value));
+    const alkyl = randint(minN, maxN);
     return `${alkylRoots[alkyl]} ${parentRoots[n]}anoate`;
   }
 
@@ -1801,8 +1994,8 @@
 
     const pick = pickFunctionalGroupsForLinear(n, fgEnabledKeys, fgN);
 
-    if (pick.early === "ethers") return simpleEtherName(n, maxChain.value);
-    if (pick.early === "esters") return simpleEsterName(n, maxChain.value);
+    if (pick.early === "ethers") return simpleEtherName(n);
+    if (pick.early === "esters") return simpleEsterName(n);
 
     const placed = placeLinearFunctionalGroupsOnAlkane(n, pick.fgs, brN, type, unsat);
     return buildLinearAlkaneNameWithFG(n, placed);
@@ -1855,19 +2048,20 @@
     // SYKLISK (cycloalkanes + substituents / functional groups)
     //
     function buildCycloName() {
-        const n = randint(3, Math.max(3, Number(maxChain.value))); // syklopropan er den minste
+      const maxN = Math.max(Number(minChain.value), Number(maxChain.value));
+      const n = randint(3, Math.max(3, maxN)); // syklopropan er den minste
 
-        const fgN = resolveCount(fgCount.value, 0, 3);
-        const brN = resolveCount(branchCount.value, 0, 3);
+      const fgN = resolveCount(fgCount.value, 0, 3);
+      const brN = resolveCount(branchCount.value, 0, 3);
 
-        if (fgN === 0 && brN === 0) return 'cyclo'+buildAlkaneName(n); // cyclopentane
-        if (fgN === 0) return buildCycloAlkylName(n, brN); // 1-ethyl-2-methylcyclopentane
-        if (brN === 0) return generateCycloPlan(n, fgN, 0); // cyclopentanone
-        if (Math.random() > 0.5) { // both alkyl and functional groups enabled → choose one type
-            return generateCycloPlan(n, fgN, 0);
-        } else {
-            return buildCycloAlkylName(n, brN);
-        }
+      if (fgN === 0 && brN === 0) return 'cyclo'+buildAlkaneName(n); // cyclopentane
+      if (fgN === 0) return buildCycloAlkylName(n, brN); // 1-ethyl-2-methylcyclopentane
+      if (brN === 0) return generateCycloPlan(n, fgN, 0); // cyclopentanone
+      if (Math.random() > 0.5) { // both alkyl and functional groups enabled → choose one type
+          return generateCycloPlan(n, fgN, 0);
+      } else {
+          return buildCycloAlkylName(n, brN);
+      }
 
     }
 
@@ -1877,6 +2071,7 @@
             return alkylRoots[sample([1,1,1,2,2,3,3,4,5,6])];
         }
 
+        if (subCount === 0) return 'cyclo'+buildAlkaneName(n);
         if (subCount === 1) return randomAlkylGroup()+'cyclo'+buildAlkaneName(n);
 
         const g1 = randomAlkylGroup();
@@ -2213,7 +2408,7 @@
   function updateRulesOut() {
     const enabled = [];
     enabled.push((lang === "no" ? "Vanskelighet" : "Difficulty") + ": " + difficulty);
-    enabled.push(t("maxChain") + ": " + maxChain.value);
+    enabled.push(t("chainLength") + ": " + Math.min(Number(minChain.value), Number(maxChain.value))+" - "+Math.max(Number(minChain.value), Number(maxChain.value)));
     const fgEnabled = FG_LIST.filter(f => fgState[f.key]).map(f => t("fgs." + f.key));
     enabled.push(t("fgTitle") + ": " + (fgEnabled.length ? fgEnabled.join(", ") : (lang === "no" ? "Ingen" : "None")));
     const hcEnabled = HC_LIST.filter(h => hcState[h.key]).map(h => t("hydroTypes." + h.key));
@@ -2372,7 +2567,7 @@
     return String(s || "")
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, "")     // ignorer mellomrom
+      .replace(/\s+/g, "") // ignorer mellomrom
       .replace(/[‐-–—]/g, "-"); // tillater alle bindestreker
   }
   
@@ -2392,7 +2587,6 @@
     const exp = normalizeName(currentName);
     const expNO = iupacEnToNo(currentName);
     const otherNO = SPECIAL_ACCEPT_NO[currentName];
-    //console.log(expNO+" "+otherNO);
 
     if (user === exp || user === expNO || user === otherNO) {
       lastCheckCorrect = true;
@@ -2400,8 +2594,8 @@
     } else {
       lastCheckCorrect = false;
       setStatus(t("statusWrong"), "err");
-      //expectedEl.style.display = "block";
-      //expectedEl.textContent = (lang === "no" ? "Forventet: " : "Expected: ") + currentName;
+      expectedEl.style.display = "block";
+      expectedEl.textContent = (lang === "no" ? expNO : currentName);
     }
   }
   
