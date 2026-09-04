@@ -13,13 +13,13 @@
     h1{margin:0;font-size:32px}
     .card{background:none;box-shadow:none;padding:0;margin:0}
     .row{display:block}
-    .col{width:100%;margin-bottom:32px}
+    .col{width:100%;margin-bottom:clamp(0px, 32px)}
     .small{font-size:14px;color:#445}
 
     /* periodic table */
     .ptable-wrap {width: 100%;max-width: 100%;overflow-x: auto;overflow-y: visible;-webkit-overflow-scrolling: touch;padding: 8px 0 14px;}
-    .ptable{display:grid;grid-template-columns:repeat(18,70px);grid-auto-rows:70px;gap:8px;justify-content:center;min-width:max-content;}
-    .elem{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;padding:2px;user-select:none}
+    .ptable{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));width:100%;max-width:1750px;gap:clamp(4px,0.4vw,10px);margin-inline:auto;}
+    .elem{display:flex;aspect-ratio:1/1;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;padding:2px;user-select:none}
     .elem .sym{font-weight:700;font-size:22px;color:#012}
     .elem .name{font-size:12px}
     .elem.metal{background:var(--metal);color:#082b4ec4;}
@@ -27,6 +27,11 @@
     .elem.semimetal{background:var(--semimetal);color:#3f0a53bf}
     .elem.off{opacity:0.28}
     .elem.inert{background:#eee;color:#777;cursor:not-allowed;pointer-events:none}
+    /* periodic table on phone */
+    @media (max-width: 700px) {.ptable-wrap {overflow-x:auto;}}
+    @media (max-width: 700px) {.ptable {width:max-content;max-width:none;grid-template-columns:repeat(18,54px);grid-auto-rows:54px;gap:4px;justify-content:start;}}
+    @media (max-width: 700px) {.elem .sym {font-size:17px}}
+    @media (max-width: 700px) {.elem .name {font-size:9px}}
 
     /* controls */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -36,18 +41,18 @@
     label.small{font-size:13px;color:#223}
     .button-primary {background:#ffdbc4;border-color:#ffcb86;color:#0f2a44;box-shadow:0 1px 3px rgba(15,54,84,0.08);}
     .button-secondary {background:#adc5dd;border-color:#8eb2d1;color:#0f2a44;box-shadow:0 1px 3px rgba(15,54,84,0.08);}
+    /* larger buttons on large screen */
+    @media (min-width: 1800px) {.controls > button {font-size: 14px;padding: 12px 14px;}}
 
-    /* Language settings */
+    /* language settings */
     .language-switch {position:relative;display:inline-block;}
-    .language-button {display:inline-flex;align-items:center;gap:10px;border:1px solid #c9dced;border-radius:20px;background:#ffffff;padding:8px 10px 8px 14px;box-shadow:0 2px 6px rgba(15,54,84,0.10);cursor:pointer;}
-    .language-label {font-size:13px;color:#4d6175;}
-    .language-code {display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:32px;border-radius:10px;background:#f3f8ff;border:1px solid #d6e4f3;color:#001a33;font-size:14px;font-weight:700;letter-spacing:0.03em;}
-    .language-menu {position:absolute;right:0;top:calc(100% + 8px);z-index:30;min-width:190px;padding:6px;background:#ffffff;border:1px solid #cfe0f2;border-radius:1px;box-shadow:0 8px 22px rgba(15,54,84,0.16);}
+    .language-button {display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;box-shadow:none;padding:4px;cursor:pointer;}
+    .language-flag-current {display:block;height:24px;width:auto;image-rendering:auto;}
+    .language-menu {position:absolute;right:0;top:auto;bottom:calc(100% + 8px);z-index:30;min-width:190px;padding:6px;background:#ffffff;border:1px solid #cfe0f2;border-radius:1px;box-shadow:0 8px 22px rgba(15,54,84,0.16);}
     .language-option {width:100%;display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;border:0;background:transparent;border-radius:1px;padding:9px 10px;cursor:pointer;text-align:left;color:#001a33;font-size:14px;}
     .language-option:hover {background:#f1f8ff;}
     .language-flag {font-size:18px;}
     .language-short {font-size:12px;font-weight:800;color:#54708a;}
-
 
     .polylist{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
     .polylist label{
@@ -72,7 +77,7 @@
     .test-fail{color:#8b1c1c}
     .status #result{font-weight:bold}
 
-    /* Prompt typography */
+    /* prompt typography */
     #prompt{ font-size:32px; font-weight:700; margin-top:6px }
     #prompt.formula{
       font-family: "Cambria Math", "STIX Two Text", "Times New Roman", serif;
@@ -85,17 +90,19 @@
       letter-spacing:0;
     }
 
-    /* Beautiful periodic table and options to the right */
-    .selection-area {display:grid;grid-template-columns:minmax(720px,1fr) 340px;gap:22px;align-items:center;margin-top:22px;}
+    /* periodic table and options to the right */
+    .selection-area {display:grid;grid-template-columns:minmax(0,1fr) minmax(240px, 340px);gap:clamp(12px, 1.2vw, 22px);align-items:center;}
     .ptable-panel {min-width:0;}
-    .ions-panel {background:#fbfdff;border:1px solid #d6e4f3;border-radius:16px;padding:16px 16px 14px 16px;box-shadow:0 2px 10px rgba(15,54,84,0.06);align-self:center;}
+    .ions-panel {background:#fbfdff;border:1px solid #d6e4f3;border-radius:16px;padding:16px 16px 14px 16px;align-self:center;}
     .ions-panel-header {margin-bottom:14px;}
     .ions-panel-header h3 {margin:0 0 4px 0;font-size:18px;line-height:1.2;color:#0f2a44;}
     .ions-panel-header p {margin:0;font-size:13px;line-height:1.4;color:#61758a;}
-    @media (max-width:1200px) {.selection-area {grid-template-columns:1fr;align-items:start;}}
-    @media (max-width:1200px) {.ions-panel {max-width:720px;align-self:start;}}
+    /* periodic table on laptop */
+    @media (max-width:1800px) {.selection-area {grid-template-columns:1fr;align-items:start;}}
+    @media (max-width:1800px) {.ions-panel {max-width:720px;align-self:start;}}
 
-    /* Composite ions rendered nicely */
+
+    /* composite ions */
     .polylist {display:flex;flex-direction:column;gap:12px;}
     .ion-group {padding:0 0 10px 0;border-bottom:1px solid #e6eef7;}
     .ion-group:last-child {border-bottom:none;padding-bottom:0;}
@@ -106,11 +113,11 @@
     .ion-toggle input {position:absolute;opacity:0;pointer-events:none;}
     .ion-toggle:has(input:checked) {border-color:#78bff0;background:#eef8ff;box-shadow:0 1px 4px rgba(60,120,180,0.12);}
     .ion-toggle:has(input:not(:checked)) {opacity:0.48;background:#f7f9fb;}
-    .ion {font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:18px;font-weight:700;color:#001a33;white-space:nowrap;letter-spacing:0.01em;}
+    .ion {font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:18px;color:#001a33;white-space:nowrap;letter-spacing:0.01em;}
     .ion sub {font-size:0.64em;vertical-align:-0.26em;}
     .ion sup {font-size:0.64em;vertical-align:0.52em;margin-left:1px;}
 
-    /* Molecule list */
+    /* molecule list */
     .molecules-block {margin-top:18px;}
     .molecules-panel {max-width:760px;}
     .molecule-list {display:flex;flex-direction:column;gap:8px;margin-top:8px;}
@@ -120,7 +127,7 @@
     .molecule-add-row {display:flex;gap:8px;align-items:center;margin-top:10px;}
     .molecule-add-row input[type="text"] {width:220px;}
 
-    /* Nomenclature modal */
+    /* nomenclature rules */
     .modal-backdrop{
       position:fixed; inset:0; background:rgba(2,6,23,0.45);
       display:flex; align-items:center; justify-content:center; z-index:1000;
@@ -130,20 +137,24 @@
       background:#fff; border-radius:14px; max-width:860px; width:92%;
       max-height:80vh; overflow:auto; padding:20px 22px; box-shadow:0 12px 40px rgba(0,0,0,0.25);
     }
-    .modal h2{ margin:0 0 12px 0; font-size:22px }
-    .modal h3{ margin:16px 0 8px 0; font-size:18px }
-    .modal p, .modal li{ font-size:16px; line-height:1.6 }
-    .modal .close-row{ display:flex; justify-content:flex-end; margin-top:12px }
-    .modal .close-btn{
-      background:#e6edf7; border:0; border-radius:10px; padding:8px 12px; cursor:pointer;
-    }
+    .modal h2{margin:0 0 12px 0;font-size:22px}
+    .modal h3{margin:16px 0 8px 0;font-size:18px}
+    .modal p, .modal li{font-size:16px;line-height:1.6}
+    .modal .close-row{display:flex;justify-content:flex-end;margin-top:12px}
+    .modal .version-close-row {justify-content: space-between;align-items: center;}
+    .modal .close-btn{background:#e6edf7;border:0;border-radius:10px;padding:8px 12px;cursor:pointer;}
     .hidden{display:none !important;}
 
-    .site-mark {position:fixed;right:14px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#60758a;background:#ffffffcc;border:1px solid #d6e4f3;border-radius:999px;padding:5px 10px;box-shadow:0 2px 6px rgba(15,54,84,0.08);text-decoration:none;z-index:50;cursor:pointer;}
+    /* controls in the bottom right */
+    .corner-controls {position:fixed;right:14px;bottom:12px;display:flex;flex-direction:column;align-items:flex-end;gap:4px;z-index:50;}
+    .site-mark {position:static;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#60758a;background:#ffffffcc;border:1px solid #d6e4f3;border-radius:999px;padding:5px 10px;box-shadow:0 2px 6px rgba(15,54,84,0.08);text-decoration:none;cursor:pointer;}
     .site-mark:hover {color:#35516b;background:#ffffff;border-color:#bfd6ea;}
     .version-modal {max-width:620px;}
     .version-modal h3 {margin-top:18px;}
-    @media (max-width:700px) {.site-mark {right:10px;bottom:8px;font-size:11px;padding:4px 8px;}}
+    .creator-info {font-size:14px;color:#5b7188;margin:0;}
+    /* bottom right controls on phone */
+    @media (max-width:700px) {.corner-controls {right:10px;bottom:8px;gap:2px;}}
+    @media (max-width:700px) {.site-mark {font-size:11px;padding:4px 8px;}}
   </style>
 </head>
 <body>
@@ -168,26 +179,7 @@
           <button id="clear-all" class="button-secondary" data-language="clearAll">Fjern alle</button>
           <button id="show-rules" class="button-primary" data-language="showHelp">Regler / nomenklatur</button>
           
-          <div class="language-switch" id="languageSwitch">
-            <button type="button" class="language-button" id="languageButton" aria-haspopup="true" aria-expanded="false">
-                <span class="language-label" data-language="languageLabel">Språk</span>
-                <span class="language-code" id="languageCode">NO</span>
-            </button>
-
-            <div class="language-menu" id="languageMenu" hidden>
-                <button type="button" class="language-option" data-lang-option="no">
-                <span class="language-flag">🇳🇴</span>
-                <span>Norsk</span>
-                <span class="language-short">NO</span>
-                </button>
-
-                <button type="button" class="language-option" data-lang-option="en">
-                <span class="language-flag">🇬🇧</span>
-                <span>English</span>
-                <span class="language-short">EN</span>
-                </button>
-            </div>
-          </div>
+          <!-- LANGUAGE BUTTON USED TO BE HERE -->
 
         </div>
       </div>
@@ -253,10 +245,40 @@
     </div>
   </div>
 
-  <button id="version-mark" class="site-mark" type="button">v1.2 - 2026</button>
+  <div class="corner-controls">
+    <div class="language-switch" id="languageSwitch">
+      <button type="button" class="language-button" id="languageButton" aria-haspopup="true" aria-expanded="false" aria-label="Velg språk" title="Velg språk">
+        <img id="languageFlag" class="language-flag-current" src="flags/norwegian.svg" alt="Norsk">
+      </button>
+
+      <div class="language-menu" id="languageMenu" hidden>
+        <button type="button" class="language-option" data-lang-option="no">
+          <span class="language-flag">🇳🇴</span>
+          <span>Norsk</span>
+          <span class="language-short">NO</span>
+        </button>
+
+        <button type="button" class="language-option" data-lang-option="en">
+          <span class="language-flag">🇬🇧</span>
+          <span>English</span>
+          <span class="language-short">EN</span>
+        </button>
+      </div>
+    </div>
+    <button id="version-mark" class="site-mark" type="button">v1.3 - 2026</button>
+  </div>
+
   <div id="version-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal version-modal">
         <h2>Versjonshistorikk</h2>
+
+        <h3>v1.3 - 04.09.2026</h3>
+        <ul>
+        <li>Forbedret display på laptop og mobil.</li>
+        <li>Flyttet språkvalg knappen nederst til høyre, nå med flagg.</li>
+        <li>Aksepterer trivialnavn dersom det er foretrukket over det systematiske.</li>
+        </ul>
+
 
         <h3>v1.2 - 24.06.2026</h3>
         <ul>
@@ -268,7 +290,7 @@
         <h3>v1.1 - 20.06.2026</h3>
         <ul>
         <li>Gikk bort fra React/Babel og over til vanlig HTML, CSS og JavaScript.</li>
-        <li>Forbedret periodesystemet (bedre mobiltilpasning, font, halvmetaller, ...)</li>
+        <li>Forbedret periodesystemet (størrelse, font, halvmetaller, ...)</li>
         <li>Nytt design for valg av sammensatte ioner til høyre for periodesystemet.</li>
         </ul>
 
@@ -279,8 +301,10 @@
         <li>Støtte for salter, molekyler og sammensatte ioner.</li>
         </ul>
 
-        <div class="close-row">
-        <button id="close-version" class="close-btn" type="button">Lukk</button>
+
+        <div class="close-row version-close-row">
+          <p class="creator-info">Laget av Sander Høiem ved Lillestrøm Vgs</p>
+          <button id="close-version" class="close-btn" type="button">Lukk</button>
         </div>
     </div>
   </div>
@@ -388,12 +412,12 @@
       {key:'H',stamme:'hydrid',base:'hydride',charge:-1,poly:false},{key:'B',stamme:'borid',base:'boride',charge:-3,poly:false},{key:'C',stamme:'karbid',base:'carbide',charge:-4,poly:false},
       {key:'N',stamme:'nitrid',base:'nitride',charge:-3,poly:false},{key:'P',stamme:'fosfid',base:'phosphide',charge:-3,poly:false},{key:'O',stamme:'oksid',base:'oxide',charge:-2,poly:false},{key:'S',stamme:'sulfid',base:'sulfide',charge:-2,poly:false},
       {key:'F',stamme:'fluorid',base:'fluoride',charge:-1,poly:false},{key:'Cl',stamme:'klorid',base:'chloride',charge:-1,poly:false},{key:'Br',stamme:'bromid',base:'bromide',charge:-1,poly:false},{key:'I',stamme:'jodid',base:'iodide',charge:-1,poly:false},
-      {key:'OH',stamme:'hydroksid',base:'hydroxide',charge:-1,poly:true},{key:'NO3',stamme:'nitrat',base:'nitrate',charge:-1,poly:true},{key:'NO2',stamme:'nitritt',base:'nitrite',charge:-1,poly:true},{key:'CO3',stamme:'karbonat',base:'carbonate',charge:-2,poly:true},
+      {key:'OH',stamme:'hydroksid',base:'hydroxide',charge:-1,poly:true},{key:'CN',stamme:'cyanid',base:'cyanide',charge:-1,poly:true},{key:'NO3',stamme:'nitrat',base:'nitrate',charge:-1,poly:true},{key:'NO2',stamme:'nitritt',base:'nitrite',charge:-1,poly:true},{key:'CO3',stamme:'karbonat',base:'carbonate',charge:-2,poly:true},
       {key:'SO4',stamme:'sulfat',base:'sulfate',charge:-2,poly:true},{key:'SO3',stamme:'sulfitt',base:'sulfite',charge:-2,poly:true},{key:'PO4',stamme:'fosfat',base:'phosphate',charge:-3,poly:true},{key:'PO3',stamme:'fosfitt',base:'phosphite',charge:-3,poly:true},
     ];
 
     const GROUP12AL = ['Li','Na','K','Rb','Cs','Be','Mg','Ca','Sr','Ba','Al'];
-    const INITIAL_MOLECULES = ['H2','H2O','H2O2','BH3','C','CO','CO2','CS2','CH4','CF4','CCl4','CBr4','CI4','N2','NH3','N2O','NO','NO2','N2O4','N2O5','PF5','P2O5','O2','O3','SO2','SO3','H2S','S2Cl2','SF6','HF','HCl','HBr','HI','Cl2'];
+    const INITIAL_MOLECULES = ['H2','H2O','H2O2','BH3','BCl3','C','CO','CO2','CS2','CH4','CF4','CCl4','CBr4','CI4','N2','NH3','N2O','NO','NO2','N2O4','N2O5','PF5','PCl3','PCl5','P2O5','O2','O3','SO2','SO3','H2S','S2Cl2','SF6','HF','HCl','HBr','HI','Cl2','Cl2O'];
     const PREFIX_no = {1:'mono',2:'di',3:'tri',4:'tetra',5:'penta',6:'heksa',7:'hepta',8:'okta',9:'nona',10:'deka'};
     const PREFIX_en = {1:'mono',2:'di',3:'tri',4:'tetra',5:'penta',6:'hexa',7:'hepta',8:'octa',9:'nona',10:'deca'};
 
@@ -411,6 +435,7 @@
     const POLY_INFO = {
         OH:  { label: 'OH<sup>−</sup>', navn: 'Hydroksid', name: 'Hydroxide' },
         NH4: { label: 'NH<sub>4</sub><sup>+</sup>', navn: 'Ammonium', name: 'Ammonium' },
+        CN:  { label: 'CN<sup>−</sup>', navn: 'Cyanid', name: 'Cyanide' },
         NO3: { label: 'NO<sub>3</sub><sup>−</sup>', navn: 'Nitrat', name: 'Nitrate' },
         NO2: { label: 'NO<sub>2</sub><sup>−</sup>', navn: 'Nitritt', name: 'Nitrite' },
         CO3: { label: 'CO<sub>3</sub><sup>2−</sup>', navn: 'Karbonat', name: 'Carbonate' },
@@ -459,7 +484,7 @@
 
     const makeMoleculeName = (formula)=>{
       const parsed = parseFormulaSimple(formula);
-      if (['HF','HCl','HBr','HI'].includes(formula)) { return 'hydrogen' + anionName(parsed.order[1]); }
+      if (['HF','HCl','HBr','HI'].includes(formula)) { return 'hydrogen' + ((state.lang=="en")? ' ' : '') + anionName(parsed.order[1]); }
       if(parsed.order.length===1){
         const sym = parsed.order[0];
         const cnt = parsed.counts[sym];
@@ -536,7 +561,7 @@
     // -------------------- STATE --------------------
     const COMMON_DEFAULT = new Set(['Li','Na','Mg','Al','K','Ca','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ag','Sn','Pb','O','S','F','Cl','Br','I']);
     const inertSet = new Set(ELEMENT_POS.filter(e=>e.inert).map(e=>e.key));
-    const initialPoly = {OH:true, NO3:true, NO2:false, CO3:true, SO4:true, SO3:false, PO4:true, PO3:false, NH4:true};
+    const initialPoly = {OH:true, NO3:true, NO2:false, CO3:true, SO4:true, SO3:false, PO4:true, PO3:false, NH4:true, CN:false};
 
     const state = {
       molecules: [...INITIAL_MOLECULES],
@@ -614,8 +639,11 @@
             el.textContent = t(key);
         });
 
-        const languageCode = document.getElementById('languageCode');
-        if (languageCode) languageCode.textContent = t('languageCode');
+        const languageFlag = document.getElementById('languageFlag');
+        if (languageFlag) {
+          languageFlag.src = state.lang === 'en' ? 'flags/english_language.svg' : 'flags/norwegian_language.svg';
+          languageFlag.alt = state.lang === 'en' ? 'English' : 'Norsk';
+        }
 
         updatePlaceholdersLanguage();
 
@@ -766,7 +794,7 @@
         polylist.innerHTML = '';
 
         const groups = [
-            { tittel: 'Vanlige', title: 'Common', ions: ['OH', 'NH4'] },
+            { tittel: 'Generelle', title: 'General', ions: ['OH', 'NH4','CN'] },
             { tittel: 'Nitrogen', title: 'Nitrogen', ions: ['NO3', 'NO2'] },
             { tittel: 'Svovel', title: 'Sulfur', ions: ['SO4', 'SO3'] },
             { tittel: 'Karbon', title: 'Carbon', ions: ['CO3'] },
@@ -889,7 +917,7 @@
       const c = chooseCompound();
       state.current = c;
       state.answer = '';
-      state.result = c ? '' : (state.lang=="en")? 'Invalid compound.' : 'Ingen gyldig forbindelse.';
+      state.result = c ? '' : (state.lang=="en")? 'Invalid compound.' : 'Ugyldig forbindelse.';
       state.correct = '';
       renderQuestionArea();
       updatePlaceholdersLanguage();
@@ -902,7 +930,7 @@
       state.answer = answerInput.value;
 
       if (!current) {
-        state.result = (state.lang=="en")? 'Invalid compound.' : 'Ingen gyldig forbindelse.';
+        state.result = (state.lang=="en")? 'Invalid compound.' : 'Ugyldig forbindelse.';
         renderQuestionArea();
         return;
       }
@@ -929,7 +957,7 @@
           renderQuestionArea();
           return;
         } else if (state.lang=="en" && user.replace(/\s/, '') === expFull.replace(/\s/, '')) {
-          state.result = 'Wrong: In English you should seperate different elements by spaces.';
+          state.result = 'Wrong: In English you should separate different elements with a space.';
           state.correct = `Expected: ${current.name}`;
           renderQuestionArea();
           return;
@@ -937,6 +965,14 @@
 
         if (current?.type === 'molecule') {
           const fcanon = fromSub(current.formula).replace(/\s+/g, '');
+          const trivialNames = state.lang === 'en' ? {H2O:'water',H2O2:'hydrogen peroxide',NH3:'ammonia'} : {H2O:'vann',H2O2:'hydrogenperoksid',NH3:'ammoniakk'};
+          const trivialName = trivialNames[fcanon];
+          if (trivialName && user === normalizeNameForCompare(trivialName)) {
+            state.result = 'Ok';
+            state.correct = state.lang === 'en' ? `This is the preferred name, but remember that the task asks for the systematic name! Systematic name: ${current.name}` : `Trivialnavnet du skrev er foretrukket, men husk at oppgaven ber om det systematiske navnet. Systematisk navn: ${current.name}`;
+            renderQuestionArea();
+            return;
+          }
           const parsed = parseFormulaSimple(fcanon);
           if (parsed.order.length === 1) {
             const sym = parsed.order[0];
