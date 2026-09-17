@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 64 64">
+
+  <!-- Oxygen -->
+  <circle
+    cx="32"
+    cy="29"
+    r="18"
+    fill="#d85c5c" />
+
+  <!-- Hydrogen, bottom left -->
+  <circle
+    cx="12"
+    cy="44"
+    r="10"
+    fill="#e8e8e8"
+    stroke="#999999"
+    stroke-width="1.5" />
+
+  <!-- Hydrogen, bottom right -->
+  <circle
+    cx="52"
+    cy="44"
+    r="10"
+    fill="#e8e8e8"
+    stroke="#999999"
+    stroke-width="1.5" />
+
+</svg>
