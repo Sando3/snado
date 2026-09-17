@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="icons/H2O.svg" />
   <title>Kjemiske forbindelser — øvingsspill</title>
   <style>
     :root{--metal:#cfe8ff;--nonmetal:#f8c0ff;--semimetal:#d4a5e9;--card:#ffffff;--bg:#f6f8fb;--accent:#7dd3fc}
@@ -265,12 +266,18 @@
         </button>
       </div>
     </div>
-    <button id="version-mark" class="site-mark" type="button">v1.3 - 2026</button>
+    <button id="version-mark" class="site-mark" type="button">v1.4 - 2026</button>
   </div>
 
   <div id="version-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal version-modal">
         <h2>Versjonshistorikk</h2>
+
+        <h3>v1.4 - 17.09.2026</h3>
+        <ul>
+        <li>La til favicon av et vannmolekyl.</li>
+        <li>La til HCO₃⁻ for engelsk (kan aktiveres for norsk ved dobbelklikk på CO₃²⁻).</li>
+        </ul>
 
         <h3>v1.3 - 04.09.2026</h3>
         <ul>
@@ -412,7 +419,7 @@
       {key:'H',stamme:'hydrid',base:'hydride',charge:-1,poly:false},{key:'B',stamme:'borid',base:'boride',charge:-3,poly:false},{key:'C',stamme:'karbid',base:'carbide',charge:-4,poly:false},
       {key:'N',stamme:'nitrid',base:'nitride',charge:-3,poly:false},{key:'P',stamme:'fosfid',base:'phosphide',charge:-3,poly:false},{key:'O',stamme:'oksid',base:'oxide',charge:-2,poly:false},{key:'S',stamme:'sulfid',base:'sulfide',charge:-2,poly:false},
       {key:'F',stamme:'fluorid',base:'fluoride',charge:-1,poly:false},{key:'Cl',stamme:'klorid',base:'chloride',charge:-1,poly:false},{key:'Br',stamme:'bromid',base:'bromide',charge:-1,poly:false},{key:'I',stamme:'jodid',base:'iodide',charge:-1,poly:false},
-      {key:'OH',stamme:'hydroksid',base:'hydroxide',charge:-1,poly:true},{key:'CN',stamme:'cyanid',base:'cyanide',charge:-1,poly:true},{key:'NO3',stamme:'nitrat',base:'nitrate',charge:-1,poly:true},{key:'NO2',stamme:'nitritt',base:'nitrite',charge:-1,poly:true},{key:'CO3',stamme:'karbonat',base:'carbonate',charge:-2,poly:true},
+      {key:'OH',stamme:'hydroksid',base:'hydroxide',charge:-1,poly:true},{key:'CN',stamme:'cyanid',base:'cyanide',charge:-1,poly:true},{key:'NO3',stamme:'nitrat',base:'nitrate',charge:-1,poly:true},{key:'NO2',stamme:'nitritt',base:'nitrite',charge:-1,poly:true},{key:'CO3',stamme:'karbonat',base:'carbonate',charge:-2,poly:true},{key:'HCO3',stamme:'hydrogenkarbonat',base:'hydrogencarbonate',charge:-1,poly:true},
       {key:'SO4',stamme:'sulfat',base:'sulfate',charge:-2,poly:true},{key:'SO3',stamme:'sulfitt',base:'sulfite',charge:-2,poly:true},{key:'PO4',stamme:'fosfat',base:'phosphate',charge:-3,poly:true},{key:'PO3',stamme:'fosfitt',base:'phosphite',charge:-3,poly:true},
     ];
 
@@ -439,6 +446,7 @@
         NO3: { label: 'NO<sub>3</sub><sup>−</sup>', navn: 'Nitrat', name: 'Nitrate' },
         NO2: { label: 'NO<sub>2</sub><sup>−</sup>', navn: 'Nitritt', name: 'Nitrite' },
         CO3: { label: 'CO<sub>3</sub><sup>2−</sup>', navn: 'Karbonat', name: 'Carbonate' },
+        HCO3: { label: 'HCO<sub>3</sub><sup>−</sup>', navn: 'Hydrogenkarbonat', name: 'Hydrogencarbonate' },
         SO4: { label: 'SO<sub>4</sub><sup>2−</sup>', navn: 'Sulfat', name: 'Sulfate' },
         SO3: { label: 'SO<sub>3</sub><sup>2−</sup>', navn: 'Sulfitt', name: 'Sulfite' },
         PO4: { label: 'PO<sub>4</sub><sup>3−</sup>', navn: 'Fosfat', name: 'Phosphate' },
@@ -524,12 +532,26 @@
       return [...base, ...polys];
     };
 
+    const HCO3_CATIONS = new Set(['Na', 'K', 'NH4', 'Ca', 'Mg']);
+    function buildHydrogenCarbonate(cat, an, enabledCats, enabledAns) {
+      const possibleCats = enabledCats.filter(c => HCO3_CATIONS.has(c.key));
+      if (possibleCats.length > 0) {
+        cat = rand(possibleCats);
+      } else {
+        const possibleAns = enabledAns.filter(a => a.key !== 'HCO3');
+        an = (possibleAns.length > 0) ? rand(possibleAns) : null;
+      }
+      return { cat, an };
+    }
+
     const pickSalt = ()=>{
       const enabledCats = getEnabledCations();
       const enabledAns = getEnabledAnions();
       if(enabledCats.length===0 || enabledAns.length===0) return null;
-      const cat = rand(enabledCats);
-      const an = rand(enabledAns);
+      let cat = rand(enabledCats);
+      let an = rand(enabledAns);
+      if (an.key === 'HCO3') ( {an, cat} = buildHydrogenCarbonate(cat, an, enabledCats, enabledAns) );
+      if (an === null) return null;
       const ox = rand(cat.states);
       const counts = balanceCharges(ox, an.charge);
       const catPart = formatIon(cat.key, counts.cationCount, !!cat.poly);
@@ -561,7 +583,7 @@
     // -------------------- STATE --------------------
     const COMMON_DEFAULT = new Set(['Li','Na','Mg','Al','K','Ca','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ag','Sn','Pb','O','S','F','Cl','Br','I']);
     const inertSet = new Set(ELEMENT_POS.filter(e=>e.inert).map(e=>e.key));
-    const initialPoly = {OH:true, NO3:true, NO2:false, CO3:true, SO4:true, SO3:false, PO4:true, PO3:false, NH4:true, CN:false};
+    const initialPoly = {OH:true, NO3:true, NO2:false, CO3:true, HCO3:false, SO4:true, SO3:false, PO4:true, PO3:false, NH4:true, CN:false};
 
     const state = {
       molecules: [...INITIAL_MOLECULES],
@@ -571,6 +593,7 @@
       forceSalt: false,
       forceMol: false,
       polyEnabled: {...initialPoly},
+      showHCO3: localStorage.getItem('showHCO3') || false,
       current: null,
       answer: '',
       result: '',
@@ -709,15 +732,25 @@
             <li><b>Formler:</b> Ladningene balanseres til minste heltall. Sammensatte ioner settes i parentes når det er flere: Ca(OH)₂, Al₂(SO₄)₃.</li>
             </ul>
 
+            <div style="text-align:center">
+              <img src="images/ioneladninger.png" style="max-width:80%"">
+              <div style="font-size:12px; color:#666; margin-top:4px;">© Aschehoug 2021</div>
+            </div>
+
             <h3>Molekyler (kovalente forbindelser)</h3>
             <ul>
             <li><b>Prefikser:</b> Mono-, di-, tri-, tetra-, penta-, heksa-, … beskriver antall atomer (dihydrogenmonoksid).</li>
             <li><b>Første ledd:</b> Prefiksen “mono-” droppes foran første atom (karbondioksid).</li>
             <li><b>Oksid:</b> Foran ordet -oksid forkortes mono- til mon- (monoksid).</li>
-            <li><b>Rekkefølgen:</b> Grunnstoffene skrives fra minst til mest elektronegativ, med unntak av hydrogen som puttes etter nitrogen til tross for å ha lavere elektronegativitet. Den fullstendige prioritetsrekkefølgen er: Rn, Xe, Kr, Ar, Ne, He, B, Si, C, Sb, As, P, N, H, Te, Se, S, I, Br, Cl, O, F.</li>
+            <li><b>Rekkefølgen:</b> Grunnstoffene skrives fra minst til mest elektronegativ, med unntak av hydrogen som puttes etter nitrogen til tross for å ha lavere elektronegativitet. Den fullstendige prioritetsrekkefølgen er: Rn, Xe, Kr, Ar, Ne, He, B, Si, C, Sb, As, P, N, H, Te, Se, S, I, Br, Cl, O, F. Den kjemiske formelen og det systematiske navnet er skrevet i samme rekkefølge.</li>
             <li><b>Trivialnavn:</b> Noen stoffer har spesielle navn som f.eks. vann (H₂O) og ammoniakk (NH₃).</li>
             <li><b>Hydrogenhalogenider:</b> Forbindelser som HCl dropper prefiks fordi H og Cl kun kan danne én binding (hydrogenklorid). Når løst i vann har de egne trivialnavn (saltsyre).</li>
             </ul>
+
+            <div style="text-align:center">
+              <img src="images/molekyler.png" style="max-width:40%"">
+              <div style="font-size:12px; color:#666; margin-top:4px;">© Aschehoug 2021</div>
+            </div>
 
             <h3>Mer informasjon</h3>
             <ul>
@@ -733,16 +766,26 @@
             <li><b>Transition metals:</b> Transition metals are generally written with Roman numerals. An exception may be accepted if the metal only has one common charge (f.ex: silver chloride), but silver can also form Ag(II) in some fluorides (AgF₂). Therefore, the convention is to always state the charge for transition metals.</li>
             <li><b>Formulas:</b> Charges are balanced to the smallest whole-number ratio. Polyatomic ions are placed in parentheses when there is more than one: Ca(OH)₂, Al₂(SO₄)₃.</li>
             </ul>
+            
+            <div style="text-align:center">
+              <img src="images/ioneladninger.png" style="max-width:80%"">
+              <div style="font-size:12px; color:#666; margin-top:4px;">© Aschehoug 2021</div>
+            </div>
 
             <h3>Molecules (covalent compounds)</h3>
             <ul>
             <li><b>Prefixes:</b> Mono-, di-, tri-, tetra-, penta-, hexa-, … describe the number of atoms (dihydrogen monoxide).</li>
             <li><b>First element:</b> The prefix “mono-” is omitted before the first element (carbon dioxide).</li>
             <li><b>Oxide:</b> Before -oxide, mono- is shortened to mon- (monoxide).</li>
-            <li><b>Order:</b> Elements are written from least to most electronegative, with the exception that hydrogen is placed after nitrogen despite having lower electronegativity. The full priority order is: Rn, Xe, Kr, Ar, Ne, He, B, Si, C, Sb, As, P, N, H, Te, Se, S, I, Br, Cl, O, F.</li>
+            <li><b>Order:</b> Elements are written from least to most electronegative, with the exception that hydrogen is placed after nitrogen despite having lower electronegativity. The full priority order is: Rn, Xe, Kr, Ar, Ne, He, B, Si, C, Sb, As, P, N, H, Te, Se, S, I, Br, Cl, O, F. The chemical formula and systematic name is written in the same order.</li>
             <li><b>Trivial names:</b> Some substances have special common names, such as water (H₂O) and ammonia (NH₃).</li>
             <li><b>Hydrogen halides:</b> Compounds such as HCl drop prefixes because H and Cl can only form one bond with each other (hydrogen chloride). When dissolved in water, they have separate acid names (hydrochloric acid).</li>
             </ul>
+
+            <div style="text-align:center">
+              <img src="images/molecules.png" style="max-width:40%"">
+              <div style="font-size:12px; color:#666; margin-top:4px;">© Aschehoug 2021 (modified)</div>
+            </div>
 
             <h3>More information</h3>
             <ul>
@@ -797,7 +840,7 @@
             { tittel: 'Generelle', title: 'General', ions: ['OH', 'NH4','CN'] },
             { tittel: 'Nitrogen', title: 'Nitrogen', ions: ['NO3', 'NO2'] },
             { tittel: 'Svovel', title: 'Sulfur', ions: ['SO4', 'SO3'] },
-            { tittel: 'Karbon', title: 'Carbon', ions: ['CO3'] },
+            { tittel: 'Karbon', title: 'Carbon', ions: (state.lang === 'en' || state.showHCO3 || state.polyEnabled.HCO3) ? ['CO3','HCO3'] : ['CO3'] },
             { tittel: 'Fosfor', title: 'Phosphorus', ions: ['PO4','PO3'] }
         ];
 
@@ -829,6 +872,15 @@
             ionSpan.className = 'ion';
             ionSpan.innerHTML = POLY_INFO[k].label;
             ionSpan.title = polyIonName(k);
+
+            if (k === 'CO3') {
+              ionSpan.addEventListener('dblclick', e => {
+                const newstate = state.showHCO3 ? false : true;
+                state.showHCO3 = newstate;
+                localStorage.setItem('showHCO3', newstate);
+                renderPolyIons();
+              })
+            }
 
             label.appendChild(input);
             label.appendChild(ionSpan);
