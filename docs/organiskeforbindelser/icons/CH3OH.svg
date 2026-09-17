@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+
+  <!-- Carbon -->
+  <circle cx="32" cy="30" r="14" fill="#5f6368"></circle>
+
+  <!-- Top oxygen -->
+  <circle cx="32" cy="11" r="8" fill="#d85c5c" stroke="#b34b4b" stroke-width="1.5"></circle>
+
+  <!-- Hydrogen attached to oxygen -->
+  <circle cx="46" cy="11" r="6.5" fill="#e8e8e8" stroke="#999999" stroke-width="1.5"></circle>
+
+  <!-- Hydrogen: left -->
+  <circle cx="14" cy="35" r="8" fill="#e8e8e8" stroke="#999999" stroke-width="1.5"></circle>
+
+  <!-- Hydrogen: right -->
+  <circle cx="50" cy="35" r="8" fill="#e8e8e8" stroke="#999999" stroke-width="1.5"></circle>
+
+  <!-- Hydrogen: bottom -->
+  <circle cx="32" cy="47" r="8" fill="#e8e8e8" stroke="#999999" stroke-width="1.5"></circle>
+
+</svg>
