@@ -38,7 +38,7 @@
     }
   } catch(_){}
   const save = () => {try{sessionStorage.setItem(storageKey,JSON.stringify({order,status,snapshots,current}));}catch(_){}};
-  const allIons = ['H+','NO2^-' ,'S^2-','Na+','K+','NH4^+' ,'Cl-','Br-','I-','NO3^-' ,'SO4^2-','Ag+','Fe^3+','Cu^2+','Ba^2+','OH-','CO3^2-'];
+  const allIons = ['H^+','NO2^-' ,'S^2-','Na^+','K^+','NH4^+' ,'Cl^-','Br^-','I^-','NO3^-' ,'SO4^2-','Ag^+','Fe^3+','Cu^2+','Ba^2+','OH^-','CO3^2-'];
   function tabs(){
     $('precip-tabs').innerHTML='';
     status.forEach((s,i)=>{
