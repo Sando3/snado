@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fb">
+  <title>Kjemiske reaksjoner</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#16263f;background:#f6f8fb;font-synthesis:none}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:#f6f8fb}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.52}button:focus-visible,input:focus-visible{outline:3px solid #6b91fa;outline-offset:3px}[hidden]{display:none!important}
+    .shell{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:26px 0 56px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:7px 0 30px}.brand{display:flex;align-items:center;gap:13px;text-decoration:none;color:#142946;font-weight:850;font-size:1.12rem;letter-spacing:-.035em}.brand-mark{width:42px;height:42px;display:grid;place-items:center;background:#dce9ff;color:#2555aa;border-radius:14px}.brand-mark svg{width:23px;height:23px}.course{font-size:.79rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:#5b6b82;background:white;border:1px solid #e5eaf1;padding:10px 14px;border-radius:99px}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:29px}.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.15em;text-transform:uppercase;color:#3574bd;margin:0 0 9px}.hero h1{font-size:clamp(2.15rem,5vw,3.8rem);letter-spacing:-.066em;line-height:1.08;margin:0 0 12px;color:#122744}.hero p:last-child{color:#697b90;margin:0;font-size:1rem;line-height:1.55}.hero-art{width:116px;height:116px;flex:none;border-radius:34px;background:linear-gradient(145deg,#d9f0ed,#e4ebff);display:grid;place-items:center;color:#258c94;transform:rotate(-9deg);box-shadow:0 15px 33px #45689d12}.hero-art svg{width:68px;height:68px;transform:rotate(9deg)}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 258px;gap:22px;align-items:start}.main-card,.side-card{background:#fff;border:1px solid #e4eaf1;box-shadow:0 16px 45px #24416a09;border-radius:24px}.main-card{padding:clamp(22px,3.3vw,37px);min-width:0}.side{display:grid;gap:16px}.side-card{padding:23px}.side-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:#7e8da2;font-weight:850;margin:0 0 18px}.stat-number{font-size:2rem;font-weight:850;letter-spacing:-.055em;color:#152d4b;line-height:1}.stat-caption{font-size:.85rem;color:#8290a3;margin-top:7px}.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.stats-grid>div+div{border-left:1px solid #e8edf3;padding-left:18px}.side-note{color:#718096;font-size:.85rem;line-height:1.65;margin:0}.side-note strong{color:#304a68}.legend{display:flex;align-items:center;gap:10px;color:#61738a;font-size:.87rem;margin-top:15px}.legend i{display:block;width:9px;height:9px;background:#48bba6;border-radius:50%}
+    .progress-header{display:flex;align-items:center;justify-content:space-between;gap:14px;color:#51647c;font-size:.84rem;font-weight:750;margin-bottom:12px}.progress-header strong{color:#2763a5}.progress-track{height:9px;border-radius:99px;background:#eaf0f6;overflow:hidden}.progress-fill{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#45baaa,#4c91df);transition:width .3s ease}.section-tag{display:inline-flex;align-items:center;gap:8px;margin:34px 0 9px;padding:7px 11px;border-radius:9px;background:#edf5ff;color:#3569af;font-size:.73rem;font-weight:850;letter-spacing:.065em;text-transform:uppercase}.task-title{font-size:clamp(1.2rem,2.7vw,1.55rem);font-weight:800;letter-spacing:-.035em;line-height:1.3;margin:0 0 7px}.task-subtitle{font-size:.91rem;color:#76869a;line-height:1.55;margin:0 0 23px}
+    .equation-panel{background:#f7f9fd;border:1px solid #e7edf5;border-radius:17px;padding:26px 18px;overflow-x:auto}.equation{display:flex;align-items:center;justify-content:center;gap:10px;min-width:max-content;margin:0 auto;width:max-content}.compound{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.formula{font-family:"Cambria Math",Cambria,Georgia,serif;font-size:clamp(1.06rem,2.1vw,1.43rem);font-weight:600;color:#1c3553;white-space:nowrap}.coefficient{width:47px;height:48px;border:1.5px solid #cdd8e6;border-radius:11px;background:#fff;text-align:center;color:#1b3657;font-size:1.08rem;font-weight:750;appearance:textfield;-moz-appearance:textfield}.coefficient::-webkit-inner-spin-button,.coefficient::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.coefficient:focus{border-color:#4a89d4}.operator{font-size:1.35rem;color:#7c8fa5;font-weight:650}.arrow{color:#2a76b1;font-size:1.65rem;padding:0 4px}.equation-caption{text-align:center;color:#8795a6;font-size:.77rem;margin:14px 0 0}
+    .group-title{font-size:.94rem;font-weight:800;color:#293c57;margin:27px 0 13px}.type-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.type-option{min-height:57px;display:flex;gap:12px;align-items:center;padding:12px 15px;border:1.5px solid #e3eaf3;background:#fff;border-radius:12px;color:#41536b;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s ease}.type-option:hover{border-color:#9fbddd;background:#fbfdff}.type-option:has(input:checked){background:#eef6ff;border-color:#4386d4;color:#225da2;box-shadow:0 0 0 2px #478fe51b}.type-option input{width:17px;height:17px;margin:0;accent-color:#337fcd;flex:none}
+    .actions{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin-top:26px}.primary,.secondary{border:0;border-radius:12px;min-height:47px;padding:12px 21px;font-size:.89rem;font-weight:800}.primary{background:#2467bd;color:white;box-shadow:0 6px 14px #2467bd25}.primary:hover:not(:disabled){background:#1956a4}.secondary{background:#edf3fa;color:#41607f}.secondary:hover:not(:disabled){background:#e1eaf6}.feedback{margin-top:17px;padding:15px 17px;border-radius:13px;font-size:.9rem;line-height:1.55;border:1px solid transparent}.feedback.success{background:#ebf8f2;color:#236c51;border-color:#c6ecda}.feedback.error{background:#fff5e7;color:#805420;border-color:#f3dfbc}.feedback.info{background:#eef5ff;color:#345d94;border-color:#d5e5f9}.feedback strong{display:block;margin-bottom:3px}.feedback p{margin:0}.feedback p+p{margin-top:5px}.subtle{font-size:.8rem;color:#8292a6;line-height:1.5;margin:13px 0 0}
+    .finish{padding:33px 5px 8px;text-align:center}.finish-icon{margin:0 auto 20px;width:74px;height:74px;display:grid;place-items:center;border-radius:22px;background:#dff6eb;color:#207c5e;font-size:2.2rem}.finish h2{font-size:2rem;margin:0 0 7px;letter-spacing:-.05em}.finish p{color:#62748b;line-height:1.6}.finish strong{color:#213c5b}.finish .primary{margin-top:12px}.footer{margin:30px 0 0;color:#91a0b3;font-size:.77rem;text-align:center}
+    .settings{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:0 0 22px}.settings label{font-size:.85rem;font-weight:800;color:#3b516f}.settings select{border:1px solid #d4dfeb;border-radius:11px;background:white;padding:10px 12px;color:#234468;font:inherit}.level{font-weight:800;color:#316ab0}.type-note{font-size:.81rem;color:#607991;line-height:1.55;margin:10px 0 0}.explanation{margin-top:15px;padding:18px;background:#edf8f6;border:1px solid #c8e9e2;border-radius:14px;color:#245c55;line-height:1.65}.explanation h3{margin:0 0 7px;font-size:1rem}.explanation p{margin:0}.explanation .solution{font-family:Cambria,Georgia,serif;font-size:1.08rem;line-height:1.9;color:#183b47;font-weight:700;overflow-wrap:anywhere}.explanation .tag{font:700 .83rem system-ui,sans-serif;color:#426b65}.cookie-note{font-size:.75rem;color:#8190a0;margin-top:15px}
+    @media(max-width:800px){.layout{grid-template-columns:minmax(0,1fr)}.side{grid-template-columns:1fr 1fr}.hero-art{width:92px;height:92px;border-radius:27px}.hero-art svg{width:55px;height:55px}}
+    @media(max-width:540px){.shell{width:calc(100% - 24px);padding-top:14px}.topbar{padding-bottom:27px}.course{font-size:.69rem;padding:9px 11px}.brand{font-size:1rem}.brand-mark{height:37px;width:37px}.hero{margin-bottom:21px}.hero-art{display:none}.main-card{border-radius:19px;padding:21px 16px}.side{grid-template-columns:1fr}.side-card{padding:20px}.type-grid{grid-template-columns:1fr}.equation-panel{padding:23px 13px}.equation{gap:8px}.coefficient{width:39px;height:43px}.formula{font-size:1.11rem}.actions>*{flex:1}.task-subtitle{margin-bottom:18px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+    /* Balansere og identifisere reaksjonstype. */
+    :root{font-family:Arial,Helvetica,sans-serif;color:#112b3b;background:#f6f8fb}
+    .shell{width:min(1600px,calc(100% - 32px));padding:18px 0 45px}
+    .topbar{padding:0 0 25px}.brand{font-size:1.06rem;letter-spacing:0}.brand-mark{width:33px;height:33px;border-radius:6px;background:#d8eaf9}.course{border:0;background:transparent;border-radius:4px}
+    .hero{margin:0 0 25px}.hero h1{font-size:clamp(1.85rem,3vw,2.55rem);letter-spacing:-.025em;margin:0;font-weight:750}.hero h1 span{display:none}
+    .layout{display:block}.main-card{padding:0;border:0;background:transparent;box-shadow:none;border-radius:0}
+    .settings{padding-bottom:15px}.settings label{font-size:.86rem}.settings select{border-radius:6px;padding:8px 10px}.level{font-size:.84rem}
+    .progress-header{margin:3px 0 9px}.progress-track{height:5px;border-radius:3px}.progress-fill{border-radius:3px;background:#5eb9df}
+    .task-title{font-size:1.22rem;letter-spacing:0;margin:27px 0 20px;font-weight:700}
+    .equation-panel{border:1px solid #dbe4ee;border-radius:7px;padding:34px 18px;background:#fff;overflow:visible;width:100%}
+    .equation{display:flex;flex-wrap:wrap;gap:11px 12px;min-width:0;width:100%;margin:0;justify-content:center;line-height:2.4}
+    .compound{gap:3px;white-space:nowrap}.formula{font-family:Cambria,'Cambria Math',Georgia,serif;font-size:clamp(1.16rem,1.8vw,1.63rem);font-weight:600;color:#102c40}
+    .coefficient{width:42px;height:36px;border:0;border-bottom:2px solid #92acc2;border-radius:0;background:transparent;font-size:1.14rem;color:#173b54;padding:2px 1px;box-shadow:none;outline:none!important}
+    .coefficient:focus{border-bottom-color:#188fc1;background:#edf9fd;outline:none!important}.coefficient::placeholder{color:transparent}
+    .operator{font-size:1.3rem;color:#506578}.arrow{font-size:1.6rem;color:#1877ad;padding:0 5px}
+    .group-title{margin:27px 0 12px;font-size:.95rem;color:#1c3446}
+    .type-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+    .type-option{--ink:#555;--tint:#f6f6f6;min-width:0;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 6px;border:1px solid color-mix(in srgb,var(--ink) 28%,white);border-radius:6px;background:color-mix(in srgb,var(--tint) 50%,white);color:color-mix(in srgb,var(--ink) 65%,#57687a);font-size:clamp(.69rem,.95vw,.86rem);font-weight:700;opacity:.75;transition:background .13s,opacity .13s,border-color .13s,box-shadow .13s;cursor:pointer;user-select:none}
+    .type-option[data-type="Redoksreaksjon"]{--ink:#b72836;--tint:#fbdde1}
+    .type-option[data-type="Forbrenningsreaksjon"]{--ink:#b95c05;--tint:#ffdfbd}
+    .type-option[data-type="Syre-basereaksjon"]{--ink:#1678b4;--tint:#d4efff}
+    .type-option[data-type="Fellingsreaksjon"]{--ink:#423bb1;--tint:#dedbff}
+    .type-option[data-type="Kompleksdannelse"]{--ink:#a52b9d;--tint:#f8d8f5}
+    .type-option:hover{opacity:1;border-color:var(--ink);background:var(--tint)}
+    .type-option:has(input:checked){opacity:1;background:var(--tint);border-color:var(--ink);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+    .type-option input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+    .type-option:focus-within{outline:2px solid var(--ink);outline-offset:2px}
+    .actions{margin-top:18px}.primary,.secondary{border-radius:6px;min-height:40px;padding:9px 17px;box-shadow:none}.primary{background:#5fc4ec;color:#07334c}.primary:hover:not(:disabled){background:#41a9d5}.secondary{background:#d9e9f4;color:#21435a}
+    .feedback,.explanation{border-radius:6px;box-shadow:none}.feedback{max-width:100%}
+    @media(max-width:740px){.type-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.equation-panel{padding:23px 10px}.equation{gap:8px}.coefficient{width:35px}.formula{font-size:1.25rem}}
+    @media(max-width:480px){.type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{width:calc(100% - 24px)}.type-option{font-size:.83rem}.main-card{padding:0}.actions>*{flex:initial}.equation{justify-content:flex-start}}
+
+    .topbar{padding:2px 0 20px}.topbar h1{font-size:clamp(1.7rem,3vw,2.3rem);margin:0;font-weight:750;color:#112b3b}
+    .modes{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 27px;padding-bottom:12px;border-bottom:1px solid #d9e2ec}
+    .mode{padding:11px 15px;border:1px solid #d4deea;background:#edf2f8;color:#39566e;font-weight:700;border-radius:5px;min-height:43px}
+    .mode:hover{background:#e0eaf3}.mode.active{background:#d3eafa;color:#0c557f;border-color:#8fc8e9;box-shadow:inset 0 -2px #4bb7e1}
+    .task-top{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:2px 0 10px;font-size:.84rem;font-weight:700;color:#50657e}
+    .quiet{border:0;background:none;color:#3076a7;font-weight:700;padding:5px 0}
+    /* A separate grid per level; all grids share the same column count. */
+    .task-tabs{overflow-x:auto;margin:0 0 24px;padding:2px 0 5px;scrollbar-width:thin}
+    .task-row{display:grid;grid-template-columns:repeat(var(--max-columns),minmax(40px,1fr));gap:6px;margin-bottom:7px;min-width:max(100%,calc(var(--max-columns) * 40px + (var(--max-columns) - 1) * 6px))}
+    .task-row:last-child{margin-bottom:0}
+    .task-tab{border:1px solid #cfd9e4;background:#e8edf3;color:#506274;border-radius:5px;min-width:0;height:39px;font-size:.86rem;font-weight:700;box-shadow:none;outline:none}
+    .task-tab:hover{border-color:#7caac9;background:#dae8f3}
+    .task-tab.current,.task-tab.current:focus-visible{border-color:#3989b8;background:#cdeafa;color:#155f88;box-shadow:none;outline:none}
+    .task-tab.done{background:#d5eee0;color:#197044;border-color:#91d0ad;cursor:pointer}
+    .task-tab.done:hover{filter:brightness(.96)}
+    .task-tab.hinted{background:#fff0c7;color:#855b0e;border-color:#e7bf5b}
+    .task-tab.revealed{background:#ffe2e2;color:#b12b32;border-color:#e8a4aa}
+    .task-tab:not(.current):focus-visible{outline:2px solid #3989b8;outline-offset:1px}
+    @media(max-width:440px){.mode{width:100%;text-align:left}}
+
+    .equation-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin:22px 0 13px}
+    .equation-head .task-title{margin:0}
+    .switch-label{display:inline-flex;align-items:center;gap:9px;font-size:.86rem;font-weight:650;color:#37536b;cursor:pointer}
+    .switch-label input{position:absolute;opacity:0;width:1px;height:1px}
+    .switch-track{display:inline-block;width:39px;height:22px;flex:none;background:#c5d0dc;border-radius:20px;position:relative;transition:background .16s}
+    .switch-track:after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:transform .16s}
+    .switch-label input:checked+.switch-track{background:#399ac9}.switch-label input:checked+.switch-track:after{transform:translateX(17px)}
+    .switch-label input:focus-visible+.switch-track{outline:3px solid #5b8fdb;outline-offset:3px}
+    .switch-label input:disabled+.switch-track{opacity:.5}
+    .coefficient:disabled{opacity:1;color:#152b42;-webkit-text-fill-color:#152b42;cursor:default}
+    .type-option:has(input:disabled){cursor:default}
+    .type-option:has(input:disabled):hover{background:color-mix(in srgb,var(--tint) 50%,white);border-color:color-mix(in srgb,var(--ink) 28%,white)}
+    .type-option:has(input:checked):has(input:disabled):hover{background:var(--tint);border-color:var(--ink)}
+
+    /* Bunnfallspillet. */
+    .precip-lead{color:#51657a;margin:0;flex:1;min-width:220px}
+    .precip-lead-row{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin:8px 0 18px}
+    .precip-lead-row .switch-label{white-space:nowrap;margin-left:auto}
+
+    .precip-equation{background:#fff;border:1px solid #dbe4ee;border-radius:6px;padding:24px 16px;font:600 clamp(1.16rem,2.1vw,1.6rem)/1.8 Cambria,Georgia,serif;text-align:center;overflow-wrap:anywhere}
+    .precip-fields{display:flex;gap:32px;flex-wrap:wrap;align-items:start;margin-top:22px}
+    .precip-fields>div{display:grid;gap:9px;min-width:min(100%,280px)}
+    .precip-fields label,.precip-fields legend{font-weight:650;color:#213e59}
+    .precip-fields select{padding:10px 12px;border:1px solid #cbd8e6;border-radius:5px;background:#fff;color:#173851}
+    .precip-fields fieldset{display:flex;gap:16px 24px;flex-wrap:wrap;border:0;padding:0;margin:0;min-width:0}
+    .precip-fields fieldset legend{margin-bottom:12px}
+    .precip-fields fieldset label{white-space:nowrap;font-weight:500}
+    .precip-fields input{accent-color:#3194bd}
+    #precip-solution p{margin:7px 0}
+    /* Bunnfall: nummererte oppgaver og kompakt kjemisk inntasting */
+    .precip-tabs{display:grid;grid-template-columns:repeat(12,minmax(32px,1fr));gap:6px;margin:0 0 20px;overflow-x:auto;padding:2px 0 5px}
+    .precip-tab{border:1px solid #cfd9e4;background:#e8edf3;color:#506274;border-radius:5px;height:39px;font-size:.86rem;font-weight:700;min-width:32px;box-shadow:none}
+    .precip-tab.current{background:#cdeafa;border-color:#3989b8;color:#155f88}
+    .precip-tab.done{background:#d5eee0;border-color:#91d0ad;color:#197044}
+    .precip-tab.hinted{background:#fff0c7;border-color:#e7bf5b;color:#855b0e}
+    .precip-tab.revealed{background:#ffe2e2;border-color:#e8a4aa;color:#b12b32}
+    .precip-tab:focus-visible{outline:2px solid #3989b8;outline-offset:2px}
+    /* Bruk en egen font med en sentrert skråstrek i det markerbare tegnet ↛. */
+    .precip-equation .arrow{font-family:"Cambria Math",Cambria,"STIX Two Math","STIXGeneral","DejaVu Serif",serif;font-weight:400}
+    .precip-equation{display:flex;flex-wrap:wrap;gap:8px 11px;align-items:center;justify-content:center;min-height:120px;padding:22px 12px}
+    .precip-compound{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+    .precip-coeff{font:700 1.15rem Cambria,Georgia,serif;color:#173b54}
+    .precip-input-wrap{position:relative;display:inline-flex;align-items:center;min-width:112px}
+    .precip-formula-input{width:130px;max-width:23vw;border:0;border-bottom:2px solid #92acc2;background:transparent;border-radius:0;padding:5px 3px;font:600 1.3rem Cambria,Georgia,serif;color:#102c40;text-align:center;outline:0}
+    .precip-formula-input:focus{border-bottom-color:#188fc1;background:#f1faff}
+    .precip-formula-input:disabled{color:#173b54;opacity:1}
+    .precip-rendered-formula{font:600 1.4rem Cambria,Georgia,serif;color:#102c40;min-width:70px;text-align:center}
+    .precip-state{font:600 1.06rem Cambria,Georgia,serif;color:#29445c}
+    .precip-state-select{border:1px solid #d5e1eb;border-radius:5px;padding:5px 3px;background:#f6f8fb;color:#29445c;font:600 1rem Cambria,Georgia,serif}
+    .precip-none{display:inline-flex;align-items:center;gap:9px;margin:16px 0 0;color:#244660;font-weight:700}
+    .precip-none input,.precip-spectators input{accent-color:#2389b6;width:17px;height:17px}
+    .precip-spectator-area{margin-top:29px}
+    .precip-spectator-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 20px;margin-bottom:12px}
+    .precip-spectator-heading .group-title{margin:0}
+    .precip-spectator-options{display:flex;align-items:flex-start;justify-content:space-between;gap:16px 24px;flex-wrap:wrap}
+    .precip-skip-switch{margin-left:auto;white-space:nowrap;flex:none;padding-top:10px}
+    .precip-spectators{display:flex;flex-wrap:wrap;gap:9px;flex:1 1 480px}
+    .precip-spectators label{padding:9px 13px;border:1px solid #d4e1eb;border-radius:5px;background:white;display:flex;align-items:center;gap:7px;color:#25435c}
+    #precip-spectator-area.skip-ions .precip-spectators{opacity:.48}
+    #precip-spectator-area.skip-ions .precip-spectators label{cursor:not-allowed}
+    .precip-spectators label:has(input:checked){background:#e5f4ff;border-color:#70b7df}
+    .precip-disabled{opacity:.46;pointer-events:none}
+    .precip-equation.no-precipitation [data-side="p"],.precip-equation.no-precipitation .precip-state-select{opacity:.48}
+    .precip-compound .operator{padding:0 2px}
+    @media(max-width:600px){.precip-tabs{grid-template-columns:repeat(12,38px)}.precip-formula-input{width:102px;max-width:27vw;font-size:1.15rem}.precip-equation{gap:7px}.precip-equation .arrow{font-size:1.3rem}}
+  
+    .solubility-details{margin:14px 0 12px;border-top:1px solid #dce5ee;padding-top:11px}
+    .solubility-details summary{display:inline-flex;align-items:center;gap:9px;list-style:none;cursor:pointer;color:#235b83;font-size:.91rem;font-weight:700;user-select:none;padding:7px 0}
+    .solubility-details summary::-webkit-details-marker{display:none}
+    .solubility-details summary::before{content:"▸";display:inline-block;transition:transform .15s}
+    .solubility-details[open] summary::before{transform:rotate(90deg)}
+    .solubility-scroll{max-width:100%;overflow-x:auto;margin-top:12px;padding-bottom:4px}
+    .solubility-table{border-collapse:collapse;font:13px Arial,sans-serif;color:#111;background:white;min-width:775px;width:100%;table-layout:fixed}
+    .solubility-table th,.solubility-table td{border:1px solid #333;text-align:center;padding:5px 2px;vertical-align:middle}
+    .solubility-table thead th,.solubility-table tbody th{background:#dedede;font-weight:700}
+    .solubility-table td .sol-code{display:block;font-weight:600}
+    .solubility-table td .sol-color{display:block;font-size:12px;margin-top:4px}
+    .solubility-title{font-size:1.12rem;font-weight:500;margin:16px 0 12px}
+    .solubility-notes{font-size:.85rem;line-height:1.55;margin:12px 0;color:#333}
+    .solubility-notes p{margin:6px 0}
+
+    /* Komplekser – samme oppgavestil som de andre spillene. */
+    .complex-modes{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 24px}
+    .complex-modes{gap:12px;margin:18px 0 25px}
+    .complex-mode-button{position:relative;padding:12px 20px 12px 21px;background:transparent;color:#485771;border:1px solid #cbd3df;border-left:4px solid #a3b4cb;border-radius:3px;font-weight:700;box-shadow:none;transition:background .15s,border-color .15s,color .15s}
+    .complex-mode-button[data-complex-mode="write"]{background:#faf5fe;color:#78578c;border-color:#e5d6ef;border-left-color:#ad83cb}
+    .complex-mode-button[data-complex-mode="identify"]{background:#f1faf8;color:#477d79;border-color:#d0eae5;border-left-color:#79bfb7}
+    .complex-mode-button[data-complex-mode="write"].active{background:#f1e6f9;color:#683c86;border-color:#bb91d3;border-left-color:#8745b0}
+    .complex-mode-button[data-complex-mode="identify"].active{background:#e3f6f3;color:#176861;border-color:#7ec7bd;border-left-color:#188c82}
+    .complex-mode-button[data-complex-mode="write"]:hover{background:#f1e6f9}
+    .complex-mode-button[data-complex-mode="identify"]:hover{background:#e3f6f3}
+    .complex-mode-button:focus-visible{outline:2px solid #497a98;outline-offset:2px}
+    .complex-tabs{display:grid;grid-template-columns:repeat(var(--complex-count,15),minmax(32px,1fr));gap:6px;overflow-x:auto;padding:2px 0 7px;margin:0 0 15px}
+    .complex-tab{height:38px;min-width:32px;border:1px solid #cfd9e4;background:#e8edf3;color:#506274;border-radius:5px;font-size:.86rem;font-weight:700}
+    .complex-tab.current{background:#d9eefb;border-color:#3989b8;color:#155f88}
+    .complex-tab.done{background:#d5eee0;border-color:#91d0ad;color:#197044}
+    .complex-tab.hinted{background:#fff0c7;border-color:#e7bf5b;color:#855b0e}
+    .complex-tab.revealed{background:#ffe2e2;border-color:#e8a4aa;color:#b12b32}
+    .complex-equation{background:#fff;border:1px solid #dbe4ee;border-radius:6px;padding:24px 16px;min-height:105px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 14px;text-align:center;color:#133047;font:600 clamp(1.12rem,2vw,1.45rem)/1.7 Cambria,Georgia,serif}
+    .complex-equation .complex-detail{font:600 .94rem/1.5 Arial,Helvetica,sans-serif;color:#415871}
+    .complex-inputs{display:flex;flex-wrap:wrap;gap:15px;margin-top:22px}
+    .complex-field{display:flex;flex-direction:column;gap:7px;min-width:180px;flex:1}
+    .complex-field label{font-size:.86rem;font-weight:700;color:#24415b}
+    .complex-field input{width:100%;border:1px solid #bfcfdf;border-bottom:2px solid #8baec9;border-radius:5px;padding:11px 12px;background:#fff;color:#122c40;font:600 1.16rem Cambria,Georgia,serif}
+    .complex-field input:focus,.complex-field input:focus-visible{
+      outline:none!important;box-shadow:none!important;border-color:#bfcfdf;
+      border-bottom:2px solid #188fc1;background:#f1faff
+    }
+    .precip-formula-input:focus,.precip-formula-input:focus-visible{
+      outline:none!important;box-shadow:none!important;border-bottom-color:#188fc1;background:#f1faff
+    }
+    .complex-field input.answer-error{border-bottom-color:#d47654;background:#fff8f4}
+    .complex-field input:disabled{background:#edf2f6;color:#3e546b;opacity:1}
+    #complex-explanation p{margin:5px 0}
+    #complex-feedback{white-space:pre-line}
+    @media(max-width:650px){.complex-tabs{grid-template-columns:repeat(var(--complex-count,15),38px)}}
+
+    /* Hjørnekontroller (språk og versjonslogg) */
+    .site-tools{position:fixed;right:14px;bottom:12px;display:flex;flex-direction:column;align-items:flex-end;gap:4px;z-index:100;font:13px Arial,Helvetica,sans-serif}
+    .language-switch{position:relative;display:inline-block}
+    .lang-trigger{display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;box-shadow:none;padding:4px;cursor:pointer;border-radius:4px}
+    .lang-trigger img{display:block;height:24px;width:auto;max-width:45px;object-fit:contain;image-rendering:auto;box-shadow:none}
+    .lang-trigger:hover{background:#e7f0f8}
+    .lang-trigger:focus-visible,.version-trigger:focus-visible,.language-option:focus-visible{outline:2px solid #3086c4;outline-offset:2px}
+    .version-trigger{border:1px solid #d4e3f1;border-radius:20px;background:white;padding:5px 10px;color:#607d9b;font-size:11px;font-weight:700;box-shadow:0 2px 8px #153c6312;cursor:pointer}
+    .version-trigger:hover{border-color:#9bbdd8;background:#f8fbfe}
+    .language-menu{position:absolute;right:0;bottom:calc(100% + 9px);min-width:190px;background:white;border:1px solid #cbdced;box-shadow:0 8px 24px #16345226;padding:7px;z-index:110}
+    .language-menu[hidden]{display:none!important}
+    .language-option{display:grid;grid-template-columns:24px 1fr 28px;align-items:center;gap:11px;padding:10px 9px;border:0;width:100%;background:transparent;text-align:left;color:#142d45;font:inherit;cursor:pointer}
+    .language-option:hover{background:#edf5fc}
+    .language-option img{height:19px;width:24px;object-fit:contain}
+    .language-option span{white-space:nowrap}
+    .language-option strong{color:#58738b;text-align:right}
+    .version-backdrop{position:fixed;inset:0;z-index:300;background:#102e476b;display:flex;align-items:center;justify-content:center;padding:20px}
+    .version-backdrop[hidden]{display:none!important}
+    .version-modal{background:#fff;border-radius:14px;max-width:620px;width:92%;max-height:80vh;overflow-y:auto;padding:20px 22px;box-shadow:0 12px 40px #0004;color:#183047;font:14px/1.6 Arial,Helvetica,sans-serif}
+    .version-modal h2{margin:0 0 17px;font-size:1.35rem}
+    .version-modal h3{margin:19px 0 7px;font-size:1rem}
+    .version-modal ul{padding-left:23px;margin:5px 0}
+    .version-close-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .version-close-row p{margin:0;color:#63788c;font-size:12px}
+    .version-close-row button{background:#dcecf7;color:#183e5e;border:0;border-radius:6px;padding:9px 17px;cursor:pointer}
+    @media(max-width:480px){.version-modal{width:100%;padding:17px}.site-tools{right:10px;bottom:9px}}
+  </style>
+  <script src="lang/no.js" defer></script>
+  <script src="lang/en.js" defer></script>
+  <script src="i18n.js" defer></script>
+  <script src="balance-questions.js" defer></script>
+  <script src="balance.js" defer></script>
+  <script src="precipitation-questions.js" defer></script>
+  <script src="precipitation.js" defer></script>
+  <script src="complex-questions.js" defer></script>
+  <script src="complex.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar"><h1>Kjemiske reaksjoner</h1></header>
+    <nav class="modes" aria-label="Oppgavemodus">
+      <button class="mode active" data-mode="balanse" type="button" aria-pressed="true">Balansere og identifisere reaksjonstype</button>
+      <button class="mode" data-mode="bunnfall" type="button" aria-pressed="false">Identifisere bunnfall</button>
+      <button class="mode" data-mode="komplekser" type="button" aria-pressed="false">Komplekser</button>
+    </nav>
+    
+    <div id="balance-mode" data-panel="balanse">
+    <div class="layout">
+      <main class="main-card">
+    
+        <div id="game-area">
+          <div class="task-top"><span id="progress-label"></span><button type="button" id="restart-mini" class="quiet">Ny runde ↻</button></div>
+          <div class="task-tabs" id="task-tabs" aria-label="Velg oppgave"></div>
+          <div class="equation-head"><h2 class="task-title" id="prompt">Balanser reaksjonslikningen</h2><label class="switch-label"><input id="type-only" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span><span>Kun identifisere reaksjonstype</span></label></div>
+          
+          <form id="answer-form" novalidate>
+            <div class="equation-panel"><div id="equation" class="equation" aria-label="Reaksjonslikning"></div></div>
+            
+            <h3 class="group-title" id="type-heading">Hvilke reaksjonstyper passer?</h3>
+            <div class="type-grid" id="types" role="group" aria-labelledby="type-heading"></div>
+            <div class="actions"><button class="primary" id="check" type="submit">Sjekk svar <span aria-hidden="true">→</span></button><button class="secondary" id="hint" type="button">Få et hint</button><button class="secondary" id="reveal" type="button">Vis fasit</button><button class="primary" id="next" type="button" hidden>Neste oppgave →</button></div>
+          </form>
+          <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div><section id="explanation" class="explanation" hidden aria-label="Løsning og faglig forklaring"></section>
+          
+        </div>
+        <section id="finished" class="finish" hidden aria-live="polite"><div class="finish-icon">✓</div><h2>Godt jobbet!</h2><p id="finish-summary"></p><button class="primary" id="restart" type="button">Øv en gang til ↻</button></section>
+        <section id="empty" hidden><h2>Fant ingen oppgaver</h2><p>Sjekk at <code>balance-questions.js</code> ligger i samme mappe som <code>index.html</code>.</p></section>
+      </main>
+
+    </div>
+    </div>
+    <section id="precipitation-mode" data-panel="bunnfall" hidden aria-label="Identifisere bunnfall">
+      <div class="task-top"><span id="precip-progress">Oppgave 1 av 12</span><button type="button" id="precip-restart" class="quiet">Ny runde ↻</button></div>
+      <div class="precip-tabs" id="precip-tabs" aria-label="Velg bunnfallsoppgave"></div>
+      <div class="equation-head"><h2 class="task-title">Identifisere bunnfall</h2></div>
+      <div class="precip-lead-row">
+        <p id="precip-lead" class="precip-lead"></p>
+        <label class="switch-label"><input id="precip-show-reactants" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span><span>Vis reaktanter</span></label>
+      </div>
+      <form id="precip-form" novalidate>
+        <div class="precip-equation" id="precip-equation" aria-label="Skriv reaksjonslikningen"></div>
+        <label class="precip-none"><input type="checkbox" id="precip-none"> Ingen bunnfall dannes (ikke en fellingsreaksjon)</label>
+        <div id="precip-spectator-area" class="precip-spectator-area">
+          <div class="precip-spectator-heading"><h3 class="group-title">Hvilke ioner er tilskuerioner?</h3></div>
+          <div class="precip-spectator-options"><div id="precip-spectators" class="precip-spectators"></div><label class="switch-label precip-skip-switch"><input id="precip-skip-spectators" type="checkbox" role="switch"><span class="switch-track" aria-hidden="true"></span><span>Hopp over tilskuerioner</span></label></div>
+        </div>
+        <div class="actions"><button class="primary" id="precip-check" type="submit">Sjekk svar <span aria-hidden="true">→</span></button><button class="secondary" id="precip-hint" type="button">Få et hint</button><button class="secondary" id="precip-reveal" type="button">Vis fasit</button><button class="primary" id="precip-next" type="button" hidden>Neste oppgave →</button></div>
+      </form>
+
+      <div id="precip-feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+      <section id="precip-solution" class="explanation" hidden></section>
+      <details class="solubility-details" id="solubility-details">
+        <summary>Vis løselighetstabell</summary>
+        <div class="solubility-title">Løselighetstabell for salter i vann ved 25 °C</div>
+        <div class="solubility-scroll"><table class="solubility-table" id="solubility-table" aria-label="Løselighetstabell for salter ved 25 grader Celsius"></table></div>
+        <div class="solubility-notes">
+          <p><strong>U</strong> = uløselig: mindre enn 0,01 g salt per 100 g vann.</p>
+          <p><strong>U*</strong> = det dannes et uløselig blandingssalt av CuCO₃ og Cu(OH)₂.</p>
+          <p><strong>T</strong> = tungtløselig: mellom 0,01 og 1 g per 100 g vann.</p>
+          <p><strong>L</strong> = lettløselig: mer enn 1 g per 100 g vann.</p>
+          <p><strong>–</strong> = ukjent forbindelse, eller forbindelsen dannes ikke ved utfelling.</p>
+          <p><strong>R</strong> = reagerer med vann.</p>
+        </div>
+      </details>
+    </section>
+    <section id="complex-mode" data-panel="komplekser" hidden aria-label="Komplekser">
+      <div class="complex-modes" role="group" aria-label="Velg kompleksoppgave">
+        <button type="button" class="complex-mode-button active" data-complex-mode="write" aria-pressed="true">Skriv kompleks</button>
+        <button type="button" class="complex-mode-button" data-complex-mode="identify" aria-pressed="false">Identifiser sentralion, ligand og koordinasjonstall</button>
+      </div>
+      <div class="task-top"><span id="complex-progress"></span><button type="button" class="quiet" id="complex-restart">Ny runde ↻</button></div>
+      <div class="complex-tabs" id="complex-tabs" aria-label="Velg kompleksoppgave"></div>
+      <h2 class="task-title" id="complex-title"></h2>
+      <div class="complex-equation" id="complex-prompt"></div>
+      <form id="complex-form" novalidate>
+        <div class="complex-inputs" id="complex-fields"></div>
+        <div class="actions">
+          <button type="submit" class="primary" id="complex-check">Sjekk svar →</button>
+          <button type="button" class="secondary" id="complex-hint">Få et hint</button>
+          <button type="button" class="secondary" id="complex-reveal">Vis fasit</button>
+          <button type="button" class="primary" id="complex-next" hidden>Neste oppgave →</button>
+        </div>
+      </form>
+      <div id="complex-feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+      <section id="complex-explanation" class="explanation" hidden></section>
+    </section>
+
+  </div>
+
+  <div class="site-tools" aria-label="Språk og versjoner">
+    <div class="language-switch">
+      <button type="button" class="lang-trigger" id="language-toggle" aria-label="Velg språk" aria-haspopup="true" aria-expanded="false" aria-controls="language-menu">
+        <img id="current-language-flag" src="flags/norwegian_language.svg" alt="Norsk">
+      </button>
+      <div id="language-menu" class="language-menu" hidden>
+        <button type="button" class="language-option" aria-current="true" id="language-norwegian"><img src="flags/norwegian_language.svg" alt=""><span>Norsk</span><strong>NO</strong></button>
+        <button type="button" class="language-option" aria-current="false" id="language-english"><img src="flags/english_language.svg" alt=""><span>English</span><strong>EN</strong></button>
+      </div>
+    </div>
+    <button type="button" class="version-trigger" id="version-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="version-menu">v1.2 - 2026</button>
+  </div>
+  <div class="version-backdrop" id="version-menu" hidden role="dialog" aria-modal="true" aria-labelledby="version-title">
+    <div class="version-modal">
+      <h2 id="version-title">Versjonshistorikk</h2>
+      <h3>v1.2 - 11.10.2026</h3>
+      <ul>
+        <li>La til engelsk språkstøtte og en versjonslogg.</li>
+        <li>Nytt kompleksspill: identifisere sentralion, ligand og koordtall.</li>
+        <li>Bedre tilbakemeldinger på oppgaver når man gjør feil.</li>
+      </ul>
+      <h3>v1.1 - 10.10.2026</h3>
+      <ul>
+        <li>Lagde tre spillmoduler: reaksjontyper, fellingsreaksjoner og komplekser.</li>
+        <li>Oppgaver blir markert i grønn, gul eller rød basert på om man brukte hint eller viste fasit.</li>
+        <li>Progresjon blir lagret med cookies.</li><!-- Teknisk sett feil, egentlig sessionStorage og localStorage -->
+      </ul>
+      <h3>v1.0 - 08.10.2026</h3>
+      <ul>
+        <li>Brukte SiktAI til å lage første utgave av reaksjonstype spillet.</li>
+        <li>Brukte ChatGPT til å generere et bedre utseende på nettsiden.</li>
+      </ul>
+      <div class="version-close-row"><p>Laget av Sander Høiem ved Lillestrøm Vgs</p><button id="close-version" type="button">Lukk</button></div>
+    </div>
+  </div>
+  <script>
+    // Løselighetstabellen er transkribert fra tabellbildet som ble levert.
+    (() => {
+      const headers=['Br⁻','Cl⁻','CO₃²⁻','CrO₄²⁻','I⁻','O²⁻','OH⁻','S²⁻','SO₄²⁻'];
+      // Celle: løselighetskode / farge. Tom farge betyr ingen oppgitt farge.
+      const rows=[
+        ['Ag⁺','U/gulhvitt','U/hvitt','U/gult','U/rødt','U/lysgult','U/svart','-','U/svart','T/hvitt'],
+        ['Al³⁺','R/hvitt','R/hvitt','-','-','R/lysgult','U/hvitt','U/hvitt','R/hvitt','R/hvitt'],
+        ['Ba²⁺','L/hvitt','L/hvitt','U/hvitt','U/gult','L/lysgult','R/hvitt','L/hvitt','T/hvitt','U/hvitt'],
+        ['Ca²⁺','L/hvitt','L/hvitt','U/hvitt','T/gult','L/hvitt','T/hvitt','U/hvitt','T/hvitt','T/hvitt'],
+        ['Cu²⁺','L/grønt','L/grønt','U*/grønt','U/gulbrunt','-','U/svart','U/blått','U/svart','L/blått'],
+        ['Fe²⁺','L/gulgrønt','L/grønt','U/grått','U/brunt','L/grått','U/svart','U/grønt','U/svart','L/grønt'],
+        ['Fe³⁺','R/brunt','R/brunt','-','U/gult','-','U/rødbrunt','U/brunt','U/svart','L/brunt'],
+        ['Hg₂²⁺','U/hvitt','U/hvitt','U/gult','U/rødt','U/grønnt','-','R/svart','-','U/gulhvitt'],
+        ['Hg²⁺','T/hvitt','L/hvitt','-','U/rødt','U/rødt','U/rødt','U/hvitt','U/svart','R/hvitt'],
+        ['Mg²⁺','L/hvitt','L/hvitt','U/hvitt','L/gult','L/hvitt','U/hvitt','U/hvitt','R/hvitt','L/hvitt'],
+        ['Ni²⁺','L/gulbrun','L/grønt','U/grønt','U/rødbrunt','L/svart','U/svart','U/grønt','U/svart','L/grønt'],
+        ['Pb²⁺','T/hvitt','T/hvitt','U/hvitt','U/gult','U/gult','U/gult','U/hvitt','U/svart','U/hvitt'],
+        ['Sn²⁺','R/hvitt','R/hvitt','U/hvitt','-','R/gulrødt','U/hvitt','U/hvitt','U/brunt','R/hvitt'],
+        ['Sn⁴⁺','R/hvitt','R/hvitt','-','L/gulbrunt','R/gulrødt','U/hvitt','U/hvitt','U/svart','R/hvitt'],
+        ['Zn²⁺','L/hvitt','L/hvitt','U/hvitt','T/gult','L/hvitt','U/hvitt','U/hvitt','U/hvitt','L/hvitt']
+      ];
+      const t=document.getElementById('solubility-table');if(!t)return;
+      const head=t.createTHead().insertRow();head.append(document.createElement('th'));
+      headers.forEach(x=>{const th=document.createElement('th');th.textContent=x;head.append(th)});
+      const body=t.createTBody();
+      rows.forEach(row=>{const tr=body.insertRow();const th=document.createElement('th');th.scope='row';th.textContent=row[0];tr.append(th);
+        row.slice(1).forEach(raw=>{const td=tr.insertCell();const [code,color]=raw.split('/');
+          const c=document.createElement('span');c.className='sol-code';c.textContent=code;td.append(c);
+          if(color){const label=document.createElement('span');label.className='sol-color';label.textContent=color;td.append(label);}
+        });
+      });
+      const details=document.getElementById('solubility-details');
+      details.addEventListener('toggle',()=>{details.querySelector('summary').textContent=details.open?'Skjul løselighetstabell':'Vis løselighetstabell';});
+    })();
+
+    // Språkvelger og modal for versjonshistorikk.
+    (() => {
+      const languageButton=document.getElementById('language-toggle');
+      const languageMenu=document.getElementById('language-menu');
+      const versionButton=document.getElementById('version-toggle');
+      const versionMenu=document.getElementById('version-menu');
+      const closeVersion=document.getElementById('close-version');
+      function hideLanguage(){languageMenu.hidden=true;languageButton.setAttribute('aria-expanded','false')}
+      function hideVersion(){versionMenu.hidden=true;versionButton.setAttribute('aria-expanded','false');document.body.style.overflow=''}
+      function openVersion(){hideLanguage();versionMenu.hidden=false;versionButton.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';closeVersion.focus()}
+      languageButton.addEventListener('click',()=>{const willOpen=languageMenu.hidden;hideVersion();languageMenu.hidden=!willOpen;languageButton.setAttribute('aria-expanded',String(willOpen))});
+      versionButton.addEventListener('click',openVersion);
+      closeVersion.addEventListener('click',()=>{hideVersion();versionButton.focus()});
+      versionMenu.addEventListener('click',e=>{if(e.target===versionMenu)hideVersion()});
+      document.getElementById('language-norwegian').addEventListener('click',hideLanguage);
+      document.getElementById('language-english').addEventListener('click',hideLanguage);
+      document.addEventListener('click',e=>{if(!e.target.closest('.language-switch'))hideLanguage()});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideLanguage();if(!versionMenu.hidden){hideVersion();versionButton.focus()}}});
+    })();
+    // Felles navigasjon. Hvert spill er isolert i sin egen JavaScript-fil.
+    document.querySelectorAll('[data-mode]').forEach(button => {
+      button.addEventListener('click', () => {
+        const selected = button.dataset.mode;
+        document.querySelectorAll('[data-mode]').forEach(tab => {
+          const active = tab === button;
+          tab.classList.toggle('active', active);
+          tab.setAttribute('aria-pressed', String(active));
+        });
+        document.querySelectorAll('[data-panel]').forEach(panel => {
+          panel.hidden = panel.dataset.panel !== selected;
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
