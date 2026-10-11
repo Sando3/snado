@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="94" height="94" aria-label="Erlenmeyerkolbe">
+  <defs>
+    <clipPath id="liquidClipFinal">
+      <path d="M27 8v16L14 50c-2 4 1 8 7 8h22c6 0 9-4 7-8L37 24V8Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Væske -->
+  <g clip-path="url(#liquidClipFinal)">
+    <path d="M13 38 C20 39.8, 26 40.6, 32 40.6 C38 40.6, 44 39.8, 51 38 L51 60 L13 60 Z" fill="#77cfff"/>
+    <path d="M17 38.4 C23 39.7, 27.5 40.3, 32 40.3 C36.5 40.3, 41 39.7, 47 38.4" fill="none" stroke="#4bb7f0" stroke-width="2.1" stroke-linecap="round"/>
+  </g>
+
+  <!-- Kolbe over væsken -->
+  <path d="M23 8h18" fill="none" stroke="#666b72" stroke-width="3" stroke-linecap="round"/>
+  <path d="M27 8v16L14 50c-2 4 1 8 7 8h22c6 0 9-4 7-8L37 24V8"
+        fill="none" stroke="#666b72" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>
