@@ -137,17 +137,8 @@
     for(let i=0;i<2;i++){if(i)eq.append(operator('+'));eq.append(compound(data.p?.[i]||'',q.p[i]?q.pc[i]:1,'p',i,data.states?.[i]||''));}
     $('precip-none').checked=!!data.none;
     const icons=$('precip-spectators');icons.replaceChildren();
-    // Reelle ioner for hver blanding (ikke bare tilskuerioner).
-    // Vis minst tre fra løsningen, som oftest alle fire, og noen distraktorer.
-    const actual = q.solutionIons || q.ions || [];
-    const minActual = Math.min(actual.length, questions[order[current]].ionDisplayCount || 4);
-    const selectedActual = shuffle([...actual]).slice(0, Math.max(3, minActual));
-    // Tilskuerioner må alltid være tilgjengelige som svarvalg.
-    q.spectators.forEach(ion=>{if(!selectedActual.includes(ion))selectedActual.push(ion);});
-    const extras = [...(q.distractors||[]),...shuffle(allIons.filter(ion=>!actual.includes(ion)))];
-    const options=[...new Set([...selectedActual,...extras])].slice(0,7);
-    q.spectators.forEach(ion=>{if(!options.includes(ion))options.push(ion);});
-    shuffle(options);
+    // Ta med ALLE ionene fra løsningen, uten duplikater, og tre ekstra ioner. Bland alternativene.
+    const options = shuffle([... new Set(q.ionOptions)]);
     options.forEach(s=>{const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.value=s;check.checked=(data.ions||[]).includes(s);label.append(check,document.createTextNode(prettyIon(s)));icons.append(label);});
     $('precip-spectator-area').hidden=false; // Også oppgaver uten bunnfall har plausible ionvalg.
     $('precip-feedback').hidden=true;$('precip-solution').hidden=true;
